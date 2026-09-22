@@ -5,6 +5,7 @@ import { articles } from "./articles/data";
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ShabbatTimes from "./components/ShabbatTimes";
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -135,12 +136,15 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             <div className="lg:col-span-6 text-center lg:text-right">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm mb-7 shadow-soft reveal">
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-500"></span>
-                </span>
-                <span>חוכמת הדורות, במרחק שיחת טלפון</span>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-7 reveal">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm shadow-soft">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary-500"></span>
+                  </span>
+                  <span>חוכמת הדורות, במרחק שיחת טלפון</span>
+                </div>
+                <ShabbatTimes />
               </div>
 
               <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7 reveal" style={{ transitionDelay: "0.1s" }}>
