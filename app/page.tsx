@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import { articles } from "./articles/data";
 
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
@@ -507,101 +508,23 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
-            <Link href="/articles/bitachon" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Judea_2_by_David_Shankbone.jpg/1280px-Judea_2_by_David_Shankbone.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אור השמש מעל הרי ירושלים – ביטחון" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">ביטחון בהשם</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">מהו 'ביטחון בהשם' וכיצד הוא מקנה רוגע?</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">מושג הביטחון הוא כלי רוחני עוצמתי. בעזרת אמונה ושינוי תפיסה, אנחנו לומדים לחייך אל המציאות ולהשתחרר מהחרדות לגבי העתיד לבוא.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
+            {articles.map((article, index) => (
+              <Link key={article.slug} href={`/articles/${article.slug}`} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: `${(index % 3) * 0.1}s` }}>
+                <div className="h-52 overflow-hidden relative">
+                  <img src={article.image} className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt={article.title} />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">{article.category}</div>
                 </div>
-              </div>
-            </Link>
-
-            <Link href="/articles/chavruta" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Mahane_Yehuda_%28I%29_%2845298221191%29.jpg/1280px-Mahane_Yehuda_%28I%29_%2845298221191%29.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אנשים לומדים בחצר ירושלמית" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">היכרות</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">הקסם שמאחורי חברותא טלפונית</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">בעידן שבו המסכים שואבים אותנו, לימוד תורה משותף הוא הזדמנות פז להתנתק מההמולה ולחוות חיבור אמיתי. כל מה שצריך זה רק להרים טלפון.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
+                <div className="p-7 flex-grow flex flex-col">
+                  <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">{article.title}</h3>
+                  <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">{article.excerpt}</p>
+                  <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
+                    <span>המשך לקרוא</span>
+                    <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
+                  </div>
                 </div>
-              </div>
-            </Link>
-
-            <Link href="/articles/lech-lecha" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/NahalHavarimNov212022_03.jpg/1280px-NahalHavarimNov212022_03.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="מסע במדבר הנגב – לך לך" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">לך לך: מסע אל תוך העצמי</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">הציווי "לך לך" שנאמר לאברהם אינו רק מסע גיאוגרפי, אלא גם הזמנה עמוקה למסע פנימי אל תוך הנפש, מחוץ להרגלים המוכרים והנוחים.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
-                </div>
-              </div>
-            </Link>
-
-            <Link href="/articles/noah" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Dead_Sea_beach_00.JPG/1280px-Dead_Sea_beach_00.JPG" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="ים המלח השקט – פרשת נח" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">פרשת נח: למצוא את האיזון במבול</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">כשהעולם בחוץ גועש ורועש כמו בימי המבול, סיפור תיבת נח מעניק לנו מודל איך לבנות סביבה בטוחה ומוגנת עבור משפחתנו והקרובים אלינו.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
-                </div>
-              </div>
-            </Link>
-
-            <Link href="/articles/vayera" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Kinneret_cropped.jpg/1280px-Kinneret_cropped.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="הרי הגליל הירוקים – הכנסת אורחים" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">פרשת וירא: אמנות נתינת החסד</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">אברהם אבינו ישב בפתח האוהל בשיא החום וחיפש אורחים. ממידת החסד שלו אנו לומדים שהנתינה האמיתית מתחילה כשאנחנו פוקחים עיניים לצרכי האחר.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
-                </div>
-              </div>
-            </Link>
-
-            <Link href="/articles/bereshit" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
-              <div className="h-52 overflow-hidden relative">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg/1280px-%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="זריחה מעל הכנרת – כוחה של התחלה" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
-              </div>
-              <div className="p-7 flex-grow flex flex-col">
-                <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">פרשת בראשית: כוחה של התחלה חדשה</h3>
-                <p className="text-ink-600 text-sm line-clamp-3 mb-6 leading-relaxed font-medium">העולם נברא מתוך תוהו ובוהו. הלקח העמוק מבריאת העולם הוא שבכל רגע נתון אנחנו יכולים לייצר סדר בחיים שלנו ולברוא מציאות חיובית יותר.</p>
-                <div className="mt-auto flex items-center gap-2 text-sm text-primary-600 font-bold group-hover:gap-3 transition-all">
-                  <span>להמשך קריאה</span>
-                  <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </section>
