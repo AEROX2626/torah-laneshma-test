@@ -436,7 +436,7 @@ export default function Home() {
             <div className="order-2 lg:order-1 relative reveal-scale">
               <div className="relative">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Jerusalem_Alley_-_Old_City.jpg/1280px-Jerusalem_Alley_-_Old_City.jpg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Safed1.jpg/1280px-Safed1.jpg"
                   alt="סמטאות ירושלים – מרחב בטוח ופתוח"
                   className="rounded-[2rem] shadow-2xl img-cover h-[440px] md:h-[520px] w-full border border-ink-800"
                 />
