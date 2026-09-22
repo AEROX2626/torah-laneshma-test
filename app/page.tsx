@@ -171,7 +171,7 @@ export default function Home() {
             <div className="lg:col-span-6 relative reveal-scale" style={{ transitionDelay: "0.2s" }}>
               <div className="hero-frame relative">
                 <img
-                  src="https://images.unsplash.com/photo-1601314002592-b8734bca6604?auto=format&fit=crop&w=1200&q=85&crop=center"
+                  src="https://image.pollinations.ai/prompt/Western%20Wall%20Jerusalem%20Kotel%20during%20golden%20hour%20sunset%20realistic%20photography%20high%20quality?width=1200&height=800&nologo=true"
                   alt="הכותל המערבי – ירושלים"
                   className="rounded-[2.5rem] shadow-elevated img-cover h-[420px] md:h-[560px] w-full border border-white"
                 />
@@ -436,8 +436,8 @@ export default function Home() {
             <div className="order-2 lg:order-1 relative reveal-scale">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1519682337058-a94d519337bc?auto=format&fit=crop&w=1200&q=85&crop=center"
-                  alt="ספרים עתיקים – חוכמה ומסורת"
+                  src="https://image.pollinations.ai/prompt/Jerusalem%20old%20city%20stone%20alleyway%20with%20sunlight%20and%20ancient%20arches%20realistic%20photography?width=1200&height=800&nologo=true"
+                  alt="סמטאות ירושלים – מרחב בטוח ופתוח"
                   className="rounded-[2rem] shadow-2xl img-cover h-[440px] md:h-[520px] w-full border border-ink-800"
                 />
                 <div className="absolute -bottom-5 -right-5 w-full h-full border-2 border-primary-500/60 rounded-[2rem] -z-10"></div>
@@ -508,7 +508,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אור השמש דרך העננים – ביטחון" />
+                <img src="https://image.pollinations.ai/prompt/Sunrays%20breaking%20through%20clouds%20over%20the%20hills%20of%20Jerusalem%20landscape%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אור השמש מעל הרי ירושלים – ביטחון" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">ביטחון בהשם</div>
               </div>
@@ -524,7 +524,7 @@ export default function Home() {
 
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אנשים לומדים יחד" />
+                <img src="https://image.pollinations.ai/prompt/Two%20people%20studying%20together%20in%20a%20bright%20ancient%20Jerusalem%20stone%20courtyard%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אנשים לומדים בחצר ירושלמית" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">היכרות</div>
               </div>
@@ -540,7 +540,7 @@ export default function Home() {
 
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="מסע במדבר – לך לך" />
+                <img src="https://image.pollinations.ai/prompt/Beautiful%20Negev%20desert%20landscape%20Israel%20with%20sand%20dunes%20and%20mountains%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="מסע במדבר הנגב – לך לך" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
               </div>
@@ -556,7 +556,7 @@ export default function Home() {
 
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1504701954957-2010ec3bcec1?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="מי אגם שקטים – פרשת נח" />
+                <img src="https://image.pollinations.ai/prompt/Dead%20Sea%20Israel%20landscape%20with%20salt%20formations%20and%20calm%20water%20at%20sunrise%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="ים המלח השקט – פרשת נח" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
               </div>
@@ -572,7 +572,7 @@ export default function Home() {
 
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אוהל באש קמפינג – הכנסת אורחים" />
+                <img src="https://image.pollinations.ai/prompt/Galilee%20mountains%20landscape%20Israel%20green%20hills%20and%20nature%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="הרי הגליל הירוקים – הכנסת אורחים" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
               </div>
@@ -588,7 +588,7 @@ export default function Home() {
 
             <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
               <div className="h-52 overflow-hidden relative">
-                <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=800&q=80&crop=center" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="זריחה מרהיבה – כוחה של התחלה" />
+                <img src="https://image.pollinations.ai/prompt/Sunrise%20over%20the%20Sea%20of%20Galilee%20Kinneret%20Israel%20landscape%20realistic%20photography?width=800&height=600&nologo=true" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="זריחה מעל הכנרת – כוחה של התחלה" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-accent-700 shadow-sm border border-accent-100">פרשת השבוע</div>
               </div>
@@ -726,7 +726,7 @@ export default function Home() {
       </section>
 
       <section className="py-16 md:py-20 relative overflow-hidden bg-ink-950">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1599059813005-11265ba4b4ce?auto=format&fit=crop&w=1600&q=80')", opacity: 0.18 }}></div>
+        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://image.pollinations.ai/prompt/Jerusalem%20stone%20wall%20texture%20background%20ancient%20realistic%20photography?width=1600&height=600&nologo=true')", opacity: 0.25 }}></div>
         <div className="absolute inset-0 bg-gradient-to-l from-ink-950 via-ink-950/70 to-transparent"></div>
 
         <div className="max-w-5xl mx-auto px-5 sm:px-8 relative z-10 text-center reveal">
