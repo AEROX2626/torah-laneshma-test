@@ -80,8 +80,8 @@ async function main() {
   const parasha = await getParasha();
   console.log(`Found: ${parasha.title} (${parasha.hebrew})`);
 
-  // Transform title for slug: "Parashat Bereshit" -> "bereshit"
-  const slug = parasha.title.toLowerCase().replace('parashat ', '').replace(/\s+/g, '-');
+  // Transform title for slug: "Parashat Ha'azinu" -> "haazinu"
+  const slug = parasha.title.toLowerCase().replace('parashat ', '').replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
   
   const contentPath = path.join(process.cwd(), 'app', 'articles', 'content.json');
   let existingArticles = [];
