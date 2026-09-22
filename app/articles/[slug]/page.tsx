@@ -26,7 +26,7 @@ export default async function ArticlePage(props: { params: Params }) {
         <div className="mb-8">
           <Link href="/#content" className="text-ink-500 hover:text-primary-600 font-medium inline-flex items-center gap-2 transition-colors">
             <i className="fas fa-arrow-right text-sm"></i>
-            חזרה לכל המאמרים
+            ׳—׳–׳¨׳” ׳׳›׳ ׳”׳׳׳׳¨׳™׳
           </Link>
         </div>
 
@@ -58,7 +58,7 @@ export default async function ArticlePage(props: { params: Params }) {
 
           <div className="mt-14 pt-10 border-t border-ink-100 flex justify-center">
             <Link href="/#join" className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
-              <span>זה הזמן לקבוע חברותא</span>
+              <span>׳–׳” ׳”׳–׳׳ ׳׳§׳‘׳•׳¢ ׳—׳‘׳¨׳•׳×׳</span>
               <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
             </Link>
           </div>

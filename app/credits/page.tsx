@@ -9,34 +9,34 @@ export default function CreditsPage() {
         <div className="mb-8">
           <Link href="/" className="text-ink-500 hover:text-primary-600 font-medium inline-flex items-center gap-2 transition-colors">
             <i className="fas fa-arrow-right text-sm"></i>
-            ηζψδ μςξεγ δαιϊ
+            Χ—Χ–Χ¨Χ” ΧΧΆΧΧ•Χ“ Χ”Χ‘Χ™Χª
           </Link>
         </div>
 
         <div className="bg-white rounded-[2.5rem] p-8 md:p-14 shadow-elevated border border-ink-100 reveal-scale active">
           
           <h1 className="font-heading font-black text-3xl md:text-5xl text-ink-950 mb-8 leading-tight">
-            ζλειεϊ ιεφψιν εχψγιθιν
+            Χ–Χ›Χ•Χ™Χ•Χª Χ™Χ•Χ¦Χ¨Χ™Χ Χ•Χ§Χ¨Χ“Χ™ΧΧ™Χ
           </h1>
 
           <div className="prose prose-lg prose-ink max-w-none text-ink-700 font-medium leading-relaxed">
             <p>
-              ΰπε ατψειχθ "ϊεψδ μπωξδ" ξλαγιν ιεφψιν εφμξιν. λμ φιμεξι δπεσ εδΰιμερθψφιδ δξετιςιν αΰϊψ πμχηε ξξΰβψ <strong>Wikimedia Commons</strong>, εξετφιν ϊηϊ ψιωιεπεϊ <strong>Creative Commons (CC)</strong> ΰε <strong>πημϊ δλμμ (Public Domain)</strong>.
+              ΧΧ Χ• Χ‘Χ¤Χ¨Χ•Χ™Χ§Χ "ΧªΧ•Χ¨Χ” ΧΧ Χ©ΧΧ”" ΧΧ›Χ‘Χ“Χ™Χ Χ™Χ•Χ¦Χ¨Χ™Χ Χ•Χ¦ΧΧΧ™Χ. Χ›Χ Χ¦Χ™ΧΧ•ΧΧ™ Χ”Χ Χ•Χ£ Χ•Χ”ΧΧ™ΧΧ•Χ΅ΧΧ¨Χ¦Χ™Χ” Χ”ΧΧ•Χ¤Χ™ΧΆΧ™Χ Χ‘ΧΧªΧ¨ Χ ΧΧ§Χ—Χ• ΧΧΧΧ’Χ¨ <strong>Wikimedia Commons</strong>, Χ•ΧΧ•Χ¤Χ¦Χ™Χ ΧªΧ—Χª Χ¨Χ™Χ©Χ™Χ•Χ Χ•Χª <strong>Creative Commons (CC)</strong> ΧΧ• <strong>Χ Χ—ΧΧª Χ”Χ›ΧΧ (Public Domain)</strong>.
             </p>
             
-            <h3>ψωιξϊ χψγιθιν ξτεψθϊ μϊξεπεϊ</h3>
+            <h3>Χ¨Χ©Χ™ΧΧª Χ§Χ¨Χ“Χ™ΧΧ™Χ ΧΧ¤Χ•Χ¨ΧΧª ΧΧªΧΧ•Χ Χ•Χª</h3>
             <ul>
-              <li><strong>δλεϊμ δξςψαι αωχιςδ:</strong> ξϊεκ Wikimedia Commons, φιμεν ϊηϊ ψιωιεο CC.</li>
-              <li><strong>ρξθΰεϊ ςϊιχεϊ (φτϊ / ιψεωμιν):</strong> ξϊεκ Wikimedia Commons, αΰγιαεϊ χδιμϊ ειχιτγιδ.</li>
-              <li><strong>ωεχ ξηπδ ιδεγδ:</strong> ξϊεκ Wikimedia Commons, ψιωιεο CC-BY.</li>
-              <li><strong>ιν δξμη, ξγαψ ιδεγδ εδπβα:</strong> γεγ ωπχαεο (David Shankbone) ειεφψιν περτιν ξ-Wikimedia Commons.</li>
-              <li><strong>δλπψϊ εψξϊ δβμιμ:</strong> ξϊεκ ξΰβψ Wikimedia Commons.</li>
-              <li><strong>ξβγμ γεγ εΰαπι ιψεωμιν:</strong> αΰγιαεϊ χδιμϊ διεφψιν ωμ ειχιτγιδ.</li>
-              <li><strong>ρτψι ϊεψδ εμεξγιν:</strong> ξΰβψι ϊξεπεϊ ηετωιεϊ ε-Wikimedia Commons.</li>
+              <li><strong>Χ”Χ›Χ•ΧªΧ Χ”ΧΧΆΧ¨Χ‘Χ™ Χ‘Χ©Χ§Χ™ΧΆΧ”:</strong> ΧΧªΧ•Χ Wikimedia Commons, Χ¦Χ™ΧΧ•Χ ΧªΧ—Χª Χ¨Χ™Χ©Χ™Χ•Χ CC.</li>
+              <li><strong>Χ΅ΧΧΧΧ•Χª ΧΆΧªΧ™Χ§Χ•Χª (Χ¦Χ¤Χª / Χ™Χ¨Χ•Χ©ΧΧ™Χ):</strong> ΧΧªΧ•Χ Wikimedia Commons, Χ‘ΧΧ“Χ™Χ‘Χ•Χª Χ§Χ”Χ™ΧΧª Χ•Χ™Χ§Χ™Χ¤Χ“Χ™Χ”.</li>
+              <li><strong>Χ©Χ•Χ§ ΧΧ—Χ Χ” Χ™Χ”Χ•Χ“Χ”:</strong> ΧΧªΧ•Χ Wikimedia Commons, Χ¨Χ™Χ©Χ™Χ•Χ CC-BY.</li>
+              <li><strong>Χ™Χ Χ”ΧΧΧ—, ΧΧ“Χ‘Χ¨ Χ™Χ”Χ•Χ“Χ” Χ•Χ”Χ Χ’Χ‘:</strong> Χ“Χ•Χ“ Χ©Χ Χ§Χ‘Χ•Χ (David Shankbone) Χ•Χ™Χ•Χ¦Χ¨Χ™Χ Χ Χ•Χ΅Χ¤Χ™Χ Χ-Wikimedia Commons.</li>
+              <li><strong>Χ”Χ›Χ Χ¨Χª Χ•Χ¨ΧΧª Χ”Χ’ΧΧ™Χ:</strong> ΧΧªΧ•Χ ΧΧΧ’Χ¨ Wikimedia Commons.</li>
+              <li><strong>ΧΧ’Χ“Χ Χ“Χ•Χ“ Χ•ΧΧ‘Χ Χ™ Χ™Χ¨Χ•Χ©ΧΧ™Χ:</strong> Χ‘ΧΧ“Χ™Χ‘Χ•Χª Χ§Χ”Χ™ΧΧª Χ”Χ™Χ•Χ¦Χ¨Χ™Χ Χ©Χ Χ•Χ™Χ§Χ™Χ¤Χ“Χ™Χ”.</li>
+              <li><strong>Χ΅Χ¤Χ¨Χ™ ΧªΧ•Χ¨Χ” Χ•ΧΧ•ΧΧ“Χ™Χ:</strong> ΧΧΧ’Χ¨Χ™ ΧªΧΧ•Χ Χ•Χª Χ—Χ•Χ¤Χ©Χ™Χ•Χª Χ•-Wikimedia Commons.</li>
             </ul>
 
             <p className="mt-8 text-sm text-ink-500">
-              * αξιγδ εξφΰϊν ϊξεπδ αΰϊψ ωζλειεϊιδ ωιιλεϊ μλν εδιΰ τεψρξδ αθςεϊ μμΰ χψγιθ ξϊΰιν, ΰπΰ τπε ΰμιπε αδχγν επγΰβ μϊχο ΰε μδριψ ΰεϊδ αδϊΰν μαχωϊλν.
+              * Χ‘ΧΧ™Χ“Χ” Χ•ΧΧ¦ΧΧªΧ ΧªΧΧ•Χ Χ” Χ‘ΧΧªΧ¨ Χ©Χ–Χ›Χ•Χ™Χ•ΧªΧ™Χ” Χ©Χ™Χ™Χ›Χ•Χª ΧΧ›Χ Χ•Χ”Χ™Χ Χ¤Χ•Χ¨Χ΅ΧΧ” Χ‘ΧΧΆΧ•Χª ΧΧΧ Χ§Χ¨Χ“Χ™Χ ΧΧªΧΧ™Χ, ΧΧ Χ Χ¤Χ Χ• ΧΧΧ™Χ Χ• Χ‘Χ”Χ§Χ“Χ Χ•Χ Χ“ΧΧ’ ΧΧªΧ§Χ ΧΧ• ΧΧ”Χ΅Χ™Χ¨ ΧΧ•ΧªΧ” Χ‘Χ”ΧªΧΧ ΧΧ‘Χ§Χ©ΧªΧ›Χ.
             </p>
           </div>
           
