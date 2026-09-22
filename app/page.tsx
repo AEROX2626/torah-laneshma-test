@@ -1,3 +1,4 @@
+import Link from "next/link";
 "use client";
 
 import { useEffect, useState } from "react";
@@ -506,7 +507,7 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
+            <Link href="/articles/bitachon" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Judea_2_by_David_Shankbone.jpg/1280px-Judea_2_by_David_Shankbone.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אור השמש מעל הרי ירושלים – ביטחון" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -520,9 +521,9 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
+            <Link href="/articles/chavruta" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Mahane_Yehuda_%28I%29_%2845298221191%29.jpg/1280px-Mahane_Yehuda_%28I%29_%2845298221191%29.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="אנשים לומדים בחצר ירושלמית" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -536,9 +537,9 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
+            <Link href="/articles/lech-lecha" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/NahalHavarimNov212022_03.jpg/1280px-NahalHavarimNov212022_03.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="מסע במדבר הנגב – לך לך" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -552,9 +553,9 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
+            <Link href="/articles/noah" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal">
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Dead_Sea_beach_00.JPG/1280px-Dead_Sea_beach_00.JPG" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="ים המלח השקט – פרשת נח" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -568,9 +569,9 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
+            <Link href="/articles/vayera" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.1s" }}>
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Kinneret_cropped.jpg/1280px-Kinneret_cropped.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="הרי הגליל הירוקים – הכנסת אורחים" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -584,9 +585,9 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
 
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
+            <Link href="/articles/bereshit" className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: "0.2s" }}>
               <div className="h-52 overflow-hidden relative">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg/1280px-%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg" className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt="זריחה מעל הכנרת – כוחה של התחלה" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -600,7 +601,7 @@ export default function Home() {
                   <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                 </div>
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </section>

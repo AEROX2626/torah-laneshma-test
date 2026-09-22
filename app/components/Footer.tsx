@@ -77,10 +77,11 @@ export default function Footer() {
           </div>
 
           <div className="pt-8 border-t border-ink-200/60 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-ink-500 font-medium">
-            <p>© <span>{year}</span> כל הזכויות שמורות – תורה לנשמה.</p>
+            <p>© <span>{new Date().getFullYear()}</span> תורה לנשמה. כל הזכויות שמורות.</p>
             <div className="flex gap-6">
-              <a href="#" className="hover:text-primary-600 transition-colors">מדיניות פרטיות</a>
-              <a href="#" className="hover:text-primary-600 transition-colors">הצהרת נגישות</a>
+              <Link href="/credits" className="hover:text-primary-600 transition-colors">קרדיטים וזכויות יוצרים</Link>
+              <Link href="/#" className="hover:text-primary-600 transition-colors">מדיניות פרטיות</Link>
+              <Link href="/#" className="hover:text-primary-600 transition-colors">הצהרת נגישות</Link>
             </div>
           </div>
         </div>
