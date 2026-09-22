@@ -51,6 +51,7 @@ export default function Navbar() {
               <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">מהי חברותא?</Link>
               <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">איך זה עובד?</Link>
               <Link href="/adopt" className={`px-4 py-2.5 font-semibold text-[15px] rounded-xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
+              <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">כל הכתבות</Link>
               <Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">שאלות נפוצות</Link>
               <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary mr-3 px-7 py-3 rounded-full font-bold text-[15px] inline-flex items-center gap-2">
                 <span>להרשמה מהירה</span>
@@ -73,6 +74,7 @@ export default function Navbar() {
             <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">מהי חברותא?</Link>
             <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">איך זה עובד?</Link>
             <Link href="/adopt" onClick={() => setIsMenuOpen(false)} className={`block px-5 py-4 text-base font-semibold rounded-2xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-700 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
+            <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">כל הכתבות</Link>
             <Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">שאלות נפוצות</Link>
             <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary block text-center mt-4 px-6 py-4 rounded-2xl font-bold">להרשמה מהירה (ללא עלות)</Link>
           </div>
