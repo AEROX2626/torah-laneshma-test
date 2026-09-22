@@ -63,7 +63,7 @@ export default function AdoptPage() {
             <div className="lg:col-span-6 relative reveal-scale" style={{ transitionDelay: "0.2s" }}>
               <div className="relative">
                 <img
-                  src="https://image.pollinations.ai/prompt/Jewish%20man%20praying%20at%20the%20Western%20Wall%20Jerusalem%20back%20view%20tallit%20realistic%20photography?width=1000&height=800&nologo=true"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Men_praying_at_the_Western_Wall.jpg/1280px-Men_praying_at_the_Western_Wall.jpg"
                   alt="תפילה בכותל המערבי בירושלים"
                   className="rounded-[2.5rem] shadow-2xl img-cover h-[400px] md:h-[500px] w-full border-2 border-white relative z-10"
                 />
@@ -105,7 +105,7 @@ export default function AdoptPage() {
               </p>
             </div>
             <div className="reveal-scale">
-              <img src="https://image.pollinations.ai/prompt/Ancient%20Torah%20scroll%20on%20a%20wooden%20desk%20with%20Jerusalem%20window%20view%20light%20rays%20realistic%20photography?width=800&height=800&nologo=true" alt="ספר תורה ונוף ירושלים" className="rounded-3xl shadow-xl border border-ink-100" />
+              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Torah_scroll_case.jpg/1280px-Torah_scroll_case.jpg" alt="ספר תורה ונוף ירושלים" className="rounded-3xl shadow-xl border border-ink-100" />
             </div>
           </div>
 
