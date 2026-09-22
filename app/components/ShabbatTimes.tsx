@@ -17,7 +17,7 @@ export default function ShabbatTimes() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const fetchShabbatTimes = (query: string, cityName: string) => {
-    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&m=50&lg=he`)
+    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he`)
       .then((res) => res.json())
       .then((data) => {
         const items = data.items;
@@ -30,8 +30,8 @@ export default function ShabbatTimes() {
         if (candles && havdalah) {
           setTimes({
             eventName,
-            inTime: new Date(candles.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }),
-            outTime: new Date(havdalah.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit" }),
+            inTime: new Date(candles.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Jerusalem" }),
+            outTime: new Date(havdalah.date).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Jerusalem" }),
             city: cityName,
           });
         }
