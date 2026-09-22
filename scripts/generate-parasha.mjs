@@ -100,11 +100,15 @@ async function main() {
   
   const randomImage = defaultImages[Math.floor(Math.random() * defaultImages.length)];
 
+  const today = new Date();
+  const dateStr = today.toLocaleDateString('he-IL');
+
   const newArticle = {
     slug: slug,
     title: generated.title,
     excerpt: generated.excerpt,
     category: 'פרשת השבוע',
+    date: dateStr,
     image: randomImage,
     content: generated.content
   };

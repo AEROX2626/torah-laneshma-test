@@ -517,7 +517,9 @@ export default function Home() {
                 <div className="h-52 overflow-hidden relative">
                   <img src={article.image} className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt={article.title} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">{article.category}</div>
+                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">
+                    {article.category} {article.date && <span className="font-medium text-ink-500 ml-1 mr-1">• {article.date}</span>}
+                  </div>
                 </div>
                 <div className="p-7 flex-grow flex flex-col">
                   <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3 group-hover:text-primary-600 transition-colors leading-snug">{article.title}</h3>

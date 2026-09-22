@@ -63,8 +63,21 @@ export default function ShabbatTimes() {
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          fetchShabbatTimes(`latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, "לפי מיקום");
-          setIsDropdownOpen(false);
+          
+          fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=he`, {
+            headers: { "User-Agent": "TorahLaneshama/1.0" }
+          })
+            .then(res => res.json())
+            .then(loc => {
+              const address = loc.address || {};
+              const locationName = address.city || address.town || address.village || address.state_district || "לפי מיקום";
+              fetchShabbatTimes(`latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, locationName);
+              setIsDropdownOpen(false);
+            })
+            .catch(() => {
+              fetchShabbatTimes(`latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, "לפי מיקום");
+              setIsDropdownOpen(false);
+            });
         },
         (error) => {
           console.error("Error getting location", error);
