@@ -133,7 +133,7 @@ export default function Home() {
 
       <Navbar />
 
-      <section className="relative pt-32 md:pt-40 pb-16 md:pb-24 overflow-hidden">
+      <section className="relative pt-12 md:pt-20 pb-16 md:pb-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             <div className="lg:col-span-6 text-center lg:text-right">

@@ -239,7 +239,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
-#mobile-menu.open { max-height: 400px; }
+#mobile-menu.open { max-height: 800px; overflow-y: auto; }
 
 .hero-frame::after {
   content: '';

@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="navbar" className={`fixed w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "glass shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
+      <nav id="navbar" className={`sticky top-0 w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "glass shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex justify-between items-center h-20 md:h-24">
             <Link href="/" className="flex items-center gap-3 group">
@@ -48,14 +48,14 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-1">
-              <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">מהי חברותא?</Link>
-              <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">איך זה עובד?</Link>
-              <Link href="/relationships-guide" className={`px-4 py-2.5 font-semibold text-[15px] rounded-xl transition-all ${pathname === '/relationships-guide' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>זוגיות ומידות</Link>
-              <Link href="/ask" className={`px-4 py-2.5 font-bold text-[15px] rounded-xl transition-all flex items-center gap-2 ${pathname === '/ask' ? 'text-primary-700 bg-primary-100/80' : 'text-primary-600 bg-primary-50 hover:bg-primary-100/80'}`}><i className="fas fa-robot text-primary-500"></i>שאל את הרב</Link>
-              <Link href="/adopt" className={`px-4 py-2.5 font-semibold text-[15px] rounded-xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
-              <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">כל הכתבות</Link>
-              <Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="px-4 py-2.5 text-ink-600 hover:text-primary-600 font-semibold text-[15px] rounded-xl hover:bg-primary-50 transition-all">שאלות נפוצות</Link>
-              <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary mr-3 px-7 py-3 rounded-full font-bold text-[15px] inline-flex items-center gap-2">
+              <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">מהי חברותא?</Link>
+              <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">איך זה עובד?</Link>
+              <Link href="/relationships-guide" className={`px-2 lg:px-3 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/relationships-guide' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>זוגיות ומידות</Link>
+              <Link href="/ask" className={`px-2 lg:px-3 py-2 font-bold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all flex items-center gap-2 ${pathname === '/ask' ? 'text-primary-700 bg-primary-100/80' : 'text-primary-600 bg-primary-50 hover:bg-primary-100/80'}`}><i className="fas fa-robot text-primary-500"></i>שאל את הרב</Link>
+              <Link href="/adopt" className={`px-2 lg:px-3 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
+              <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">כל הכתבות</Link>
+              <Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">שאלות נפוצות</Link>
+              <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary mr-1 lg:mr-3 px-4 lg:px-6 py-2.5 rounded-full font-bold text-[15px] inline-flex items-center gap-2">
                 <span>להרשמה מהירה</span>
                 <i className="fas fa-arrow-left text-xs"></i>
               </Link>
