@@ -2,8 +2,8 @@ name: Generate Daily Tip
 
 on:
   schedule:
-    # Run every day at 00:00 UTC (02:00 or 03:00 Israel time)
-    - cron: '0 0 * * *'
+    # Run every day at 21:00 UTC (00:00 or 23:00 Israel time)
+    - cron: '0 21 * * *'
   workflow_dispatch:
     # Allows manual triggering from the GitHub Actions UI
 
