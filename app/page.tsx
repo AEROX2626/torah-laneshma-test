@@ -112,8 +112,8 @@ export default function Home() {
     
     // Add Web3Forms access key
     formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11");
-    formData.append("subject", "��� ��� ����� - ���� �������!");
-    formData.append("from_name", "���� �����");
+    formData.append("subject", "ליד חדש מהאתר - בקשה לחברותא!");
+    formData.append("from_name", "תורה לנשמה");
 
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
