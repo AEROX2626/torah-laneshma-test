@@ -55,7 +55,15 @@ export default function JewishCalendarWidget({ onClose }: { onClose: () => void 
     };
   };
 
-  const weekdays = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+  const weekdays = [
+    { full: 'ראשון', short: "א'" },
+    { full: 'שני', short: "ב'" },
+    { full: 'שלישי', short: "ג'" },
+    { full: 'רביעי', short: "ד'" },
+    { full: 'חמישי', short: "ה'" },
+    { full: 'שישי', short: "ו'" },
+    { full: 'שבת', short: 'שבת' }
+  ];
   const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
 
   const modalContent = (
@@ -92,22 +100,23 @@ export default function JewishCalendarWidget({ onClose }: { onClose: () => void 
         </div>
         
         {/* Calendar Body */}
-        <div className="flex-grow overflow-y-auto p-3 md:p-8 bg-ink-50/30 no-scrollbar">
+        <div className="flex-grow overflow-y-auto p-2 md:p-8 bg-ink-50/30 no-scrollbar">
           {loading ? (
             <div className="flex flex-col items-center justify-center h-64 text-ink-500 gap-4">
               <i className="fas fa-circle-notch fa-spin text-4xl text-primary-500"></i>
               <span className="font-medium text-lg">מכין את לוח השנה...</span>
             </div>
           ) : (
-            <div className="grid grid-cols-7 gap-1.5 md:gap-4">
+            <div className="grid grid-cols-7 gap-1 md:gap-4">
               {weekdays.map((wd, i) => (
-                <div key={wd} className={`text-center font-bold text-xs md:text-sm py-2 ${i === 6 ? 'text-primary-600' : 'text-ink-500'}`}>
-                  {wd}
+                <div key={wd.full} className={`text-center font-bold text-[11px] md:text-sm py-1.5 md:py-2 ${i === 6 ? 'text-primary-600' : 'text-ink-500'}`}>
+                  <span className="hidden md:inline">{wd.full}</span>
+                  <span className="md:hidden">{wd.short}</span>
                 </div>
               ))}
               
               {Array.from({ length: startWeekday }).map((_, i) => (
-                <div key={`empty-${i}`} className="min-h-[60px] md:min-h-[110px] rounded-xl md:rounded-2xl bg-white/40 border border-ink-100/40"></div>
+                <div key={`empty-${i}`} className="min-h-[70px] md:min-h-[110px] rounded-lg md:rounded-2xl bg-white/40 border border-ink-100/40"></div>
               ))}
               
               {Array.from({ length: daysInMonth }).map((_, i) => {
@@ -117,28 +126,28 @@ export default function JewishCalendarWidget({ onClose }: { onClose: () => void 
                 const isShabbat = (startWeekday + i) % 7 === 6;
                 
                 return (
-                  <div key={day} className={`min-h-[70px] md:min-h-[110px] rounded-xl md:rounded-2xl border p-1.5 md:p-3 flex flex-col transition-all group ${
+                  <div key={day} className={`min-h-[75px] md:min-h-[110px] rounded-lg md:rounded-2xl border p-1 md:p-3 flex flex-col transition-all group ${
                     isToday 
                       ? 'bg-primary-50 border-primary-300 ring-2 ring-primary-200/50 shadow-sm' 
                       : 'bg-white border-ink-200 hover:border-primary-200 hover:shadow-md'
                   }`}>
                     
-                    <div className="flex justify-between items-start mb-1 md:mb-2">
-                      <span className={`font-black text-sm md:text-xl leading-none ${isToday ? 'text-primary-700' : (isShabbat ? 'text-primary-600' : 'text-ink-800')}`}>{day}</span>
-                      <span className={`text-[10px] md:text-sm font-semibold leading-none ${isToday ? 'text-primary-600' : 'text-ink-400'}`}>{hebDateStr}</span>
+                    <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start mb-1 md:mb-2 gap-0.5 md:gap-0">
+                      <span className={`font-black text-[13px] md:text-xl leading-none ${isToday ? 'text-primary-700' : (isShabbat ? 'text-primary-600' : 'text-ink-800')}`}>{day}</span>
+                      <span className={`text-[9px] md:text-sm font-semibold leading-none ${isToday ? 'text-primary-600' : 'text-ink-400'}`}>{hebDateStr}</span>
                     </div>
                     
-                    <div className="flex-grow flex flex-col gap-1 mt-1 overflow-hidden">
+                    <div className="flex-grow flex flex-col gap-1 mt-0.5 md:mt-1 overflow-hidden justify-end md:justify-start">
                       {holidays.map((h, idx) => {
                         const cleanTitle = h.hebrew.replace(/[\u0591-\u05C7]/g, '').replace(/\s\d{4}$/, '');
                         return (
-                          <div key={idx} className="text-[9px] md:text-xs font-bold px-1.5 py-1 md:px-2 md:py-1.5 rounded-lg md:rounded-md bg-amber-50 text-amber-700 border border-amber-100/50 leading-tight text-center md:text-right truncate" title={cleanTitle}>
+                          <div key={idx} className="text-[8.5px] md:text-xs font-bold px-0.5 md:px-2 py-0.5 md:py-1.5 rounded-[4px] md:rounded-md bg-amber-50 text-amber-700 border border-amber-100/50 leading-[1.1] text-center md:text-right whitespace-normal md:truncate line-clamp-2 md:line-clamp-none" title={cleanTitle}>
                             {cleanTitle}
                           </div>
                         );
                       })}
                       {parasha && (
-                        <div className="text-[9px] md:text-xs font-bold px-1.5 py-1 md:px-2 md:py-1.5 rounded-lg md:rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100/50 leading-tight text-center md:text-right truncate" title={parasha}>
+                        <div className="text-[8.5px] md:text-xs font-bold px-0.5 md:px-2 py-0.5 md:py-1.5 rounded-[4px] md:rounded-md bg-emerald-50 text-emerald-700 border border-emerald-100/50 leading-[1.1] text-center md:text-right whitespace-normal md:truncate line-clamp-2 md:line-clamp-none" title={parasha}>
                           {parasha}
                         </div>
                       )}
