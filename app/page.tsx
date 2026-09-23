@@ -409,10 +409,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-primary-50 to-white p-8 md:p-10 rounded-[2rem] shadow-soft border border-primary-100 reveal-scale">
             <div className="md:w-5/12 text-center md:text-right">
               <h3 className="font-heading font-black text-2xl md:text-3xl text-ink-950 mb-3">
-                מוכנים לצאת לדרך?
+                שעה בשבוע לעצמכם
               </h3>
               <p className="text-ink-600 font-medium">
-                השאירו פרטים ונציג שלנו יחזור אליכם להתאמה מדויקת. בלי טפסים ארוכים.
+                השאירו פרטים ונחבר לכם חברותא טלפונית ללא עלות, ביום ובשעה שהכי נוחים לכם.
               </p>
             </div>
             <div className="md:w-7/12 w-full">
@@ -550,10 +550,10 @@ export default function Home() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8 bg-gradient-to-br from-accent-50 to-white p-8 md:p-10 rounded-[2rem] shadow-soft border border-accent-100 reveal-scale">
             <div className="md:w-5/12 text-center md:text-right">
               <h3 className="font-heading font-black text-2xl md:text-3xl text-ink-950 mb-3">
-                הגיע הזמן לדבר באמת.
+                חברותא טלפונית בחינם
               </h3>
               <p className="text-ink-600 font-medium">
-                רוצים לנסות שיחה קצרה ופתוחה? השאירו פרטים קצרים ונתחיל.
+                שיחה קצרה ופתוחה מתי שנוח לכם. השירות ניתן ללא כל התחייבות, השאירו פרטים ונתחיל.
               </p>
             </div>
             <div className="md:w-7/12 w-full">
