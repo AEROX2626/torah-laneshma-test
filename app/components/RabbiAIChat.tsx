@@ -5,7 +5,7 @@ export default function RabbiAIChat() {
         <span className="text-ink-400 font-medium text-sm">טוען את הרב הווירטואלי...</span>
       </div>
       <iframe
-        src="https://widget.rabbiai.app/he/chat/rabbi?display-mode=auto&app=torah-laneshma"
+        src="https://widget.rabbiai.app/he/chat/rabbi?display-mode=auto&app=your-app-name"
         width="100%"
         height="100%"
         frameBorder="0"
