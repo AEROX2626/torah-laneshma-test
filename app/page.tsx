@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 import DailyInspiration from "./components/DailyInspiration";
 import Footer from "./components/Footer";
 import ShabbatTimes from "./components/ShabbatTimes";
+import HebrewDate from "./components/HebrewDate";
 
 export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -137,7 +138,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             <div className="lg:col-span-6 text-center lg:text-right">
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 mb-7 reveal relative z-50">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-7 reveal relative z-50">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm shadow-soft">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
@@ -146,6 +147,7 @@ export default function Home() {
                   <span>שעה בשבוע שמטעינה את הנשמה</span>
                 </div>
                 <ShabbatTimes />
+                <HebrewDate />
               </div>
 
               <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7 reveal" style={{ transitionDelay: "0.1s" }}>
