@@ -507,9 +507,9 @@ export default function Home() {
                 טעימות תוכן שפותחות את הראש והלב, מבוססות על החוכמה היהודית העתיקה והרלוונטיות העמוקה שלה לחיינו כיום.
               </p>
             </div>
-            <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="btn-outline bg-white px-6 py-3 rounded-2xl font-bold text-ink-700 inline-flex items-center gap-2 whitespace-nowrap">
+            <Link href="/articles" className="btn-outline bg-white px-6 py-3 rounded-2xl font-bold text-ink-700 inline-flex items-center gap-2 whitespace-nowrap">
               צפייה בכל התכנים <i className="fas fa-arrow-left text-xs"></i>
-            </a>
+            </Link>
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-7">
