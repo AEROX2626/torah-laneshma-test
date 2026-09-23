@@ -16,7 +16,7 @@ export default function RelationshipsGuidePage() {
       <main className="flex-grow pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           
-          <div className="text-center mb-12 md:mb-16 reveal">
+          <div className="text-center mb-12 md:mb-16">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-rose-100 text-rose-700 font-bold text-xs tracking-widest uppercase mb-4 shadow-sm">
               <i className="fas fa-heart"></i>
               <span>מתעדכן כל יום</span>
@@ -31,7 +31,7 @@ export default function RelationshipsGuidePage() {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
             {dailyTips.map((tip, index) => (
-              <div key={tip.id} className="bg-white rounded-3xl p-8 shadow-soft border border-rose-100 flex flex-col h-full reveal-scale hover:shadow-lg transition-shadow" style={{ transitionDelay: `${(index % 3) * 0.1}s` }}>
+              <div key={tip.id} className="bg-white rounded-3xl p-8 shadow-soft border border-rose-100 flex flex-col h-full hover:shadow-lg transition-shadow">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1 rounded-full">{tip.category}</span>
                   <span className="text-xs font-medium text-ink-400">{tip.date}</span>

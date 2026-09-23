@@ -16,7 +16,7 @@ export default function AskRabbiPage() {
       <main className="flex-grow pt-28 pb-20 md:pt-36 md:pb-28">
         <div className="max-w-4xl mx-auto px-5 sm:px-8">
           
-          <div className="text-center mb-10 md:mb-14 reveal">
+          <div className="text-center mb-10 md:mb-14">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-700 font-bold text-xs tracking-widest uppercase mb-4 shadow-sm">
               <i className="fas fa-robot"></i>
               <span>זמין 24 שעות ביממה</span>
@@ -30,11 +30,11 @@ export default function AskRabbiPage() {
             </p>
           </div>
 
-          <div className="reveal-scale" style={{ transitionDelay: "0.1s" }}>
+          <div>
             <RabbiAIChat />
           </div>
 
-          <div className="mt-12 text-center text-ink-400 text-sm font-medium flex items-center justify-center gap-2 reveal" style={{ transitionDelay: "0.2s" }}>
+          <div className="mt-12 text-center text-ink-400 text-sm font-medium flex items-center justify-center gap-2">
             <i className="fas fa-info-circle"></i>
             <span>התשובות ניתנות על ידי בינה מלאכותית ונועדו להעשרה ולימוד בלבד.</span>
           </div>
