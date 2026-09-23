@@ -230,6 +230,8 @@ export default function Home() {
         </div>
       </section>
 
+      <DailyInspiration />
+
       <section id="about" className="py-20 md:py-28 relative">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="text-center max-w-3xl mx-auto mb-16 md:mb-20 reveal">
