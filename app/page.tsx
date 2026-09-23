@@ -435,7 +435,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-20 md:py-28 relative overflow-hidden bg-ink-950 text-white noise">
+      <section className="py-20 md:py-28 relative overflow-hidden bg-ink-950 text-white noise selection:bg-white/30 selection:text-white">
         <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwem0yMCAyMGMtNS41IDAtMTAtNC41LTEwLTEwUzE0LjUgMTAgMjAgMTBzMTAgNC41IDEwIDEwLTQuNSAxMC0xMCAxMHoiIGZpbGw9IiNmZmYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]"></div>
         <div className="absolute top-1/3 left-0 w-96 h-96 bg-primary-500/20 rounded-full blur-[120px]"></div>
         <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-[120px]"></div>
@@ -658,7 +658,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 relative overflow-hidden bg-ink-950">
+      <section className="py-16 md:py-20 relative overflow-hidden bg-ink-950 selection:bg-white/30 selection:text-white">
         <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Jerusalem_stone.jpg/1280px-Jerusalem_stone.jpg')", opacity: 0.25 }}></div>
         <div className="absolute inset-0 bg-gradient-to-l from-ink-950 via-ink-950/70 to-transparent"></div>
 
