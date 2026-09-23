@@ -62,11 +62,11 @@ export default function AdoptPage() {
 
             <div className="lg:col-span-6 relative reveal-scale" style={{ transitionDelay: "0.2s" }}>
               <div className="relative">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Men_praying_at_the_Western_Wall.jpg/1280px-Men_praying_at_the_Western_Wall.jpg"
-                  alt="תפילה בכותל המערבי בירושלים"
-                  className="rounded-[2.5rem] shadow-2xl img-cover h-[400px] md:h-[500px] w-full border-2 border-white relative z-10"
-                />
+                  <img
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Westernwall2.jpg/1280px-Westernwall2.jpg"
+                    alt="אברכים מתפללים בכותל המערבי"
+                    className="rounded-[2.5rem] shadow-2xl img-cover h-[400px] md:h-[500px] w-full border-2 border-white relative z-10"
+                  />
                 <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-accent-500/20 rounded-full blur-3xl"></div>
                 <div className="absolute -top-6 -left-6 md:-left-8 bg-white p-5 rounded-2xl shadow-elevated flex items-center gap-4 border border-ink-50 z-20">
                   <div className="w-14 h-14 bg-gradient-to-br from-rose-400 to-rose-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-rose-500/40">
@@ -104,9 +104,9 @@ export default function AdoptPage() {
                 היום, אתם יכולים להיות זבולון. השותפות הזו מאפשרת לאברכים (תלמידי חכמים) להמשיך להקדיש את חייהם ללימוד תורה, כאשר הזכות הרוחנית נזקפת גם לזכותכם.
               </p>
             </div>
-            <div className="reveal-scale">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Torah_scroll_case.jpg/1280px-Torah_scroll_case.jpg" alt="ספר תורה ונוף ירושלים" className="rounded-3xl shadow-xl border border-ink-100" />
-            </div>
+              <div className="reveal-scale">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Talmud-Druck_von_Daniel_Bomberg_und_Ambrosius_Froben.jpg/1280px-Talmud-Druck_von_Daniel_Bomberg_und_Ambrosius_Froben.jpg" alt="לימוד תלמוד ותורה" className="rounded-3xl shadow-xl border border-ink-100" />
+              </div>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
