@@ -40,8 +40,17 @@ export default function ShabbatTimes() {
   };
 
   useEffect(() => {
-    // Default to Jerusalem
-    fetchShabbatTimes("geonameid=281184", "ירושלים");
+    const saved = localStorage.getItem("shabbatLocation");
+    if (saved) {
+      try {
+        const { query, cityName } = JSON.parse(saved);
+        fetchShabbatTimes(query, cityName);
+      } catch (e) {
+        fetchShabbatTimes("geonameid=281184", "ירושלים");
+      }
+    } else {
+      fetchShabbatTimes("geonameid=281184", "ירושלים");
+    }
     
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -54,6 +63,7 @@ export default function ShabbatTimes() {
 
   const handleCitySelect = (cityId: string, cityName: string) => {
     fetchShabbatTimes(`geonameid=${cityId}`, cityName);
+    localStorage.setItem("shabbatLocation", JSON.stringify({ query: `geonameid=${cityId}`, cityName }));
     setIsDropdownOpen(false);
   };
 
@@ -72,10 +82,12 @@ export default function ShabbatTimes() {
               const address = loc.address || {};
               const locationName = address.city || address.town || address.village || address.state_district || "לפי מיקום";
               fetchShabbatTimes(`latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, locationName);
+              localStorage.setItem("shabbatLocation", JSON.stringify({ query: `latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, cityName: locationName }));
               setIsDropdownOpen(false);
             })
             .catch(() => {
               fetchShabbatTimes(`latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, "לפי מיקום");
+              localStorage.setItem("shabbatLocation", JSON.stringify({ query: `latitude=${lat}&longitude=${lng}&tzid=Asia/Jerusalem`, cityName: "לפי מיקום" }));
               setIsDropdownOpen(false);
             });
         },
