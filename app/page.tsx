@@ -636,18 +636,18 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-ink-800" htmlFor="name">איך קוראים לך?</label>
-                    <input type="text" id="name" name="שם_מלא" required className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base" placeholder="שם מלא" />
+                    <input type="text" id="name" name="Full_Name" required className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base" placeholder="שם מלא" />
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-ink-800" htmlFor="phone">לאן נוכל להתקשר?</label>
-                    <input type="tel" id="phone" name="טלפון" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-ink-900 text-left font-medium text-base" dir="ltr" placeholder="050-0000000" />
+                    <input type="tel" id="phone" name="Phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-ink-900 text-left font-medium text-base" dir="ltr" placeholder="050-0000000" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="topic">איזה נושא הכי מסקרן אותך? (לא חובה)</label>
                   <div className="relative">
-                    <select id="topic" name="נושא_מועדף" className="w-full input-modern p-4 rounded-2xl text-ink-900 appearance-none pl-12 font-medium text-base cursor-pointer" defaultValue="">
+                    <select id="topic" name="Preferred_Topic" className="w-full input-modern p-4 rounded-2xl text-ink-900 appearance-none pl-12 font-medium text-base cursor-pointer" defaultValue="">
                       <option value="" disabled>אנא בחר/י מהרשימה...</option>
                       <option value="פילוסופיה של הנפש / חובת הלבבות">פילוסופיה של הנפש / חובת הלבבות</option>
                       <option value="אקטואליה ופרשת השבוע">אקטואליה ופרשת השבוע</option>
@@ -663,7 +663,7 @@ export default function Home() {
 
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="notes">יש משהו נוסף שחשוב שנדע? (לא חובה)</label>
-                  <textarea id="notes" name="הערות" rows={3} className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base resize-none" placeholder="זה הזמן לספר על עצמך, על שעות שנוחות לך, או כל בקשה מיוחדת שתעזור לנו לדייק..."></textarea>
+                  <textarea id="notes" name="Additional_Notes" rows={3} className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base resize-none" placeholder="זה הזמן לספר על עצמך, על שעות שנוחות לך, או כל בקשה מיוחדת שתעזור לנו לדייק..."></textarea>
                 </div>
 
                 <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-5 rounded-2xl font-extrabold text-lg inline-flex items-center justify-center gap-3 group">
