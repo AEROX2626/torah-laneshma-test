@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="navbar" className={`sticky top-0 w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "glass shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
+      <nav id="navbar" className={`sticky top-0 w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "bg-white shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex justify-between items-center h-20 md:h-24">
             <Link href="/" onClick={(e) => { if(isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex items-center gap-3 group">
@@ -71,7 +71,7 @@ export default function Navbar() {
           </div>
         </div>
 
-        <div id="mobile-menu" className={`lg:hidden bg-white/98 backdrop-blur-2xl border-t border-ink-100 ${isMenuOpen ? "open" : ""}`}>
+        <div id="mobile-menu" className={`lg:hidden bg-white border-t border-ink-100 ${isMenuOpen ? "open" : ""}`}>
           <div className="px-5 py-6 space-y-1">
             <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">מהי חברותא?</Link>
             <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="block px-5 py-4 text-base font-semibold text-ink-700 hover:text-primary-600 hover:bg-primary-50 rounded-2xl transition-all">איך זה עובד?</Link>
