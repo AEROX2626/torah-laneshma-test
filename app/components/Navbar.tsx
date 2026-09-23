@@ -43,7 +43,7 @@ export default function Navbar() {
               </div>
               <div className="flex flex-col justify-center">
                 <span className="font-heading font-black text-xl md:text-2xl text-ink-900 leading-tight tracking-tight">תורה לנשמה</span>
-                <span className="text-primary-600 font-bold text-[10px] md:text-xs tracking-widest leading-none mt-0.5">חברותא עם רבנים</span>
+                <span className="text-primary-600 font-bold text-[10px] md:text-xs tracking-widest leading-none mt-0.5">חברותא ללימוד תורה</span>
               </div>
             </Link>
 
