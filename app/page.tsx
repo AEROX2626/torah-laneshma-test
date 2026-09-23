@@ -103,14 +103,39 @@ export default function Home() {
     };
   }, []);
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setTimeout(() => {
+    
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    
+    // Add Web3Forms access key
+    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "YOUR_KEY_HERE");
+    formData.append("subject", "��� ��� ����� - ���� �������!");
+    formData.append("from_name", "���� �����");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        setIsSubmitting(false);
+        setIsModalOpen(true);
+        form.reset();
+      } else {
+        console.error("Form submission failed", data);
+        alert("����� ����� ������ �����. ��� ��� �� ��� ����� ��������.");
+        setIsSubmitting(false);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("����� �����. ���� �� ������ �������� ���� ���.");
       setIsSubmitting(false);
-      setIsModalOpen(true);
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+    }
   };
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
@@ -611,18 +636,18 @@ export default function Home() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-ink-800" htmlFor="name">איך קוראים לך?</label>
-                    <input type="text" id="name" required className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base" placeholder="שם מלא" />
+                    <input type="text" id="name" name="name" required className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base" placeholder="שם מלא" />
                   </div>
                   <div className="space-y-2">
                     <label className="block text-sm font-bold text-ink-800" htmlFor="phone">לאן נוכל להתקשר?</label>
-                    <input type="tel" id="phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-ink-900 text-left font-medium text-base" dir="ltr" placeholder="050-0000000" />
+                    <input type="tel" id="phone" name="phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-ink-900 text-left font-medium text-base" dir="ltr" placeholder="050-0000000" />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="topic">איזה נושא הכי מסקרן אותך? (לא חובה)</label>
                   <div className="relative">
-                    <select id="topic" className="w-full input-modern p-4 rounded-2xl text-ink-900 appearance-none pl-12 font-medium text-base cursor-pointer" defaultValue="">
+                    <select id="topic" name="topic" className="w-full input-modern p-4 rounded-2xl text-ink-900 appearance-none pl-12 font-medium text-base cursor-pointer" defaultValue="">
                       <option value="" disabled>אנא בחר/י מהרשימה...</option>
                       <option value="bitachon">פילוסופיה של הנפש / חובת הלבבות</option>
                       <option value="parasha">אקטואליה ופרשת השבוע</option>
