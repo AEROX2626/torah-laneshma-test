@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import GlobalCTA from "./GlobalCTA";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -20,6 +21,7 @@ export default function Footer() {
 
   return (
     <>
+      {!isHome && <GlobalCTA />}
       <footer className="bg-ink-50 border-t border-ink-100 pt-16 md:pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="grid md:grid-cols-12 gap-10 md:gap-8 mb-14">
