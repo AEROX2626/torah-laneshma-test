@@ -56,6 +56,15 @@ export default async function ArticlePage(props: { params: Params }) {
             dangerouslySetInnerHTML={{ __html: article.content }} 
           />
 
+          
+          <div className="mt-16 pt-12 border-t border-ink-100 mb-10">
+            <div className="text-center mb-8">
+              <h3 className="font-heading font-black text-2xl md:text-3xl text-ink-950 mb-3">�� ��� ����� ������ �� �����?</h3>
+              <p className="text-ink-600 font-medium">��� ���������� ���� ���� ����� ��� �� �� ����, ��� ������.</p>
+            </div>
+            <RabbiAIChat />
+          </div>
+
           <div className="mt-14 pt-10 border-t border-ink-100 flex justify-center">
             <Link href="/#join" className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
               <span>זה הזמן לקבוע חברותא</span>
