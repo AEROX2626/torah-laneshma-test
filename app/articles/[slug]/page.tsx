@@ -1,3 +1,4 @@
+import RabbiAIChat from '../../components/RabbiAIChat';
 import { articles } from '../data';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
