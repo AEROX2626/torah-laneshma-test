@@ -4,7 +4,7 @@ import { articles } from "./articles/data";
 
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
-import DailyTipWidget from "./components/DailyTipWidget";
+import DailyInspiration from "./components/DailyInspiration";
 import Footer from "./components/Footer";
 import ShabbatTimes from "./components/ShabbatTimes";
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Assistant, Rubik } from "next/font/google";
 import "./globals.css";
+import HolidayBanner from "./components/HolidayBanner";
 
 const assistant = Assistant({
   subsets: ["hebrew", "latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
+        <HolidayBanner />
         {children}
       </body>
     </html>
