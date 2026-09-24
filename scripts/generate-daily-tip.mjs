@@ -33,7 +33,19 @@ const prompt = `
 
 async function run() {
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+    // Auto-discover model
+    let modelName = 'gemini-1.5-flash';
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
+      if (listRes.ok) {
+        const listData = await listRes.json();
+        const models = listData.models || [];
+        const flash = models.find(m => m.name.includes('flash') && m.supportedGenerationMethods.includes('generateContent'));
+        if (flash) modelName = flash.name.replace('models/', '');
+      }
+    } catch (e) {}
+
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

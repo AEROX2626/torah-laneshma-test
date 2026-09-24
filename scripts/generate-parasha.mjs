@@ -20,6 +20,28 @@ async function getParasha() {
 
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
+  // Discover available models
+  let modelName = 'gemini-1.5-flash';
+  try {
+    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
+    if (listRes.ok) {
+      const listData = await listRes.json();
+      const models = listData.models || [];
+      console.log("Available models:", models.map(m => m.name.replace('models/', '')).join(', '));
+      const flash = models.find(m => m.name.includes('flash') && m.supportedGenerationMethods.includes('generateContent'));
+      if (flash) {
+        modelName = flash.name.replace('models/', '');
+      } else if (models.length > 0) {
+        const any = models.find(m => m.supportedGenerationMethods.includes('generateContent'));
+        if (any) modelName = any.name.replace('models/', '');
+      }
+    }
+  } catch (err) {
+    console.warn("Could not list models, falling back to default:", err);
+  }
+
+  console.log("Using model:", modelName);
+
   const prompt = `
 אתה כותב תוכן לאתר אינטרנט בשם 'תורה לנשמה', שמטרתו להנגיש חיבור למסורת לאנשים עמוסים דרך לימוד טלפוני (חברותא).
 כתוב מאמר מעורר השראה בן 3 פסקאות על ${parashaNameHe} (פרשת השבוע).
@@ -42,7 +64,7 @@ async function generateArticle(parashaNameHe, parashaNameEn) {
     }
   };
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(requestBody)
