@@ -319,7 +319,7 @@ export default function SefariaReader() {
             onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             placeholder="חפש (למשל: חובות הלבבות)..."
-            className="w-full bg-slate-100 dark:bg-slate-800 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-base"
+            className={`w-full rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-base ${isDarkMode ? 'bg-slate-800 focus:bg-slate-900 text-white placeholder:text-slate-300' : 'bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-500'}`}
             dir="rtl"
           />
           <button type="submit" className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400">
