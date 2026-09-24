@@ -24,7 +24,7 @@ jobs:
           
       - name: Generate Daily Tip
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY_NEW }}
         run: |
           node scripts/generate-daily-tip.mjs
           node scripts/generate-daily-features.mjs
