@@ -41,9 +41,17 @@ export default function SefariaReader() {
   
   const [showJump, setShowJump] = useState(false);
   const [jumpInput, setJumpInput] = useState('');
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentToc, setCurrentToc] = useState<any>(null);
   const [bookTocData, setBookTocData] = useState<any>(null);
   const [showTocModal, setShowTocModal] = useState(false);
+
+  const toggleDarkMode = () => {
+    const newVal = !isDarkMode;
+    setIsDarkMode(newVal);
+    localStorage.setItem('sefaria_dark_mode', String(newVal));
+  };
+
   
   const [calendar, setCalendar] = useState<any[]>([]);
   
@@ -55,6 +63,10 @@ export default function SefariaReader() {
       try {
         setBookmarks(JSON.parse(saved));
       } catch (e) {}
+    }
+    const savedDark = localStorage.getItem('sefaria_dark_mode');
+    if (savedDark) {
+      setIsDarkMode(savedDark === 'true');
     }
     const lastRead = localStorage.getItem('sefaria_last_read');
     if (lastRead) {
@@ -191,13 +203,13 @@ export default function SefariaReader() {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#f8f5f0] font-sans">
+    <div className="flex flex-col h-full w-full bg-[#f8f5f0] dark:bg-slate-950 font-sans">
       
       {/* APP TOP BAR */}
-      <header className="h-16 md:h-20 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between px-4 md:px-8 shrink-0 z-50 relative">
+      <header className="h-16 md:h-20 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between px-4 md:px-8 shrink-0 z-50 relative">
         <div className="flex items-center gap-3 md:gap-6">
-          <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors group">
-            <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-slate-200 transition-colors">
+          <Link href="/" className="flex items-center gap-2 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 transition-colors group">
+            <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center group-hover:bg-slate-200 transition-colors">
               <i className="fas fa-arrow-right text-lg"></i>
             </div>
             <span className="font-semibold hidden md:inline">חזרה לאתר</span>
@@ -205,11 +217,11 @@ export default function SefariaReader() {
           <div className="h-8 w-px bg-slate-200 hidden md:block"></div>
           <button 
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="md:hidden text-slate-600 p-2 text-xl"
+            className="md:hidden text-slate-600 dark:text-slate-400 p-2 text-xl"
           >
             <i className="fas fa-bars"></i>
           </button>
-          <h1 className="font-serif font-bold text-xl md:text-2xl text-slate-800 whitespace-nowrap">
+          <h1 className="font-serif font-bold text-xl md:text-2xl text-slate-800 dark:text-slate-200 whitespace-nowrap">
             בית מדרש
           </h1>
         </div>
@@ -223,7 +235,7 @@ export default function SefariaReader() {
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="חפש ספר, פרק או דף (למשל: חובות הלבבות, יומא ב)"
-              className="w-full bg-slate-100 border border-transparent focus:bg-white focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px]"
+              className="w-full bg-slate-100 dark:bg-slate-800 border border-transparent focus:bg-white dark:bg-slate-900 focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px]"
               dir="rtl"
             />
             <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
@@ -231,13 +243,13 @@ export default function SefariaReader() {
             </button>
           </form>
           {showSuggestions && suggestions.length > 0 && (
-            <ul className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-72 overflow-y-auto z-50 py-2 custom-scrollbar">
+            <ul className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-xl max-h-72 overflow-y-auto z-50 py-2 custom-scrollbar">
               {suggestions.map((s, i) => (
                 <li key={i}>
                   <button 
                     type="button"
                     onMouseDown={() => selectSuggestion(s)}
-                    className="w-full text-right px-5 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors text-slate-700 font-medium text-[15px] border-b border-slate-50 last:border-0 truncate"
+                    className="w-full text-right px-5 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors text-slate-700 dark:text-slate-300 font-medium text-[15px] border-b border-slate-50 last:border-0 truncate"
                     dir="rtl"
                   >
                     {s}
@@ -249,14 +261,23 @@ export default function SefariaReader() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-700 transition-colors">
+          
+          <button 
+            onClick={toggleDarkMode} 
+            className="flex items-center justify-center w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors"
+            title="מצב קריאת לילה"
+          >
+            <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
+          </button>
+
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 rounded-full font-medium text-slate-700 dark:text-slate-300 transition-colors">
             <i className="fas fa-bookmark text-blue-600"></i> סימניות
           </button>
         </div>
       </header>
 
       {/* MOBILE SEARCH */}
-      <div className="md:hidden bg-white border-b border-slate-200 p-3 shrink-0 z-40 relative">
+      <div className="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-3 shrink-0 z-40 relative">
         <form onSubmit={handleSearch}>
           <input
             type="text"
@@ -265,7 +286,7 @@ export default function SefariaReader() {
             onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             placeholder="חפש (למשל: חובות הלבבות)..."
-            className="w-full bg-slate-100 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-[15px]"
+            className="w-full bg-slate-100 dark:bg-slate-800 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-[15px]"
             dir="rtl"
           />
           <button type="submit" className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400">
@@ -273,13 +294,13 @@ export default function SefariaReader() {
           </button>
         </form>
         {showSuggestions && suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 right-0 mt-1 mx-3 bg-white border border-slate-200 rounded-xl shadow-2xl max-h-64 overflow-y-auto z-50 py-2 custom-scrollbar">
+          <ul className="absolute top-full left-0 right-0 mt-1 mx-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl max-h-64 overflow-y-auto z-50 py-2 custom-scrollbar">
             {suggestions.map((s, i) => (
               <li key={i}>
                 <button 
                   type="button"
                   onMouseDown={() => selectSuggestion(s)}
-                  className="w-full text-right px-4 py-3 hover:bg-blue-50 transition-colors text-slate-800 font-medium text-[15px] border-b border-slate-100 last:border-0 truncate"
+                  className="w-full text-right px-4 py-3 hover:bg-blue-50 transition-colors text-slate-800 dark:text-slate-200 font-medium text-[15px] border-b border-slate-100 dark:border-slate-800/50 last:border-0 truncate"
                   dir="rtl"
                 >
                   {s}
@@ -303,12 +324,12 @@ export default function SefariaReader() {
 
         {/* SIDEBAR */}
         <aside className={`
-          absolute md:static top-0 right-0 h-full w-72 bg-white border-l border-slate-200 shadow-2xl md:shadow-none z-40
+          absolute md:static top-0 right-0 h-full w-72 bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl md:shadow-none z-40
           transition-transform duration-300 ease-in-out flex flex-col
           ${sidebarOpen ? 'translate-x-0 flex' : 'translate-x-full hidden'}
         `}>
-          <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-            <h3 className="font-bold text-slate-800"><i className="fas fa-bookmark text-blue-500 mr-2"></i>הסימניות שלי</h3>
+          <div className="p-4 border-b border-slate-100 dark:border-slate-800/50 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+            <h3 className="font-bold text-slate-800 dark:text-slate-200"><i className="fas fa-bookmark text-blue-500 mr-2"></i>הסימניות שלי</h3>
             <button onClick={() => setSidebarOpen(false)} className="md:hidden text-slate-400 text-lg p-2"><i className="fas fa-times"></i></button>
           </div>
           
@@ -322,7 +343,7 @@ export default function SefariaReader() {
               <ul className="space-y-2">
                 {bookmarks.map((b) => (
                   <li key={b.ref} className="group flex justify-between items-center p-3 rounded-xl hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all cursor-pointer" onClick={() => fetchText(b.ref)}>
-                    <span className="font-semibold text-slate-700 group-hover:text-blue-700 text-sm">{b.heRef || b.ref}</span>
+                    <span className="font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 text-sm">{b.heRef || b.ref}</span>
                     <button 
                       onClick={(e) => removeBookmark(e, b.ref)}
                       className="text-slate-300 hover:text-red-500 transition-colors p-1"
@@ -334,42 +355,42 @@ export default function SefariaReader() {
               </ul>
             )}
           </div>
-          <div className="p-4 border-t border-slate-100 bg-slate-50 text-center">
+          <div className="p-4 border-t border-slate-100 dark:border-slate-800/50 bg-slate-50 dark:bg-slate-800/50 text-center">
             <a href="https://www.sefaria.org" target="_blank" rel="noreferrer" className="inline-block opacity-50 hover:opacity-100 transition-opacity">
               <img src="https://upload.wikimedia.org/wikipedia/commons/1/1d/Sefaria_Logo.png" alt="Sefaria" className="h-5 grayscale mx-auto mb-1" />
-              <span className="text-[10px] text-slate-500">מופעל באמצעות Sefaria API</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400">מופעל באמצעות Sefaria API</span>
             </a>
           </div>
         </aside>
 
         {/* READER CONTAINER */}
-        <main className="flex-1 flex justify-center bg-[#f8f5f0] overflow-hidden relative">
+        <main className="flex-1 flex justify-center bg-[#f8f5f0] dark:bg-slate-950 overflow-hidden relative">
           
           {loading ? (
             <div className="absolute inset-0 flex flex-col justify-center items-center">
-              <div className="animate-spin rounded-full h-14 w-14 border-4 border-slate-200 border-t-blue-600 mb-4"></div>
-              <p className="text-slate-500 font-medium">טוען טקסט...</p>
+              <div className="animate-spin rounded-full h-14 w-14 border-4 border-slate-200 dark:border-slate-800 border-t-blue-600 mb-4"></div>
+              <p className="text-slate-500 dark:text-slate-400 font-medium">טוען טקסט...</p>
             </div>
           ) : bookTocData ? (
-            <div className="absolute inset-0 flex flex-col p-6 md:p-12 overflow-y-auto custom-scrollbar bg-[#f8f5f0]">
+            <div className="absolute inset-0 flex flex-col p-6 md:p-12 overflow-y-auto custom-scrollbar bg-[#f8f5f0] dark:bg-slate-950">
                <div className="max-w-3xl mx-auto w-full">
-                 <h2 className="text-3xl font-bold text-slate-800 font-serif mb-2 text-center">{bookTocData.schema.heTitle || bookTocData.title}</h2>
-                 <p className="text-slate-500 text-center mb-8">בחר פרק או שער כדי להתחיל לקרוא</p>
+                 <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-200 font-serif mb-2 text-center">{bookTocData.schema.heTitle || bookTocData.title}</h2>
+                 <p className="text-slate-500 dark:text-slate-400 text-center mb-8">בחר פרק או שער כדי להתחיל לקרוא</p>
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                    {bookTocData.schema.nodes ? (
                      bookTocData.schema.nodes.map((node: any, idx: number) => (
-                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ', ' + node.title)} className="p-4 bg-white border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all text-right group">
-                         <span className="font-bold text-slate-800 group-hover:text-blue-700">{node.heTitle || node.title}</span>
+                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ', ' + node.title)} className="p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-blue-300 hover:shadow-md transition-all text-right group">
+                         <span className="font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-700">{node.heTitle || node.title}</span>
                        </button>
                      ))
                    ) : bookTocData.schema.nodeType === 'JaggedArrayNode' ? (
                      Array.from({length: bookTocData.schema.lengths[0]}).map((_, idx) => (
-                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ' ' + (idx + 1))} className="p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-sm transition-all text-center group font-bold text-slate-700 hover:text-blue-700">
+                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ' ' + (idx + 1))} className="p-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-blue-300 hover:shadow-sm transition-all text-center group font-bold text-slate-700 dark:text-slate-300 hover:text-blue-700">
                          {bookTocData.schema.heSectionNames?.[0] || 'פרק'} {idx + 1}
                        </button>
                      ))
                    ) : (
-                     <p className="text-slate-500 text-center col-span-2">מבנה הספר מורכב מדי לתצוגה זו.</p>
+                     <p className="text-slate-500 dark:text-slate-400 text-center col-span-2">מבנה הספר מורכב מדי לתצוגה זו.</p>
                    )}
                  </div>
                </div>
@@ -380,23 +401,23 @@ export default function SefariaReader() {
               <p className="text-xl font-medium">{error}</p>
             </div>
           ) : data ? (
-            <div className="w-full max-w-4xl h-full flex flex-col bg-white shadow-2xl md:my-0 border-x border-slate-200">
+            <div className="w-full max-w-4xl h-full flex flex-col bg-white dark:bg-slate-900 shadow-2xl md:my-0 border-x border-slate-200 dark:border-slate-800">
               
               {/* READER TOOLBAR */}
-              <div className="bg-white border-b border-slate-200 px-4 md:px-8 py-3 flex justify-between items-center shrink-0">
-                <h2 className="text-lg md:text-2xl font-bold text-slate-800 font-serif truncate pl-4">
+              <div className="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 md:px-8 py-3 flex justify-between items-center shrink-0">
+                <h2 className="text-lg md:text-2xl font-bold text-slate-800 dark:text-slate-200 font-serif truncate pl-4">
                   {data.heRef || data.ref}
                 </h2>
                 
                 <div className="flex items-center gap-1 md:gap-3 shrink-0">
-                  <div className="flex items-center bg-slate-100 rounded-lg p-1">
-                    <button onClick={() => setFontSize(Math.max(16, fontSize - 2))} className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-white rounded shadow-sm transition-all text-sm font-bold">A-</button>
-                    <button onClick={() => setFontSize(Math.min(48, fontSize + 2))} className="w-8 h-8 flex items-center justify-center text-slate-600 hover:bg-white rounded shadow-sm transition-all text-lg font-bold">A+</button>
+                  <div className="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+                    <button onClick={() => setFontSize(Math.max(16, fontSize - 2))} className="w-8 h-8 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-white dark:bg-slate-900 rounded shadow-sm transition-all text-sm font-bold">A-</button>
+                    <button onClick={() => setFontSize(Math.min(48, fontSize + 2))} className="w-8 h-8 flex items-center justify-center text-slate-600 dark:text-slate-400 hover:bg-white dark:bg-slate-900 rounded shadow-sm transition-all text-lg font-bold">A+</button>
                   </div>
 
                   <button
                     onClick={() => setShowEnglish(!showEnglish)}
-                    className="w-10 h-10 md:w-auto md:px-4 flex items-center justify-center border border-slate-200 rounded-lg font-semibold hover:bg-slate-50 transition-colors text-slate-700 bg-white"
+                    className="w-10 h-10 md:w-auto md:px-4 flex items-center justify-center border border-slate-200 dark:border-slate-800 rounded-lg font-semibold hover:bg-slate-50 dark:bg-slate-800/50 transition-colors text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900"
                     title="תרגום"
                   >
                     <span className="hidden md:inline">{showEnglish ? 'עברית בלבד' : 'עברית + English'}</span>
@@ -409,7 +430,7 @@ export default function SefariaReader() {
                     className={`w-10 h-10 md:w-auto md:px-4 flex items-center justify-center rounded-lg font-bold transition-all
                       ${bookmarks.some(b => b.ref === data.ref) 
                         ? 'bg-amber-100 text-amber-700' 
-                        : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-50'}`}
+                        : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:bg-slate-800/50'}`}
                   >
                     <i className={bookmarks.some(b => b.ref === data.ref) ? "fas fa-bookmark" : "far fa-bookmark"}></i>
                     <span className="hidden md:inline mr-2">{bookmarks.some(b => b.ref === data.ref) ? 'נשמר' : 'שמור'}</span>
@@ -420,7 +441,7 @@ export default function SefariaReader() {
               {/* SCROLLABLE TEXT */}
               <div 
                 ref={contentRef}
-                className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth bg-white"
+                className="flex-1 overflow-y-auto p-4 md:p-10 scroll-smooth bg-white dark:bg-slate-900"
                 dir="rtl"
               >
                 {data.he.length === 0 ? (
@@ -432,13 +453,13 @@ export default function SefariaReader() {
                         <p 
                           dangerouslySetInnerHTML={{ __html: paragraph }} 
                           style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
-                          className="font-serif text-slate-900 leading-loose"
+                          className="font-serif text-slate-900 dark:text-slate-50 leading-loose"
                         />
                         {showEnglish && data.text[idx] && (
                           <p 
                             dir="ltr" 
                             style={{ fontSize: `${Math.max(14, fontSize - 6)}px` }}
-                            className="mt-3 text-slate-500 font-sans leading-relaxed text-left opacity-90 border-l-4 border-slate-200 pl-4"
+                            className="mt-3 text-slate-500 dark:text-slate-400 font-sans leading-relaxed text-left opacity-90 border-l-4 border-slate-200 dark:border-slate-800 pl-4"
                             dangerouslySetInnerHTML={{ __html: data.text[idx] }} 
                           />
                         )}
@@ -449,28 +470,28 @@ export default function SefariaReader() {
               </div>
 
               {/* READER FOOTER PAGER */}
-              <div className="bg-slate-50 border-t border-slate-200 p-3 md:p-4 flex justify-between items-center shrink-0">
+              <div className="bg-slate-50 dark:bg-slate-800/50 border-t border-slate-200 dark:border-slate-800 p-3 md:p-4 flex justify-between items-center shrink-0">
                 <button
                   onClick={() => data.next && fetchText(data.next)}
                   disabled={!data.next}
-                  className="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all flex items-center gap-2 text-sm md:text-base shadow-sm"
+                  className="px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all flex items-center gap-2 text-sm md:text-base shadow-sm"
                 >
                   <i className="fas fa-chevron-right text-xs"></i> פרק הבא
                 </button>
                 <div className="relative flex items-center justify-center">
                   <button 
                     onClick={() => { if(currentToc) { setShowTocModal(true); setShowJump(false); } else { setShowJump(!showJump); } }} 
-                    className="text-slate-500 hover:text-blue-600 transition-colors font-serif font-bold text-sm md:text-base px-3 py-1.5 rounded-lg hover:bg-blue-50 flex items-center gap-1.5 border border-transparent hover:border-blue-100"
+                    className="text-slate-500 dark:text-slate-400 hover:text-blue-600 transition-colors font-serif font-bold text-sm md:text-base px-3 py-1.5 rounded-lg hover:bg-blue-50 flex items-center gap-1.5 border border-transparent hover:border-blue-100"
                     title="פתח תוכן עניינים"
                   >
                     {data.heRef} <i className="fas fa-list text-xs"></i>
                   </button>
                   
                   {showJump && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-white rounded-xl shadow-2xl border border-slate-200 z-50 w-64 md:w-72 flex flex-col gap-3 animate-fade-in">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 p-4 bg-white dark:bg-slate-900 rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 z-50 w-64 md:w-72 flex flex-col gap-3 animate-fade-in">
                       <div className="flex justify-between items-center mb-1">
-                        <p className="text-sm font-bold text-slate-700">קפיצה מהירה</p>
-                        <button onClick={() => setShowJump(false)} className="text-slate-400 hover:text-slate-600"><i className="fas fa-times"></i></button>
+                        <p className="text-sm font-bold text-slate-700 dark:text-slate-300">קפיצה מהירה</p>
+                        <button onClick={() => setShowJump(false)} className="text-slate-400 hover:text-slate-600 dark:text-slate-400"><i className="fas fa-times"></i></button>
                       </div>
                       <form onSubmit={handleJumpSubmit} className="flex gap-2">
                         <button type="submit" className="bg-blue-600 text-white rounded-lg px-4 py-2 text-sm font-bold hover:bg-blue-700 transition-colors shadow-sm">
@@ -481,7 +502,7 @@ export default function SefariaReader() {
                           value={jumpInput} 
                           onChange={e=>setJumpInput(e.target.value)} 
                           placeholder={data.sectionNames?.[0] === 'Daf' ? "לדוגמה: 5 או 2b" : "מספר פרק"} 
-                          className="flex-1 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-center text-[15px] font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                          className="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-center text-[15px] font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
                           dir="ltr" 
                           autoFocus 
                         />
@@ -495,7 +516,7 @@ export default function SefariaReader() {
                 <button
                   onClick={() => data.prev && fetchText(data.prev)}
                   disabled={!data.prev}
-                  className="px-4 py-2.5 bg-white border border-slate-200 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all flex items-center gap-2 text-sm md:text-base shadow-sm"
+                  className="px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 disabled:opacity-40 disabled:cursor-not-allowed font-semibold rounded-lg hover:bg-blue-50 hover:text-blue-700 hover:border-blue-200 transition-all flex items-center gap-2 text-sm md:text-base shadow-sm"
                 >
                   פרק קודם <i className="fas fa-chevron-left text-xs"></i>
                 </button>
@@ -507,13 +528,13 @@ export default function SefariaReader() {
             <div className="flex-1 flex flex-col p-6 md:p-10 overflow-y-auto custom-scrollbar">
               <div className="text-center mb-10 mt-4">
                 <i className="fas fa-book-open text-5xl mb-4 text-blue-600 opacity-20"></i>
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 font-serif mb-3">ברוכים הבאים לבית המדרש</h2>
-                <p className="text-slate-600 text-lg">חפשו טקסט למעלה או התחילו מיד עם ספרי היסוד והלימוד היומי.</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 dark:text-slate-200 font-serif mb-3">ברוכים הבאים לבית המדרש</h2>
+                <p className="text-slate-600 dark:text-slate-400 text-lg">חפשו טקסט למעלה או התחילו מיד עם ספרי היסוד והלימוד היומי.</p>
               </div>
 
               {calendar.length > 0 && (
                 <div className="mb-12 max-w-4xl mx-auto w-full">
-                  <h3 className="text-xl font-bold text-slate-800 mb-5 flex items-center gap-2 border-b border-slate-200 pb-2">
+                  <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-5 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                     <i className="fas fa-calendar-day text-blue-600"></i> הלימוד היומי
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -521,10 +542,10 @@ export default function SefariaReader() {
                       <button 
                         key={idx}
                         onClick={() => fetchText(item.ref)}
-                        className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-blue-300 transition-all text-right group flex flex-col gap-2"
+                        className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-300 transition-all text-right group flex flex-col gap-2"
                       >
                         <span className="text-xs font-bold text-blue-600 uppercase tracking-wider">{item.title.he}</span>
-                        <span className="text-lg font-bold text-slate-800 group-hover:text-blue-700 transition-colors font-serif">{item.displayValue.he}</span>
+                        <span className="text-lg font-bold text-slate-800 dark:text-slate-200 group-hover:text-blue-700 transition-colors font-serif">{item.displayValue.he}</span>
                       </button>
                     ))}
                   </div>
@@ -532,7 +553,7 @@ export default function SefariaReader() {
               )}
 
               <div className="max-w-4xl mx-auto w-full mb-10">
-                <h3 className="text-xl font-bold text-slate-800 mb-5 flex items-center gap-2 border-b border-slate-200 pb-2">
+                <h3 className="text-xl font-bold text-slate-800 dark:text-slate-200 mb-5 flex items-center gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
                   <i className="fas fa-star text-amber-500"></i> ספרי יסוד פופולריים
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -547,10 +568,10 @@ export default function SefariaReader() {
                     <button 
                       key={idx}
                       onClick={() => fetchText(book.ref)}
-                      className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md hover:border-amber-300 transition-all text-right group flex flex-col gap-1"
+                      className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-amber-300 transition-all text-right group flex flex-col gap-1"
                     >
-                      <span className="text-lg font-bold text-slate-800 group-hover:text-amber-700 transition-colors font-serif">{book.title}</span>
-                      <span className="text-sm text-slate-500">{book.desc}</span>
+                      <span className="text-lg font-bold text-slate-800 dark:text-slate-200 group-hover:text-amber-700 transition-colors font-serif">{book.title}</span>
+                      <span className="text-sm text-slate-500 dark:text-slate-400">{book.desc}</span>
                     </button>
                   ))}
                 </div>
@@ -566,16 +587,16 @@ export default function SefariaReader() {
       {showTocModal && currentToc && data && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowTocModal(false)}></div>
-          <div className="bg-white w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl relative z-10 flex flex-col animate-fade-in">
-            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
-              <h3 className="font-bold text-xl text-slate-800 font-serif">{currentToc.heTitle || data.heIndexTitle || data.indexTitle}</h3>
-              <button onClick={() => setShowTocModal(false)} className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-full text-slate-500 hover:text-slate-800 hover:shadow-sm transition-all"><i className="fas fa-times"></i></button>
+          <div className="bg-white dark:bg-slate-900 w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl relative z-10 flex flex-col animate-fade-in">
+            <div className="p-5 border-b border-slate-100 dark:border-slate-800/50 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50 rounded-t-2xl">
+              <h3 className="font-bold text-xl text-slate-800 dark:text-slate-200 font-serif">{currentToc.heTitle || data.heIndexTitle || data.indexTitle}</h3>
+              <button onClick={() => setShowTocModal(false)} className="w-8 h-8 flex items-center justify-center bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 hover:shadow-sm transition-all"><i className="fas fa-times"></i></button>
             </div>
             <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
               {currentToc.nodes ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {currentToc.nodes.map((node: any, idx: number) => (
-                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ', ' + node.title); setShowTocModal(false); }} className="p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-right font-semibold text-slate-700 hover:text-blue-700">
+                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ', ' + node.title); setShowTocModal(false); }} className="p-4 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-right font-semibold text-slate-700 dark:text-slate-300 hover:text-blue-700">
                       {node.heTitle || node.title}
                     </button>
                   ))}
@@ -583,13 +604,13 @@ export default function SefariaReader() {
               ) : currentToc.nodeType === 'JaggedArrayNode' ? (
                 <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 dir-rtl">
                   {Array.from({length: currentToc.lengths[0]}).map((_, idx) => (
-                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ' ' + (idx + 1)); setShowTocModal(false); }} className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm transition-all text-center font-bold text-slate-700 hover:text-blue-700">
+                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ' ' + (idx + 1)); setShowTocModal(false); }} className="p-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-lg hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm transition-all text-center font-bold text-slate-700 dark:text-slate-300 hover:text-blue-700">
                       {idx + 1}
                     </button>
                   ))}
                 </div>
               ) : (
-                <div className="text-center text-slate-500 py-10">לא נמצא תוכן עניינים זמין.</div>
+                <div className="text-center text-slate-500 dark:text-slate-400 py-10">לא נמצא תוכן עניינים זמין.</div>
               )}
             </div>
           </div>
