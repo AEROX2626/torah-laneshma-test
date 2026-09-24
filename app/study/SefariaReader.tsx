@@ -29,6 +29,11 @@ export default function SefariaReader() {
   const [fontSize, setFontSize] = useState(26);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   
+  // Autocomplete states
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const searchTimeout = useRef<NodeJS.Timeout | null>(null);
+  
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -53,6 +58,7 @@ export default function SefariaReader() {
     setLoading(true);
     setError('');
     setSidebarOpen(false); // Close sidebar on mobile after selecting
+    setShowSuggestions(false);
     
     if (contentRef.current) {
       contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -77,8 +83,35 @@ export default function SefariaReader() {
     }
   };
 
+  const handleQueryChange = (val: string) => {
+    setQuery(val);
+    if (val.trim().length >= 2) {
+      if (searchTimeout.current) clearTimeout(searchTimeout.current);
+      searchTimeout.current = setTimeout(async () => {
+        try {
+          const res = await fetch(`https://www.sefaria.org/api/name/${encodeURIComponent(val)}`);
+          const data = await res.json();
+          setSuggestions(data.completions || []);
+          setShowSuggestions(true);
+        } catch (e) {
+          setSuggestions([]);
+        }
+      }, 300);
+    } else {
+      setSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const selectSuggestion = (suggestion: string) => {
+    setQuery(suggestion);
+    setShowSuggestions(false);
+    fetchText(suggestion);
+  };
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setShowSuggestions(false);
     if (query.trim()) {
       fetchText(query.trim());
     }
@@ -105,7 +138,7 @@ export default function SefariaReader() {
     <div className="flex flex-col h-full w-full bg-[#f8f5f0] font-sans">
       
       {/* APP TOP BAR */}
-      <header className="h-16 md:h-20 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between px-4 md:px-8 shrink-0 z-20 relative">
+      <header className="h-16 md:h-20 bg-white border-b border-slate-200 shadow-sm flex items-center justify-between px-4 md:px-8 shrink-0 z-50 relative">
         <div className="flex items-center gap-3 md:gap-6">
           <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors group">
             <div className="w-10 h-10 bg-slate-100 rounded-full flex items-center justify-center group-hover:bg-slate-200 transition-colors">
@@ -120,18 +153,20 @@ export default function SefariaReader() {
           >
             <i className="fas fa-bars"></i>
           </button>
-          <h1 className="font-serif font-bold text-xl md:text-2xl text-slate-800">
+          <h1 className="font-serif font-bold text-xl md:text-2xl text-slate-800 whitespace-nowrap">
             בית מדרש
           </h1>
         </div>
 
-        <div className="flex-1 max-w-xl mx-4 md:mx-8 hidden md:block">
-          <form onSubmit={handleSearch} className="relative">
+        <div className="flex-1 max-w-xl mx-4 md:mx-8 hidden md:block relative">
+          <form onSubmit={handleSearch}>
             <input
               type="text"
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="חפש ספר, פרק או דף (למשל: בראשית א, יומא ב)"
+              onChange={(e) => handleQueryChange(e.target.value)}
+              onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              placeholder="חפש ספר, פרק או דף (למשל: חובות הלבבות, יומא ב)"
               className="w-full bg-slate-100 border border-transparent focus:bg-white focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px]"
               dir="rtl"
             />
@@ -139,6 +174,22 @@ export default function SefariaReader() {
               <i className="fas fa-search"></i>
             </button>
           </form>
+          {showSuggestions && suggestions.length > 0 && (
+            <ul className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-xl max-h-72 overflow-y-auto z-50 py-2 custom-scrollbar">
+              {suggestions.map((s, i) => (
+                <li key={i}>
+                  <button 
+                    type="button"
+                    onMouseDown={() => selectSuggestion(s)}
+                    className="w-full text-right px-5 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors text-slate-700 font-medium text-[15px] border-b border-slate-50 last:border-0 truncate"
+                    dir="rtl"
+                  >
+                    {s}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div className="flex items-center gap-3">
@@ -148,25 +199,43 @@ export default function SefariaReader() {
         </div>
       </header>
 
-      {/* MOBILE SEARCH (Visible only on mobile) */}
-      <div className="md:hidden bg-white border-b border-slate-200 p-3 shrink-0 z-10">
-        <form onSubmit={handleSearch} className="relative">
+      {/* MOBILE SEARCH */}
+      <div className="md:hidden bg-white border-b border-slate-200 p-3 shrink-0 z-40 relative">
+        <form onSubmit={handleSearch}>
           <input
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="חפש (למשל: יומא ב)..."
+            onChange={(e) => handleQueryChange(e.target.value)}
+            onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+            placeholder="חפש (למשל: חובות הלבבות)..."
             className="w-full bg-slate-100 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-[15px]"
             dir="rtl"
           />
-          <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+          <button type="submit" className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400">
             <i className="fas fa-search"></i>
           </button>
         </form>
+        {showSuggestions && suggestions.length > 0 && (
+          <ul className="absolute top-full left-0 right-0 mt-1 mx-3 bg-white border border-slate-200 rounded-xl shadow-2xl max-h-64 overflow-y-auto z-50 py-2 custom-scrollbar">
+            {suggestions.map((s, i) => (
+              <li key={i}>
+                <button 
+                  type="button"
+                  onMouseDown={() => selectSuggestion(s)}
+                  className="w-full text-right px-4 py-3 hover:bg-blue-50 transition-colors text-slate-800 font-medium text-[15px] border-b border-slate-100 last:border-0 truncate"
+                  dir="rtl"
+                >
+                  {s}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {/* MAIN CONTENT AREA */}
-      <div className="flex flex-1 overflow-hidden relative">
+      <div className="flex flex-1 overflow-hidden relative z-0">
         
         {/* SIDEBAR OVERLAY (Mobile) */}
         {sidebarOpen && (
