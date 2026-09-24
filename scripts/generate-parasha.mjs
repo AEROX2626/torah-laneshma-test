@@ -18,10 +18,51 @@ async function getParasha() {
   return parashaEvent;
 }
 
+// Retry temporary server failures, with a finite number of attempts.
+async function requestGemini(modelName, requestBody) {
+  const maxAttempts = 6;
+  const retryableStatuses = new Set([500, 502, 503, 504]);
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    console.log(`Gemini attempt ${attempt}/${maxAttempts}`);
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': API_KEY },
+      body: JSON.stringify(requestBody),
+      signal: AbortSignal.timeout(120_000)
+    });
+
+    if (res.ok) return res.json();
+
+    const errorText = await res.text();
+    const error = new Error(`Gemini API error (${modelName}, attempt ${attempt}/${maxAttempts}): ${res.status} - ${errorText}`);
+    if (!retryableStatuses.has(res.status) || attempt === maxAttempts) {
+      throw error;
+    }
+
+    // Respect Retry-After when present, but do not keep a workflow waiting indefinitely.
+    const retryAfter = res.headers.get('retry-after');
+    let serverDelayMs = 0;
+    if (retryAfter) {
+      const seconds = Number(retryAfter);
+      serverDelayMs = Number.isFinite(seconds)
+        ? Math.max(0, seconds * 1000)
+        : Math.max(0, Date.parse(retryAfter) - Date.now());
+      if (!Number.isFinite(serverDelayMs)) serverDelayMs = 0;
+    }
+    if (serverDelayMs > 300_000) throw error;
+
+    const backoffMs = Math.min(10_000 * 2 ** (attempt - 1), 120_000);
+    const delayMs = Math.max(backoffMs, serverDelayMs) + Math.floor(Math.random() * 1000);
+    console.warn(`Gemini returned ${res.status}; retrying in ${Math.ceil(delayMs / 1000)} seconds...`);
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+  }
+}
+
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
   // Use an explicit text model; list order does not guarantee model access.
-  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.6-flash';
+  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.1-flash-lite';
 
   console.log("Using model:", modelName);
 
@@ -47,18 +88,7 @@ async function generateArticle(parashaNameHe, parashaNameEn) {
     }
   };
 
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!res.ok) {
-    const errorText = await res.text();
-    throw new Error(`Gemini API error: ${res.status} - ${errorText}`);
-  }
-
-  const data = await res.json();
+  const data = await requestGemini(modelName, requestBody);
   const contentText = data.candidates[0].content.parts[0].text;
   
   try {
