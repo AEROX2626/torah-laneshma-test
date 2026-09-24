@@ -31,22 +31,33 @@ const prompt = `
 }
 `;
 
+
+async function requestGemini(modelName, requestBody) {
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${API_KEY}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(requestBody)
+    });
+    if (res.ok) return res.json();
+    const errorText = await res.text();
+    console.error(`Gemini API error (attempt ${attempt}): ${res.status} - ${errorText}`);
+    if (attempt === maxAttempts) throw new Error(`Gemini failed: ${res.status} - ${errorText}`);
+    await new Promise(r => setTimeout(r, 2000));
+  }
+}
+
 async function run() {
   try {
     const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.1-flash-lite';
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    const result = await requestGemini(modelName, {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
             temperature: 0.8,
             responseMimeType: "application/json"
         }
-      })
-    });
-
-    const result = await response.json();
+      });
     let text = result.candidates[0].content.parts[0].text;
     
     // Parse the new tip
