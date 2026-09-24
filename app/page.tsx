@@ -35,7 +35,7 @@ export default function Home() {
     handleScroll();
 
     // Intersection Observer for Reveal
-    const revealEls = document.querySelectorAll(".reveal, .reveal-scale");
+    const els = document.querySelectorAll(".reveal, .reveal-scale");
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -47,7 +47,7 @@ export default function Home() {
       },
       { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
     );
-    revealEls.forEach((el) => observer.observe(el));
+   els.forEach((el) => observer.observe(el));
 
     // Intersection Observer for Counters
     const counterObserver = new IntersectionObserver(
@@ -164,7 +164,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-10 items-center">
             <div className="lg:col-span-6 text-center lg:text-right">
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-7 reveal relative z-50">
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3 mb-7 relative z-50">
                 <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm shadow-soft">
                   <span className="relative flex h-2.5 w-2.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
@@ -176,16 +176,16 @@ export default function Home() {
                 <HebrewDate />
               </div>
 
-              <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7 reveal" style={{ transitionDelay: "0.1s" }}>
+              <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7" style={{ transitionDelay: "0.1s" }}>
                 להתחבר למסורת,<br />
                 <span className="text-gradient">בקצב המדויק שלכם.</span>
               </h1>
 
-              <p className="text-lg lg:text-xl text-ink-600 mb-9 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium reveal" style={{ transitionDelay: "0.2s" }}>
+              <p className="text-lg lg:text-xl text-ink-600 mb-9 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium" style={{ transitionDelay: "0.2s" }}>
                 סקרנים לגבי המסורת היהודית אבל השגרה העמוסה לא משאירה לכם רגע פנוי? <strong className="text-ink-800">'תורה לנשמה'</strong> מזמינה אתכם לחברותא טלפונית: שעת איכות שבועית של לימוד משותף ושיח פתוח, מכל מקום ובזמן שהכי נוח לכם.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8 reveal" style={{ transitionDelay: "0.3s" }}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8" style={{ transitionDelay: "0.3s" }}>
                 <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
                   <span>מצאו לי חברותא</span>
                   <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
@@ -196,14 +196,14 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-ink-500 font-semibold reveal" style={{ transitionDelay: "0.4s" }}>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-ink-500 font-semibold" style={{ transitionDelay: "0.4s" }}>
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> 100% בחינם</div>
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> ללא שום התחייבות</div>
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> התאמה אישית מדויקת</div>
               </div>
             </div>
 
-            <div className="lg:col-span-6 relative reveal-scale" style={{ transitionDelay: "0.2s" }}>
+            <div className="lg:col-span-6 relative" style={{ transitionDelay: "0.2s" }}>
               <div className="hero-frame relative">
                 <div className="relative w-full h-[420px] md:h-[560px] rounded-[2.5rem] shadow-elevated border border-white overflow-hidden"><Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Westernwall2.jpg/1280px-Westernwall2.jpg" alt="הכותל המערבי – ירושלים" fill priority className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
                 <div className="absolute -bottom-5 -left-5 md:-left-8 bg-white p-4 md:p-5 rounded-2xl shadow-elevated flex items-center gap-4 border border-ink-50">
