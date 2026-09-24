@@ -11,7 +11,7 @@ import ShabbatTimes from "./components/ShabbatTimes";
 import HebrewDate from "./components/HebrewDate";
 
 export default function Home() {
-  const [scrollProgress, setScrollProgress] = useState(0);
+
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -28,7 +28,8 @@ export default function Home() {
     const handleScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      setScrollProgress((scrollTop / docHeight) * 100);
+      const el = document.getElementById("scroll-progress");
+      if (el) el.style.width = `${(scrollTop / docHeight) * 100}%`;
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -150,7 +151,7 @@ export default function Home() {
 
   return (
     <>
-      <div id="scroll-progress" style={{ width: `${scrollProgress}%` }}></div>
+      <div id="scroll-progress" style={{ width: `0%` }}></div>
 
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div className="blob bg-primary-200 w-[600px] h-[600px] rounded-full top-[-200px] right-[-200px] animate-float"></div>
