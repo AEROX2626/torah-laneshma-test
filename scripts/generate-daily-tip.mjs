@@ -9,7 +9,7 @@ const DATA_FILE = path.join(__dirname, '..', 'app', 'data', 'daily-tips.json');
 const API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_NEW;
 
 if (!API_KEY) {
-  console.error("No GEMINI_API_KEY found. Available env keys: " + Object.keys(process.env).join(", "));
+  console.error("No GEMINI_API_KEY found");
   process.exit(1);
 }
 
@@ -33,18 +33,7 @@ const prompt = `
 
 async function run() {
   try {
-    // Auto-discover model
-    let modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.1-flash-lite';
-    try {
-      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
-      if (listRes.ok) {
-        const listData = await listRes.json();
-        const models = listData.models || [];
-        const flash = models.find(m => m.name.includes('flash') && m.supportedGenerationMethods.includes('generateContent'));
-        if (flash) modelName = flash.name.replace('models/', '');
-      }
-    } catch (e) {}
-
+    const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.1-flash-lite';
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
