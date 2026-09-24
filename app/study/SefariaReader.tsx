@@ -41,6 +41,9 @@ export default function SefariaReader() {
   
   const [showJump, setShowJump] = useState(false);
   const [jumpInput, setJumpInput] = useState('');
+  const [currentToc, setCurrentToc] = useState<any>(null);
+  const [bookTocData, setBookTocData] = useState<any>(null);
+  const [showTocModal, setShowTocModal] = useState(false);
   
   const [calendar, setCalendar] = useState<any[]>([]);
   
@@ -75,6 +78,8 @@ export default function SefariaReader() {
     setError('');
     setSidebarOpen(false); // Close sidebar on mobile after selecting
     setShowSuggestions(false);
+    setBookTocData(null);
+    setShowSuggestions(false);
     
     if (contentRef.current) {
       contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
@@ -86,6 +91,17 @@ export default function SefariaReader() {
       
       if (result.error) {
         if (result.error.includes("complex' book-level ref")) {
+          // Instead of error, fetch TOC and show it
+          try {
+            const idxRes = await fetch(`https://www.sefaria.org/api/index/${encodeURIComponent(ref)}`);
+            const idxData = await idxRes.json();
+            if (idxData.schema) {
+              setBookTocData({ title: ref, schema: idxData.schema });
+              setError('');
+              setData(null);
+              return;
+            }
+          } catch(e) {}
           setError("הספר שבחרת מחולק לשערים או חלקים. אנא חפש שוב ובחר חלק ספציפי מתוך הרשימה (למשל: 'חובות הלבבות, שער ראשון').");
         } else {
           setError("שגיאה בטעינת הטקסט: " + result.error);
@@ -94,6 +110,13 @@ export default function SefariaReader() {
       } else {
         setData(result);
         localStorage.setItem('sefaria_last_read', result.ref);
+        const baseBook = result.indexTitle || result.book;
+        if (baseBook) {
+          fetch(`https://www.sefaria.org/api/index/${encodeURIComponent(baseBook)}`)
+            .then(r => r.json())
+            .then(d => { if (d.schema) setCurrentToc(d.schema); })
+            .catch(()=>console.log('No TOC found'));
+        }
       }
     } catch (err) {
       setError("שגיאה בטעינת הטקסט. אנא נסה שוב.");
@@ -327,6 +350,30 @@ export default function SefariaReader() {
               <div className="animate-spin rounded-full h-14 w-14 border-4 border-slate-200 border-t-blue-600 mb-4"></div>
               <p className="text-slate-500 font-medium">טוען טקסט...</p>
             </div>
+          ) : bookTocData ? (
+            <div className="absolute inset-0 flex flex-col p-6 md:p-12 overflow-y-auto custom-scrollbar bg-[#f8f5f0]">
+               <div className="max-w-3xl mx-auto w-full">
+                 <h2 className="text-3xl font-bold text-slate-800 font-serif mb-2 text-center">{bookTocData.schema.heTitle || bookTocData.title}</h2>
+                 <p className="text-slate-500 text-center mb-8">בחר פרק או שער כדי להתחיל לקרוא</p>
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                   {bookTocData.schema.nodes ? (
+                     bookTocData.schema.nodes.map((node: any, idx: number) => (
+                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ', ' + node.title)} className="p-4 bg-white border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-md transition-all text-right group">
+                         <span className="font-bold text-slate-800 group-hover:text-blue-700">{node.heTitle || node.title}</span>
+                       </button>
+                     ))
+                   ) : bookTocData.schema.nodeType === 'JaggedArrayNode' ? (
+                     Array.from({length: bookTocData.schema.lengths[0]}).map((_, idx) => (
+                       <button key={idx} onClick={() => fetchText(bookTocData.schema.title + ' ' + (idx + 1))} className="p-3 bg-white border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-sm transition-all text-center group font-bold text-slate-700 hover:text-blue-700">
+                         {bookTocData.schema.heSectionNames?.[0] || 'פרק'} {idx + 1}
+                       </button>
+                     ))
+                   ) : (
+                     <p className="text-slate-500 text-center col-span-2">מבנה הספר מורכב מדי לתצוגה זו.</p>
+                   )}
+                 </div>
+               </div>
+            </div>
           ) : error ? (
             <div className="absolute inset-0 flex flex-col justify-center items-center text-red-500 p-8 text-center">
               <i className="fas fa-exclamation-triangle text-5xl mb-4 opacity-80"></i>
@@ -412,11 +459,11 @@ export default function SefariaReader() {
                 </button>
                 <div className="relative flex items-center justify-center">
                   <button 
-                    onClick={() => setShowJump(!showJump)} 
+                    onClick={() => { if(currentToc) { setShowTocModal(true); setShowJump(false); } else { setShowJump(!showJump); } }} 
                     className="text-slate-500 hover:text-blue-600 transition-colors font-serif font-bold text-sm md:text-base px-3 py-1.5 rounded-lg hover:bg-blue-50 flex items-center gap-1.5 border border-transparent hover:border-blue-100"
-                    title="נווט לחלק אחר בספר"
+                    title="פתח תוכן עניינים"
                   >
-                    {data.heRef} <i className="fas fa-caret-up text-xs"></i>
+                    {data.heRef} <i className="fas fa-list text-xs"></i>
                   </button>
                   
                   {showJump && (
@@ -514,6 +561,40 @@ export default function SefariaReader() {
 
         </main>
       </div>
+
+      {/* TOC MODAL */}
+      {showTocModal && currentToc && data && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowTocModal(false)}></div>
+          <div className="bg-white w-full max-w-2xl max-h-[85vh] rounded-2xl shadow-2xl relative z-10 flex flex-col animate-fade-in">
+            <div className="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50 rounded-t-2xl">
+              <h3 className="font-bold text-xl text-slate-800 font-serif">{currentToc.heTitle || data.heIndexTitle || data.indexTitle}</h3>
+              <button onClick={() => setShowTocModal(false)} className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 rounded-full text-slate-500 hover:text-slate-800 hover:shadow-sm transition-all"><i className="fas fa-times"></i></button>
+            </div>
+            <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+              {currentToc.nodes ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {currentToc.nodes.map((node: any, idx: number) => (
+                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ', ' + node.title); setShowTocModal(false); }} className="p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all text-right font-semibold text-slate-700 hover:text-blue-700">
+                      {node.heTitle || node.title}
+                    </button>
+                  ))}
+                </div>
+              ) : currentToc.nodeType === 'JaggedArrayNode' ? (
+                <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-2 dir-rtl">
+                  {Array.from({length: currentToc.lengths[0]}).map((_, idx) => (
+                    <button key={idx} onClick={() => { fetchText((data.indexTitle || '') + ' ' + (idx + 1)); setShowTocModal(false); }} className="p-2 bg-slate-50 border border-slate-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm transition-all text-center font-bold text-slate-700 hover:text-blue-700">
+                      {idx + 1}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center text-slate-500 py-10">לא נמצא תוכן עניינים זמין.</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
