@@ -44,10 +44,26 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className="scroll-smooth">
       <head>
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="style"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          media="print"
+          onLoad={(e) => { e.currentTarget.media = "all"; }}
         />
+        <noscript>
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          />
+        </noscript>
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />

@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { articles } from "./articles/data";
 
 import { useEffect, useState } from "react";
@@ -204,11 +205,7 @@ export default function Home() {
 
             <div className="lg:col-span-6 relative reveal-scale" style={{ transitionDelay: "0.2s" }}>
               <div className="hero-frame relative">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Westernwall2.jpg/1280px-Westernwall2.jpg"
-                  alt="הכותל המערבי – ירושלים"
-                  className="rounded-[2.5rem] shadow-elevated img-cover h-[420px] md:h-[560px] w-full border border-white"
-                />
+                <div className="relative w-full h-[420px] md:h-[560px] rounded-[2.5rem] shadow-elevated border border-white overflow-hidden"><Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Westernwall2.jpg/1280px-Westernwall2.jpg" alt="הכותל המערבי – ירושלים" fill priority className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
                 <div className="absolute -bottom-5 -left-5 md:-left-8 bg-white p-4 md:p-5 rounded-2xl shadow-elevated flex items-center gap-4 border border-ink-50">
                   <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-xl flex items-center justify-center text-xl md:text-2xl shadow-lg shadow-primary-500/40">
                     <i className="fas fa-phone-volume"></i>
@@ -495,11 +492,7 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 lg:order-1 relative reveal-scale">
               <div className="relative">
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Safed1.jpg/1280px-Safed1.jpg"
-                  alt="סמטאות ירושלים – מרחב בטוח ופתוח"
-                  className="rounded-[2rem] shadow-2xl img-cover h-[440px] md:h-[520px] w-full border border-ink-800"
-                />
+                <div className="relative w-full h-[440px] md:h-[520px] rounded-[2rem] shadow-2xl border border-ink-800 overflow-hidden"><Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Safed1.jpg/1280px-Safed1.jpg" alt="סמטאות ירושלים – מרחב בטוח ופתוח" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" /></div>
                 <div className="absolute -bottom-5 -right-5 w-full h-full border-2 border-primary-500/60 rounded-[2rem] -z-10"></div>
                 <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3">
                   <i className="fas fa-shield-halved text-primary-600 text-xl"></i>
@@ -593,7 +586,7 @@ export default function Home() {
             {articles.map((article, index) => (
               <Link key={article.slug} href={`/articles/${article.slug}`} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 card-hover flex flex-col h-full reveal" style={{ transitionDelay: `${(index % 3) * 0.1}s` }}>
                 <div className="h-52 overflow-hidden relative">
-                  <img src={article.image} className="w-full h-full img-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" alt={article.title} />
+                  <Image src={article.image} alt={article.title} fill className="object-cover transform group-hover:scale-110 transition duration-[1.2s] ease-out" sizes="(max-width: 768px) 100vw, 33vw" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <div className="absolute top-4 right-4 bg-white/95 backdrop-blur px-3.5 py-1.5 rounded-full text-xs font-extrabold text-primary-700 shadow-sm border border-primary-100">
                     {article.category} {article.date && <span className="font-medium text-ink-500 ml-1 mr-1">• {article.date}</span>}
