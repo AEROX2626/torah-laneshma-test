@@ -226,7 +226,7 @@ export default function SefariaReader() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button onClick={() => setSidebarOpen(true)} className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-700 transition-colors">
+          <button onClick={() => setSidebarOpen(!sidebarOpen)} className="hidden md:flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 rounded-full font-medium text-slate-700 transition-colors">
             <i className="fas fa-bookmark text-blue-600"></i> סימניות
           </button>
         </div>
@@ -282,7 +282,7 @@ export default function SefariaReader() {
         <aside className={`
           absolute md:static top-0 right-0 h-full w-72 bg-white border-l border-slate-200 shadow-2xl md:shadow-none z-40
           transition-transform duration-300 ease-in-out flex flex-col
-          ${sidebarOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0 hidden md:flex'}
+          ${sidebarOpen ? 'translate-x-0 flex' : 'translate-x-full hidden'}
         `}>
           <div className="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
             <h3 className="font-bold text-slate-800"><i className="fas fa-bookmark text-blue-500 mr-2"></i>הסימניות שלי</h3>
