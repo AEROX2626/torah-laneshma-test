@@ -31,7 +31,7 @@ export async function generateMetadata(
   return {
     title: `${article.title} | תורה לנשמה`,
     description: cleanDescription,
-    authors: [{ name: 'תורה לנשמה' || 'תורה לנשמה' }],
+    authors: [{ name: 'תורה לנשמה' }],
     openGraph: {
       title: article.title,
       description: cleanDescription,
