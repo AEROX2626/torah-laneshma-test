@@ -1,9 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const API_KEY = process.env.GEMINI_API_KEY;
+const API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_NEW;
 if (!API_KEY) {
-  console.error("Missing GEMINI_API_KEY");
+  console.error("Missing GEMINI_API_KEY. Available env keys: " + Object.keys(process.env).join(", "));
   process.exit(1);
 }
 
