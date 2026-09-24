@@ -69,7 +69,11 @@ export default function SefariaReader() {
       const result: SefariaResponse = await response.json();
       
       if (result.error) {
-        setError(result.error);
+        if (result.error.includes("complex' book-level ref")) {
+          setError("הספר שבחרת מחולק לשערים או חלקים. אנא חפש שוב ובחר חלק ספציפי מתוך הרשימה (למשל: 'חובות הלבבות, שער ראשון').");
+        } else {
+          setError("שגיאה בטעינת הטקסט: " + result.error);
+        }
         setData(null);
       } else {
         setData(result);
