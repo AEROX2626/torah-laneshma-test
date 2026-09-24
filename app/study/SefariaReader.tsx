@@ -244,7 +244,7 @@ export default function SefariaReader() {
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="חפש ספר, פרק או דף (למשל: חובות הלבבות, יומא ב)"
-              className={`w-full border border-transparent focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px] ${isDarkMode ? 'bg-slate-800 focus:bg-slate-900 text-slate-100 placeholder:text-slate-400' : 'bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-500'}`}
+              className={`w-full border border-transparent focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-base ${isDarkMode ? 'bg-slate-800 focus:bg-slate-900 text-white placeholder:text-slate-300' : 'bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-500'}`}
               dir="rtl"
             />
             <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
@@ -258,7 +258,7 @@ export default function SefariaReader() {
                   <button 
                     type="button"
                     onMouseDown={() => selectSuggestion(s)}
-                    className="w-full text-right px-5 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors text-slate-700 dark:text-slate-300 font-medium text-[15px] border-b border-slate-50 last:border-0 truncate"
+                    className="w-full text-right px-5 py-2.5 hover:bg-blue-50 hover:text-blue-700 transition-colors text-slate-700 dark:text-slate-300 font-medium text-base border-b border-slate-50 last:border-0 truncate"
                     dir="rtl"
                   >
                     {s}
@@ -319,7 +319,7 @@ export default function SefariaReader() {
             onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             placeholder="חפש (למשל: חובות הלבבות)..."
-            className="w-full bg-slate-100 dark:bg-slate-800 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-[15px]"
+            className="w-full bg-slate-100 dark:bg-slate-800 rounded-full py-2.5 px-4 pr-10 outline-none shadow-inner text-base"
             dir="rtl"
           />
           <button type="submit" className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400">
@@ -333,7 +333,7 @@ export default function SefariaReader() {
                 <button 
                   type="button"
                   onMouseDown={() => selectSuggestion(s)}
-                  className="w-full text-right px-4 py-3 hover:bg-blue-50 transition-colors text-slate-800 dark:text-slate-200 font-medium text-[15px] border-b border-slate-100 dark:border-slate-800/50 last:border-0 truncate"
+                  className="w-full text-right px-4 py-3 hover:bg-blue-50 transition-colors text-slate-800 dark:text-slate-200 font-medium text-base border-b border-slate-100 dark:border-slate-800/50 last:border-0 truncate"
                   dir="rtl"
                 >
                   {s}
@@ -535,7 +535,7 @@ export default function SefariaReader() {
                           value={jumpInput} 
                           onChange={e=>setJumpInput(e.target.value)} 
                           placeholder={data.sectionNames?.[0] === 'Daf' ? "לדוגמה: 5 או 2b" : "מספר פרק"} 
-                          className="flex-1 bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 rounded-lg px-3 py-2 text-center text-[15px] font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                          className={`flex-1 rounded-lg px-3 py-2 text-center text-base font-medium outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all ${isDarkMode ? 'bg-slate-800 border-slate-700 text-white placeholder:text-slate-400' : 'bg-slate-50 border-slate-200 text-slate-900 placeholder:text-slate-500'}`} 
                           dir="ltr" 
                           autoFocus 
                         />
