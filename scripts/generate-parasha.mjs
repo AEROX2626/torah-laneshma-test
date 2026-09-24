@@ -20,25 +20,8 @@ async function getParasha() {
 
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
-  // Discover available models
-  let modelName = 'gemini-2.5-flash';
-  try {
-    const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
-    if (listRes.ok) {
-      const listData = await listRes.json();
-      const models = listData.models || [];
-      console.log("Available models:", models.map(m => m.name.replace('models/', '')).join(', '));
-      const flash = models.find(m => m.name.includes('flash') && m.supportedGenerationMethods.includes('generateContent'));
-      if (flash) {
-        modelName = flash.name.replace('models/', '');
-      } else if (models.length > 0) {
-        const any = models.find(m => m.supportedGenerationMethods.includes('generateContent'));
-        if (any) modelName = any.name.replace('models/', '');
-      }
-    }
-  } catch (err) {
-    console.warn("Could not list models, falling back to default:", err);
-  }
+  // Use an explicit text model; list order does not guarantee model access.
+  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.6-flash';
 
   console.log("Using model:", modelName);
 
