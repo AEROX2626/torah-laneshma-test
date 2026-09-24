@@ -99,16 +99,26 @@ async function generateArticle(parashaNameHe, parashaNameEn) {
   }
 }
 
-// List of amazing fallback images for the articles
-const defaultImages = [
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/NahalHavarimNov212022_03.jpg/1280px-NahalHavarimNov212022_03.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Judea_2_by_David_Shankbone.jpg/1280px-Judea_2_by_David_Shankbone.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Mahane_Yehuda_%28I%29_%2845298221191%29.jpg/1280px-Mahane_Yehuda_%28I%29_%2845298221191%29.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Safed1.jpg/1280px-Safed1.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg/1280px-%D7%9E%D7%92%D7%93%D7%9C_-%D7%93%D7%95%D7%93.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Kinneret_cropped.jpg/1280px-Kinneret_cropped.jpg",
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Dead_Sea_beach_00.JPG/1280px-Dead_Sea_beach_00.JPG"
-];
+// Fetch a random amazing Israel landscape from Wikimedia Commons
+async function getRandomIsraelImage() {
+  try {
+    const url = 'https://commons.wikimedia.org/w/api.php?action=query&list=categorymembers&cmtitle=Category:Landscapes_of_Israel&cmnamespace=6&cmlimit=500&format=json';
+    const res = await fetch(url);
+    const data = await res.json();
+    const members = data.query.categorymembers;
+    const randomFile = members[Math.floor(Math.random() * members.length)].title;
+    
+    const imgUrlRes = await fetch(`https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(randomFile)}&prop=imageinfo&iiprop=url&format=json`);
+    const imgData = await imgUrlRes.json();
+    const pages = imgData.query.pages;
+    const imgInfo = Object.values(pages)[0].imageinfo[0];
+    return imgInfo.url;
+  } catch(e) {
+    console.error("Failed to fetch Wikimedia image", e);
+    // fallback
+    return "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/NahalHavarimNov212022_03.jpg/1280px-NahalHavarimNov212022_03.jpg";
+  }
+}
 
 async function main() {
   console.log("Fetching Parasha from Hebcal...");
@@ -133,7 +143,7 @@ async function main() {
   console.log("Generating article using Gemini AI...");
   const generated = await generateArticle(parasha.hebrew, parasha.title);
   
-  const randomImage = defaultImages[Math.floor(Math.random() * defaultImages.length)];
+  const randomImage = await getRandomIsraelImage();
 
   const today = new Date();
   const dateStr = today.toLocaleDateString('he-IL');

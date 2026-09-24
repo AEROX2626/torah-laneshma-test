@@ -34,7 +34,7 @@ const prompt = `
 async function run() {
   try {
     // Auto-discover model
-    let modelName = 'gemini-2.5-flash';
+    let modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.1-flash-lite';
     try {
       const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
       if (listRes.ok) {
