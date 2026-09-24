@@ -54,6 +54,15 @@ export default function SefariaReader() {
 
   
   const [calendar, setCalendar] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
+
   
   const contentRef = useRef<HTMLDivElement>(null);
 

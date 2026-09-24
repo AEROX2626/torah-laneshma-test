@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function StudyPage() {
   return (
-    <div className="h-screen w-full bg-[#f4ece3] overflow-hidden flex flex-col font-serif">
+    <div className="h-screen w-full bg-[#f4ece3] dark:bg-slate-950 overflow-hidden flex flex-col font-serif">
       <SefariaReader />
     </div>
   );
