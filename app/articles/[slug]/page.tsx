@@ -26,12 +26,12 @@ export async function generateMetadata(
 
   const articleUrl = `https://www.torah-laneshma.org/articles/${article.slug}`;
   // Clean HTML from abstract for description
-  const cleanDescription = article.abstract ? article.abstract.replace(/<[^>]+>/g, '').substring(0, 160) : 'מאמר מרתק מתורה לנשמה - היכנסו לקריאה.';
+  const cleanDescription = article.excerpt ? article.excerpt.replace(/<[^>]+>/g, '').substring(0, 160) : 'מאמר מרתק מתורה לנשמה - היכנסו לקריאה.';
 
   return {
     title: `${article.title} | תורה לנשמה`,
     description: cleanDescription,
-    authors: [{ name: article.author || 'תורה לנשמה' }],
+    authors: [{ name: 'תורה לנשמה' || 'תורה לנשמה' }],
     openGraph: {
       title: article.title,
       description: cleanDescription,
