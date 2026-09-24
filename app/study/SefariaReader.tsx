@@ -282,13 +282,13 @@ export default function SefariaReader() {
                       <div key={idx} className="group">
                         <p 
                           dangerouslySetInnerHTML={{ __html: paragraph }} 
-                          style={{ fontSize: \`\${fontSize}px\`, lineHeight: '1.8' }}
+                          style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
                           className="font-serif text-slate-900 leading-loose"
                         />
                         {showEnglish && data.text[idx] && (
                           <p 
                             dir="ltr" 
-                            style={{ fontSize: \`\${Math.max(14, fontSize - 6)}px\` }}
+                            style={{ fontSize: `${Math.max(14, fontSize - 6)}px` }}
                             className="mt-3 text-slate-500 font-sans leading-relaxed text-left opacity-90 border-l-4 border-slate-200 pl-4"
                             dangerouslySetInnerHTML={{ __html: data.text[idx] }} 
                           />
