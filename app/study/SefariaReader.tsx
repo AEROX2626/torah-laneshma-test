@@ -244,7 +244,7 @@ export default function SefariaReader() {
               onFocus={() => { if (suggestions.length > 0) setShowSuggestions(true); }}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               placeholder="חפש ספר, פרק או דף (למשל: חובות הלבבות, יומא ב)"
-              className={`w-full border border-transparent focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px] ${isDarkMode ? 'bg-slate-800 focus:bg-slate-900 text-slate-200 placeholder-slate-400' : 'bg-slate-100 focus:bg-white text-slate-900'}`}
+              className={`w-full border border-transparent focus:border-blue-500 rounded-full py-2.5 px-6 pr-12 outline-none transition-all shadow-inner text-[15px] ${isDarkMode ? 'bg-slate-800 focus:bg-slate-900 text-slate-100 placeholder:text-slate-400' : 'bg-slate-100 focus:bg-white text-slate-900 placeholder:text-slate-500'}`}
               dir="rtl"
             />
             <button type="submit" className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">

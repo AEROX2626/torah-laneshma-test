@@ -1,7 +1,11 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import holidayData from "../data/holiday.json";
 
 export default function HolidayBanner() {
-  if (!holidayData || !holidayData.active) return null;
+  const pathname = usePathname();
+  if (!holidayData || !holidayData.active || pathname === "/study") return null;
 
   return (
     <div className="selection:bg-white/30 selection:text-white bg-gradient-to-r from-primary-600 via-primary-500 to-primary-700 text-white relative overflow-hidden shadow-md">
