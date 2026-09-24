@@ -67,7 +67,7 @@ export default function AdoptPage() {
                     alt="אברכים מתפללים בכותל המערבי"
                     className="rounded-[2.5rem] shadow-2xl img-cover h-[400px] md:h-[500px] w-full border-2 border-white relative z-10"
                   />
-                <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-accent-500/20 rounded-full blur-3xl"></div>
+                <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-[radial-gradient(circle,_#f59e0b44_0%,_transparent_70%)] opacity-30"></div>
                 <div className="absolute -top-6 -left-6 md:-left-8 bg-white p-5 rounded-2xl shadow-elevated flex items-center gap-4 border border-ink-50 z-20">
                   <div className="w-14 h-14 bg-gradient-to-br from-rose-400 to-rose-600 text-white rounded-xl flex items-center justify-center text-2xl shadow-lg shadow-rose-500/40">
                     <i className="fas fa-hand-holding-usd"></i>

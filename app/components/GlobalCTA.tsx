@@ -5,8 +5,8 @@ export default function GlobalCTA() {
     <section className="bg-gradient-to-br from-primary-50 to-primary-100/50 py-16 md:py-24 border-t border-primary-100 relative overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none -z-10">
-        <div className="absolute top-10 right-10 w-64 h-64 bg-primary-200/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 left-10 w-64 h-64 bg-emerald-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-10 right-10 w-64 h-64 bg-[radial-gradient(circle,_#bfdbfe44_0%,_transparent_70%)] opacity-30"></div>
+        <div className="absolute bottom-10 left-10 w-64 h-64 bg-[radial-gradient(circle,_#a7f3d044_0%,_transparent_70%)] opacity-30"></div>
       </div>
 
       <div className="max-w-4xl mx-auto px-5 sm:px-8 text-center relative z-10">

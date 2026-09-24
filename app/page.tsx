@@ -360,7 +360,7 @@ export default function Home() {
             <div className="relative reveal">
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-32 h-32 mb-8">
-                  <div className="absolute inset-0 bg-primary-100 rounded-full blur-2xl opacity-60"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,_#dbeafe_0%,_transparent_70%)] opacity-80"></div>
                   <div className="relative w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-primary-100 shadow-elevated">
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-primary-500 to-primary-700 rounded-full flex items-center justify-center text-white font-black shadow-lg">1</div>
                     <i className="fas fa-clipboard-list text-4xl text-primary-600"></i>
@@ -374,7 +374,7 @@ export default function Home() {
             <div className="relative reveal" style={{ transitionDelay: "0.15s" }}>
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-32 h-32 mb-8">
-                  <div className="absolute inset-0 bg-accent-100 rounded-full blur-2xl opacity-60"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,_#ffedd5_0%,_transparent_70%)] opacity-80"></div>
                   <div className="relative w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-accent-100 shadow-elevated">
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-accent-500 to-accent-700 rounded-full flex items-center justify-center text-white font-black shadow-lg">2</div>
                     <i className="fas fa-user-check text-4xl text-accent-600"></i>
@@ -388,7 +388,7 @@ export default function Home() {
             <div className="relative reveal" style={{ transitionDelay: "0.3s" }}>
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-32 h-32 mb-8">
-                  <div className="absolute inset-0 bg-emerald-100 rounded-full blur-2xl opacity-60"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle,_#d1fae5_0%,_transparent_70%)] opacity-80"></div>
                   <div className="relative w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-emerald-100 shadow-elevated">
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center text-white font-black shadow-lg">3</div>
                     <i className="fas fa-phone-alt text-4xl text-emerald-600"></i>
@@ -486,8 +486,8 @@ export default function Home() {
 
       <section className="py-20 md:py-28 relative overflow-hidden bg-ink-950 text-white noise selection:bg-white/30 selection:text-white">
         <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwem0yMCAyMGMtNS41IDAtMTAtNC41LTEwLTEwUzE0LjUgMTAgMjAgMTBzMTAgNC41IDEwIDEwLTQuNSAxMC0xMCAxMHoiIGZpbGw9IiNmZmYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]"></div>
-        <div className="absolute top-1/3 left-0 w-96 h-96 bg-primary-500/20 rounded-full blur-[120px]"></div>
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent-500/10 rounded-full blur-[120px]"></div>
+        <div className="absolute top-1/3 left-0 w-96 h-96 bg-[radial-gradient(circle,_rgba(59,130,246,0.15)_0%,_transparent_70%)]"></div>
+        <div className="absolute bottom-0 right-0 w-96 h-96 bg-[radial-gradient(circle,_rgba(245,158,11,0.1)_0%,_transparent_70%)]"></div>
 
         <div className="max-w-7xl mx-auto px-5 sm:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -649,7 +649,7 @@ export default function Home() {
             
             <div className="lg:w-5/12 bg-gradient-to-br from-primary-700 via-primary-800 to-ink-950 p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
               <div className="absolute -right-20 -bottom-20 w-72 h-72 border-[40px] border-white/5 rounded-full"></div>
-              <div className="absolute -left-24 -top-24 w-64 h-64 bg-accent-500/10 rounded-full blur-3xl"></div>
+              <div className="absolute -left-24 -top-24 w-64 h-64 bg-[radial-gradient(circle,_rgba(245,158,11,0.1)_0%,_transparent_70%)]"></div>
 
               <div className="relative z-10">
                 <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-primary-100 border border-white/20 text-xs font-bold mb-6 tracking-widest uppercase">הצעד הראשון שלכם</span>
