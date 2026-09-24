@@ -21,7 +21,7 @@ async function getParasha() {
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
   // Discover available models
-  let modelName = 'gemini-1.5-flash';
+  let modelName = 'gemini-2.5-flash';
   try {
     const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${API_KEY}`);
     if (listRes.ok) {
