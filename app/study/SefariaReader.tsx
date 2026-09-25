@@ -22,6 +22,7 @@ interface Bookmark {
   ref: string;
   heRef: string;
   timestamp: number;
+  verseIdx?: number;
 }
 
 export default function SefariaReader() {
@@ -44,6 +45,7 @@ export default function SefariaReader() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentToc, setCurrentToc] = useState<any>(null);
   const [bookTocData, setBookTocData] = useState<any>(null);
+  const [pendingScrollVerse, setPendingScrollVerse] = useState<number | null>(null);
   const [showTocModal, setShowTocModal] = useState(false);
 
   const toggleDarkMode = () => {
@@ -194,9 +196,50 @@ export default function SefariaReader() {
     }
   };
 
+  
+  useEffect(() => {
+    if (data && pendingScrollVerse !== null) {
+      setTimeout(() => {
+        const el = document.getElementById(`verse-${pendingScrollVerse}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('bg-amber-100/50', 'dark:bg-amber-900/30', 'rounded-xl', 'transition-colors', 'duration-1000');
+          setTimeout(() => el.classList.remove('bg-amber-100/50', 'dark:bg-amber-900/30'), 2500);
+        }
+        setPendingScrollVerse(null);
+      }, 300);
+    }
+  }, [data, pendingScrollVerse]);
+
+  const handleBookmarkClick = (b: Bookmark) => {
+    setSidebarOpen(false);
+    if (b.verseIdx !== undefined) {
+      setPendingScrollVerse(b.verseIdx);
+    } else {
+      setPendingScrollVerse(null);
+    }
+    fetchText(b.ref);
+  };
+
+  const toggleVerseBookmark = (idx: number) => {
+    if (!data) return;
+    const isBookmarked = bookmarks.some(b => b.ref === data.ref && b.verseIdx === idx);
+    if (isBookmarked) {
+      saveBookmarks(bookmarks.filter(b => !(b.ref === data.ref && b.verseIdx === idx)));
+    } else {
+      const newBookmark: Bookmark = {
+        ref: data.ref,
+        heRef: data.heRef,
+        timestamp: Date.now(),
+        verseIdx: idx
+      };
+      saveBookmarks([newBookmark, ...bookmarks]);
+    }
+  };
+
   const addBookmark = () => {
     if (!data) return;
-    if (bookmarks.some(b => b.ref === data.ref)) return;
+    if (bookmarks.some(b => b.ref === data.ref && b.verseIdx === undefined)) return;
 
     const newBookmark: Bookmark = {
       ref: data.ref,
@@ -206,9 +249,9 @@ export default function SefariaReader() {
     saveBookmarks([newBookmark, ...bookmarks]);
   };
 
-  const removeBookmark = (e: React.MouseEvent, ref: string) => {
+  const removeBookmark = (e: React.MouseEvent, ref: string, verseIdx?: number) => {
     e.stopPropagation();
-    saveBookmarks(bookmarks.filter(b => b.ref !== ref));
+    saveBookmarks(bookmarks.filter(b => !(b.ref === ref && b.verseIdx === verseIdx)));
   };
 
   return (
@@ -369,10 +412,10 @@ export default function SefariaReader() {
             ) : (
               <ul className="space-y-2">
                 {bookmarks.map((b) => (
-                  <li key={b.ref} className="group flex justify-between items-center p-3 rounded-xl hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all cursor-pointer" onClick={() => fetchText(b.ref)}>
-                    <span className="font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 text-sm">{b.heRef || b.ref}</span>
+                  <li key={b.ref + (b.verseIdx !== undefined ? '-' + b.verseIdx : '')} className="group flex justify-between items-center p-3 rounded-xl hover:bg-blue-50 border border-transparent hover:border-blue-100 transition-all cursor-pointer" onClick={() => handleBookmarkClick(b)}>
+                    <span className="font-semibold text-slate-700 dark:text-slate-300 group-hover:text-blue-700 text-sm">{b.heRef || b.ref} {b.verseIdx !== undefined && <span className="text-xs text-slate-400 font-normal mr-1">(פסקה {b.verseIdx + 1})</span>}</span>
                     <button 
-                      onClick={(e) => removeBookmark(e, b.ref)}
+                      onClick={(e) => { e.stopPropagation(); removeBookmark(e, b.ref, b.verseIdx); }}
                       className="text-slate-300 hover:text-red-500 transition-colors p-1"
                     >
                       <i className="fas fa-trash-alt text-xs"></i>
@@ -453,13 +496,12 @@ export default function SefariaReader() {
 
                   <button
                     onClick={addBookmark}
-                    disabled={bookmarks.some(b => b.ref === data.ref)}
+                    disabled={bookmarks.some(b => b.ref === data.ref && b.verseIdx === undefined)}
                     className={`w-10 h-10 md:w-auto md:px-4 flex items-center justify-center rounded-lg font-bold transition-all
-                      ${bookmarks.some(b => b.ref === data.ref) 
-                        ? 'bg-amber-100 text-amber-700' 
+                      ${bookmarks.some(b => b.ref === data.ref && b.verseIdx === undefined) ? 'bg-amber-100 text-amber-700' 
                         : 'bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:bg-slate-800/50'}`}
                   >
-                    <i className={bookmarks.some(b => b.ref === data.ref) ? "fas fa-bookmark" : "far fa-bookmark"}></i>
+                    <i className={bookmarks.some(b => b.ref === data.ref && b.verseIdx === undefined) ? "fas fa-bookmark" : "far fa-bookmark"}></i>
                     <span className="hidden md:inline mr-2">{bookmarks.some(b => b.ref === data.ref) ? 'נשמר' : 'שמור'}</span>
                   </button>
                 </div>
@@ -476,7 +518,14 @@ export default function SefariaReader() {
                 ) : (
                   <div className="space-y-6 max-w-3xl mx-auto pb-10">
                     {data.he.map((paragraph, idx) => (
-                      <div key={idx} className="group">
+                      <div key={idx} id={`verse-${idx}`} className="group relative pr-8 md:pr-12">
+                          <button 
+                            onClick={() => toggleVerseBookmark(idx)}
+                            className={`absolute right-0 md:-right-2 top-2 p-1.5 rounded-lg transition-all ${bookmarks.some(b => b.ref === data.ref && b.verseIdx === idx) ? 'opacity-100 text-amber-500 bg-amber-50 dark:bg-amber-900/20' : 'opacity-0 group-hover:opacity-100 text-slate-300 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-900/20'}`}
+                            title="שמור סימניה לפסוק זה"
+                          >
+                            <i className={`${bookmarks.some(b => b.ref === data.ref && b.verseIdx === idx) ? 'fas' : 'far'} fa-bookmark`}></i>
+                          </button>
                         <p 
                           dangerouslySetInnerHTML={{ __html: paragraph }} 
                           style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
