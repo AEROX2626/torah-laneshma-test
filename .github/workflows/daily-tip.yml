@@ -2,8 +2,8 @@ name: Generate Daily Tip
 
 on:
   schedule:
-    # Run every day at 21:00 UTC (00:00 or 23:00 Israel time)
-    - cron: '0 21 * * *'
+    # Run every day at 22:00 UTC (01:00 or 00:00 Israel time)
+    - cron: '0 22 * * *'
   workflow_dispatch:
     # Allows manual triggering from the GitHub Actions UI
 
@@ -25,6 +25,7 @@ jobs:
       - name: Generate Daily Tip
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY_NEW }}
+          TZ: "Asia/Jerusalem"
           OLD_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node scripts/generate-daily-tip.mjs
