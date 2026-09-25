@@ -230,9 +230,9 @@ export default function SefariaReader() {
           >
             <i className="fas fa-bars"></i>
           </button>
-          <h1 className="font-serif font-bold text-xl md:text-2xl text-slate-800 dark:text-slate-200 whitespace-nowrap">
+          <button onClick={() => { setData(null); setQuery(""); }} className="font-serif font-bold text-xl md:text-2xl text-slate-800 dark:text-slate-200 whitespace-nowrap hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
             בית מדרש
-          </h1>
+          </button>
         </div>
 
         <div className="flex-1 max-w-xl mx-4 md:mx-8 hidden md:block relative">
@@ -279,28 +279,22 @@ export default function SefariaReader() {
             <i className={`fas ${isDarkMode ? 'fa-sun' : 'fa-moon'}`}></i>
           </button>
 
-          <button 
-            onClick={() => {
-              setData(null);
-              setQuery("");
-            }}
+          <Link 
+            href="/"
             className={`md:hidden flex items-center justify-center w-10 h-10 rounded-full transition-colors ${isDarkMode ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-700'}`}
           >
             <i className="fas fa-home"></i>
-          </button>
+          </Link>
 
 
           
-          <button 
-            onClick={() => {
-              setData(null);
-              setQuery("");
-            }} 
+          <Link 
+            href="/"
             className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-colors ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}
-            title="חזרה לראשי"
+            title="חזרה לעמוד הבית"
           >
             <i className="fas fa-home text-blue-500"></i> ראשי
-          </button>
+          </Link>
           
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className={`hidden md:flex items-center gap-2 px-4 py-2 rounded-full font-medium transition-colors ${isDarkMode ? 'bg-slate-800 hover:bg-slate-700 text-slate-300' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}`}>
 
