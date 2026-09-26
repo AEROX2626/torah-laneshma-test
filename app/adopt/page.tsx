@@ -28,8 +28,8 @@ export default function AdoptPage() {
   return (
     <>
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div className="blob bg-primary-200 w-[600px] h-[600px] rounded-full top-[-200px] right-[-200px] animate-float"></div>
-        <div className="blob bg-accent-100 w-[500px] h-[500px] rounded-full top-[30%] left-[-200px] animate-float-slow" style={{ animationDelay: "-4s" }}></div>
+        <div className="absolute top-[-200px] right-[-200px] w-[800px] h-[800px] bg-[radial-gradient(circle,_rgba(184,221,253,0.3)_0%,_transparent_60%)] animate-float"></div>
+        <div className="absolute top-[30%] left-[-200px] w-[700px] h-[700px] bg-[radial-gradient(circle,_rgba(254,215,170,0.25)_0%,_transparent_60%)] animate-float-slow" style={{ animationDelay: "-4s" }}></div>
       </div>
 
       <Navbar />
