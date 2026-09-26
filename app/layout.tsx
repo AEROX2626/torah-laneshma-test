@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import { Assistant, Rubik } from "next/font/google";
+import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
+import '@fortawesome/fontawesome-free/css/solid.min.css';
+import '@fortawesome/fontawesome-free/css/brands.min.css';
 import "./globals.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import HolidayBanner from "./components/HolidayBanner";
 
 const assistant = Assistant({
   subsets: ["hebrew", "latin"],
   variable: "--font-assistant",
+  display: "swap",
 });
 
 const rubik = Rubik({
   subsets: ["hebrew", "latin"],
   variable: "--font-rubik",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -42,17 +46,33 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "url": "https://www.torah-laneshma.org",
+    "name": "תורה לנשמה",
+    "description": "חברותא טלפונית אישית ללימוד תורה, מכל מקום ובחינם. פתרון קל לחיבור למסורת בשגרת החיים.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "תורה לנשמה"
+    }
+  };
+
   return (
     <html lang="he" dir="rtl" className="scroll-smooth">
       <head>
-        
+        <meta name="theme-color" content="#1f84ee" />
         <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        
+        <link rel="alternate" type="text/markdown" href="/llms.txt" title="Torah Laneshima LLM Guide" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />
-        {children}
+        <main>{children}</main>
       </body>
     </html>
   );

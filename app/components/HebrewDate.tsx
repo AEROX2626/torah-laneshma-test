@@ -28,6 +28,8 @@ export default function HebrewDate() {
     <>
       <button 
         onClick={() => setIsModalOpen(true)}
+        aria-haspopup="dialog"
+        aria-label={`תאריך עברי: ${dateStr}. לחצו לפתיחת לוח שנה`}
         className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm shadow-soft hover:bg-primary-50 transition-colors group"
         title="צפו בלוח השנה המלא"
       >

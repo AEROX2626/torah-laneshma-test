@@ -62,7 +62,7 @@ export default function Navbar() {
               </Link>
             </div>
 
-            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden relative w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-soft border border-ink-100 hover:border-primary-200 transition-colors" aria-label="תפריט">
+            <button aria-expanded={isMenuOpen} aria-controls="mobile-menu" onClick={() => setIsMenuOpen(!isMenuOpen)} className="lg:hidden relative w-12 h-12 flex items-center justify-center bg-white rounded-2xl shadow-soft border border-ink-100 hover:border-primary-200 transition-colors" aria-label="תפריט">
               <div className="flex flex-col gap-1.5 items-center">
                 <span className="block w-5 h-0.5 bg-ink-700 rounded-full transition-all duration-300" style={isMenuOpen ? { transform: "translateY(8px) rotate(45deg)" } : {}}></span>
                 <span className="block w-5 h-0.5 bg-ink-700 rounded-full transition-all duration-300" style={isMenuOpen ? { opacity: 0 } : {}}></span>

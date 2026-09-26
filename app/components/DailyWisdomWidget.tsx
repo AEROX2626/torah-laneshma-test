@@ -17,8 +17,8 @@ export default function DailyWisdomWidget() {
             <i className="fas fa-quote-right"></i>
           </div>
           <div>
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">חיזוק יומי</span>
-            <div className="text-sm font-semibold text-ink-400 mt-1">{latestWisdom.source}</div>
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">חיזוק יומי</span>
+            <div className="text-sm font-semibold text-ink-500 mt-1">{latestWisdom.source}</div>
           </div>
         </div>
         

@@ -16,7 +16,7 @@ export default function DafYomiWidget() {
           </div>
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">הדף היומי היום</span>
-            <div className="text-sm font-semibold text-ink-400 mt-1">{dafYomiData.daf} | {dafYomiData.date}</div>
+            <div className="text-sm font-semibold text-ink-500 mt-1">{dafYomiData.daf} | {dafYomiData.date}</div>
           </div>
         </div>
         

@@ -1,9 +1,6 @@
-"use client";
 import Link from "next/link";
 import Image from "next/image";
 import { articles } from "./articles/data";
-
-import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import PageEffects from "./components/PageEffects";
 import HeroCounters from "./components/HeroCounters";
@@ -18,6 +15,65 @@ import HebrewDate from "./components/HebrewDate";
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "האם החברותא בחינם או כרוכה בתשלום / התחייבות כלשהי?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "חינם לגמרי, לתמיד. המטרה שלנו היא להנגיש את התורה לכל יהודי, ללא שום עלות. אתם לא משלמים על השירות, ולא מחויבים להמשיך אם זה לא מתאים לכם.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "איך מתבצע הלימוד בפועל? זה בטלפון או בזום?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "בטלפון! רוב הלומדים שלנו מעדיפים את הפשטות והנוחות של שיחת טלפון רגילה. אין צורך להסתבך עם זום, מצלמות או אינטרנט. פשוט מתקשרים, לומדים ומנתקים. קל ונגיש מכל מקום.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "אני לא יודע לקרוא דף גמרא. האם זה מתאים לי?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "בהחלט! יש לנו מסלולי לימוד שמותאמים בדיוק לרמה שלך. בין אם אתה רוצה ללמוד פרשת שבוע, הלכה, מוסר, או גמרא מהבסיס – נתאים לך חברותא שילמד איתך בקצב ובשפה שלך.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "תוך כמה זמן ימצאו לי חברותא?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "בדרך כלל, תוך 24-48 שעות ממועד הפנייה. צוות ההתאמה שלנו עובד קשה כדי למצוא עבורך את החברותא המדויק ביותר.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "האם אפשר לבחור את נושא הלימוד?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "הבחירה כולה שלך! אתה יכול לבחור ללמוד גמרא, פרשת שבוע, הלכה, מוסר או כל נושא תורני אחר.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "האם יש שעות ספציפיות בהן צריך ללמוד?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "לא. אתה מתאם את שעת הלימוד ישירות מול החברותא שלך, לפי מה שנוח לשניכם. הגמישות היא מלאה.",
+                },
+              },
+            ],
+          }),
+        }}
+      />
       <div id="scroll-progress" style={{ width: `0%` }}></div>
 
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -44,16 +100,16 @@ export default function Home() {
                 <HebrewDate />
               </div>
 
-              <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7" style={{ transitionDelay: "0.1s" }}>
+              <h1 className="font-heading font-black text-4xl sm:text-5xl lg:text-[4.2rem] text-ink-950 leading-[1.05] mb-7">
                 להתחבר למסורת,<br />
                 <span className="text-gradient">בקצב המדויק שלכם.</span>
               </h1>
 
-              <p className="text-lg lg:text-xl text-ink-600 mb-9 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium" style={{ transitionDelay: "0.2s" }}>
+              <p className="text-lg lg:text-xl text-ink-600 mb-9 max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
                 סקרנים לגבי המסורת היהודית אבל השגרה העמוסה לא משאירה לכם רגע פנוי? <strong className="text-ink-800">'תורה לנשמה'</strong> מזמינה אתכם לחברותא טלפונית: שעת איכות שבועית של לימוד משותף ושיח פתוח, מכל מקום ובזמן שהכי נוח לכם.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8" style={{ transitionDelay: "0.3s" }}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
                 <a href="#join"  className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
                   <span>מצאו לי חברותא</span>
                   <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
@@ -64,22 +120,22 @@ export default function Home() {
                 </a>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-ink-500 font-semibold" style={{ transitionDelay: "0.4s" }}>
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-sm text-ink-500 font-semibold">
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> 100% בחינם</div>
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> ללא שום התחייבות</div>
                 <div className="flex items-center gap-2"><i className="fas fa-check-circle text-emerald-500"></i> התאמה אישית מדויקת</div>
               </div>
             </div>
 
-            <div className="lg:col-span-6 relative" style={{ transitionDelay: "0.2s" }}>
+            <div className="lg:col-span-6 relative">
               <div className="hero-frame relative">
-                <div className="relative w-full h-[420px] md:h-[560px] rounded-[2.5rem] shadow-elevated border border-white overflow-hidden"><Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Westernwall2.jpg/1280px-Westernwall2.jpg" alt="הכותל המערבי – ירושלים" fill priority className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
+                <div className="relative w-full h-[420px] md:h-[560px] rounded-[2.5rem] shadow-elevated border border-white overflow-hidden"><Image src="/images/hero-bg.jpg" alt="הכותל המערבי – ירושלים" fill priority className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" /></div>
                 <div className="absolute -bottom-5 -left-5 md:-left-8 bg-white p-4 md:p-5 rounded-2xl shadow-elevated flex items-center gap-4 border border-ink-50">
                   <div className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-primary-500 to-primary-700 text-white rounded-xl flex items-center justify-center text-xl md:text-2xl shadow-lg shadow-primary-500/40">
                     <i className="fas fa-phone-volume"></i>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] md:text-xs text-ink-400 font-bold uppercase tracking-wider">נגיש מכל מקום</p>
+                    <p className="text-[10px] md:text-xs text-ink-500 font-bold uppercase tracking-wider">נגיש מכל מקום</p>
                     <p className="font-heading font-extrabold text-ink-900 text-base md:text-lg">רק שיחת טלפון</p>
                   </div>
                 </div>
@@ -92,7 +148,7 @@ export default function Home() {
                   </div>
                   <div className="text-right">
                     <p className="font-heading font-extrabold text-ink-900 text-sm">+2,500</p>
-                    <p className="text-[10px] text-ink-400 font-bold">לומדים פעילים</p>
+                    <p className="text-[10px] text-ink-500 font-bold">לומדים פעילים</p>
                   </div>
                 </div>
               </div>
@@ -104,18 +160,18 @@ export default function Home() {
           <div className="marquee-container py-6">
             <div className="flex gap-16 animate-marquee whitespace-nowrap items-center">
               <div className="flex gap-16 items-center">
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-star text-amber-400"></i> 4.9 שביעות רצון</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-users text-primary-400"></i> +2,500 משתתפים</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-clock text-primary-400"></i> +80,000 שעות לימוד</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-hand-holding-heart text-rose-400"></i> יוזמה התנדבותית</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-shield-alt text-emerald-400"></i> דיסקרטיות מלאה</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-star text-amber-400"></i> 4.9 שביעות רצון</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-users text-primary-400"></i> +2,500 משתתפים</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-clock text-primary-400"></i> +80,000 שעות לימוד</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-hand-holding-heart text-rose-400"></i> יוזמה התנדבותית</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-shield-alt text-emerald-400"></i> דיסקרטיות מלאה</span>
               </div>
               <div className="flex gap-16 items-center" aria-hidden="true">
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-star text-amber-400"></i> 4.9 שביעות רצון</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-users text-primary-400"></i> +2,500 משתתפים</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-clock text-primary-400"></i> +80,000 שעות לימוד</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-hand-holding-heart text-rose-400"></i> יוזמה התנדבותית</span>
-                <span className="flex items-center gap-3 text-ink-400 font-bold text-lg"><i className="fas fa-shield-alt text-emerald-400"></i> דיסקרטיות מלאה</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-star text-amber-400"></i> 4.9 שביעות רצון</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-users text-primary-400"></i> +2,500 משתתפים</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-clock text-primary-400"></i> +80,000 שעות לימוד</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-hand-holding-heart text-rose-400"></i> יוזמה התנדבותית</span>
+                <span className="flex items-center gap-3 text-ink-500 font-bold text-lg"><i className="fas fa-shield-alt text-emerald-400"></i> דיסקרטיות מלאה</span>
               </div>
             </div>
           </div>
@@ -151,7 +207,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="card-hover bg-white rounded-3xl p-8 md:p-10 border border-ink-100 hover:border-primary-200 reveal group relative overflow-hidden" style={{ transitionDelay: "0.1s" }}>
+            <div className="card-hover bg-white rounded-3xl p-8 md:p-10 border border-ink-100 hover:border-primary-200 reveal group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-accent-50 to-transparent rounded-full -translate-y-16 translate-x-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
                 <div className="w-16 h-16 bg-gradient-to-br from-accent-500 to-accent-700 rounded-2xl flex items-center justify-center text-white text-2xl mb-7 shadow-lg shadow-accent-500/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
@@ -162,7 +218,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="card-hover bg-white rounded-3xl p-8 md:p-10 border border-ink-100 hover:border-primary-200 reveal group relative overflow-hidden" style={{ transitionDelay: "0.2s" }}>
+            <div className="card-hover bg-white rounded-3xl p-8 md:p-10 border border-ink-100 hover:border-primary-200 reveal group relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-emerald-50 to-transparent rounded-full -translate-y-16 translate-x-16 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
               <div className="relative">
                 <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center text-white text-2xl mb-7 shadow-lg shadow-emerald-500/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
@@ -231,13 +287,13 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="relative reveal" style={{ transitionDelay: "0.3s" }}>
+            <div className="relative reveal">
               <div className="flex flex-col items-center text-center">
                 <div className="relative w-32 h-32 mb-8">
                   <div className="absolute inset-0 bg-[radial-gradient(circle,_#d1fae5_0%,_transparent_70%)] opacity-80"></div>
                   <div className="relative w-full h-full bg-white rounded-full flex items-center justify-center border-4 border-emerald-100 shadow-elevated">
                     <div className="absolute -top-2 -right-2 w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-full flex items-center justify-center text-white font-black shadow-lg">3</div>
-                    <i className="fas fa-phone-alt text-4xl text-emerald-600"></i>
+                    <i className="fas fa-phone-alt text-4xl text-emerald-700"></i>
                   </div>
                 </div>
                 <h3 className="font-heading text-xl font-extrabold text-ink-900 mb-3">יוצאים לדרך משותפת</h3>
@@ -288,12 +344,12 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-full bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center text-white font-bold">ע</div>
                 <div>
                   <div className="font-heading font-extrabold text-ink-900 text-sm">עמרי דהן</div>
-                  <div className="text-ink-400 text-xs font-semibold">בן 32, רמת גן</div>
+                  <div className="text-ink-500 text-xs font-semibold">בן 32, רמת גן</div>
                 </div>
               </div>
             </div>
 
-            <div className="card-hover bg-white rounded-3xl p-8 border border-ink-100 reveal" style={{ transitionDelay: "0.1s" }}>
+            <div className="card-hover bg-white rounded-3xl p-8 border border-ink-100 reveal">
               <div className="flex gap-1 mb-5 text-amber-400">
                 <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
               </div>
@@ -302,12 +358,12 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold">א</div>
                 <div>
                   <div className="font-heading font-extrabold text-ink-900 text-sm">אלעד כהן</div>
-                  <div className="text-ink-400 text-xs font-semibold">בן 41, תל אביב</div>
+                  <div className="text-ink-500 text-xs font-semibold">בן 41, תל אביב</div>
                 </div>
               </div>
             </div>
 
-            <div className="card-hover bg-white rounded-3xl p-8 border border-ink-100 reveal md:col-span-2 lg:col-span-1" style={{ transitionDelay: "0.2s" }}>
+            <div className="card-hover bg-white rounded-3xl p-8 border border-ink-100 reveal md:col-span-2 lg:col-span-1">
               <div className="flex gap-1 mb-5 text-amber-400">
                 <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
               </div>
@@ -316,7 +372,7 @@ export default function Home() {
                 <div className="w-11 h-11 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white font-bold">נ</div>
                 <div>
                   <div className="font-heading font-extrabold text-ink-900 text-sm">נדב שפירא</div>
-                  <div className="text-ink-400 text-xs font-semibold">בן 28, חיפה</div>
+                  <div className="text-ink-500 text-xs font-semibold">בן 28, חיפה</div>
                 </div>
               </div>
             </div>
@@ -333,13 +389,13 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="order-2 lg:order-1 relative reveal-scale">
               <div className="relative">
-                <div className="relative w-full h-[440px] md:h-[520px] rounded-[2rem] shadow-2xl border border-ink-800 overflow-hidden"><Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/Safed1.jpg/1280px-Safed1.jpg" alt="סמטאות ירושלים – מרחב בטוח ופתוח" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" /></div>
+                <div className="relative w-full h-[440px] md:h-[520px] rounded-[2rem] shadow-2xl border border-ink-800 overflow-hidden"><Image src="/images/safed.jpg" alt="סמטאות צפת – מרחב בטוח ופתוח" fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" loading="lazy" /></div>
                 <div className="absolute -bottom-5 -right-5 w-full h-full border-2 border-primary-500/60 rounded-[2rem] -z-10"></div>
                 <div className="absolute bottom-6 left-6 bg-white/95 backdrop-blur rounded-2xl px-5 py-3 shadow-2xl flex items-center gap-3">
                   <i className="fas fa-shield-halved text-primary-600 text-xl"></i>
                   <div className="text-right">
                     <p className="font-heading font-extrabold text-ink-900 text-sm">מרחב בטוח</p>
-                    <p className="text-[10px] text-ink-400 font-bold">100% נטול שיפוטיות</p>
+                    <p className="text-[10px] text-ink-500 font-bold">100% נטול שיפוטיות</p>
                   </div>
                 </div>
               </div>
@@ -505,7 +561,9 @@ export default function Home() {
       </section>
 
       <section className="py-16 md:py-20 relative overflow-hidden bg-ink-950 selection:bg-white/30 selection:text-white">
-        <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Jerusalem_stone.jpg/1280px-Jerusalem_stone.jpg')", opacity: 0.25 }}></div>
+        <div className="absolute inset-0 opacity-25">
+          <Image src="/images/hero-bg.jpg" alt="" fill className="object-cover object-center" sizes="100vw" loading="lazy" aria-hidden="true" />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-l from-ink-950 via-ink-950/70 to-transparent"></div>
 
         <div className="max-w-5xl mx-auto px-5 sm:px-8 relative z-10 text-center reveal">

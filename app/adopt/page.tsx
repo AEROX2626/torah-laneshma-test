@@ -39,7 +39,7 @@ export default function AdoptPage() {
           <div className="grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
             <div className="lg:col-span-6 text-center lg:text-right">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-700 font-bold text-sm mb-7 shadow-soft reveal">
-                <i className="fas fa-hand-holding-heart text-rose-500"></i>
+                <i className="fas fa-hand-holding-heart text-rose-700"></i>
                 <span>שותפות נצחית בלימוד התורה</span>
               </div>
 
@@ -171,7 +171,7 @@ export default function AdoptPage() {
                 <button type="submit" className="w-full bg-gradient-to-l from-primary-500 to-primary-600 text-white py-5 rounded-2xl font-extrabold text-xl shadow-lg shadow-primary-500/40 hover:shadow-primary-500/60 hover:-translate-y-1 transition-all duration-300">
                   שלח פנייה עכשיו
                 </button>
-                <p className="text-center text-sm text-ink-400 font-medium mt-4">
+                <p className="text-center text-sm text-ink-500 font-medium mt-4">
                   <i className="fas fa-lock mr-1"></i> הפרטים יישמרו בסודיות מלאה ולא יועברו לאיש
                 </p>
               </form>

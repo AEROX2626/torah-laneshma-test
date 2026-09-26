@@ -30,7 +30,7 @@ export default function GlobalCTA() {
             <i className="fas fa-arrow-left"></i>
           </Link>
           
-          <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 bg-white text-ink-700 border border-ink-200 hover:border-emerald-500 hover:text-emerald-600 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+          <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 bg-white text-ink-700 border border-ink-200 hover:border-emerald-500 hover:text-emerald-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
             <i className="fab fa-whatsapp text-emerald-500 text-xl"></i>
             <span>או דברו איתנו בוואטסאפ</span>
           </a>

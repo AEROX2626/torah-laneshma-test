@@ -1,56 +1,84 @@
-﻿"use client";
-import { useState, useEffect } from "react";
+"use client";
+import { useEffect, useRef, useCallback } from "react";
 
 export default function HeroCounters() {
-  const [counters, setCounters] = useState({
-    learners: 0,
-    hours: 0,
-    volunteers: 0,
-  });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animatedRef = useRef(false);
 
-  useEffect(() => {
-    // Number Counting Animation
-    const animateValue = (key: keyof typeof counters, end: number, duration: number) => {
-      let start = 0;
-      const increment = end / (duration / 16);
-      const timer = setInterval(() => {
-        start += increment;
-        if (start >= end) {
-          setCounters((prev) => ({ ...prev, [key]: end }));
-          clearInterval(timer);
-        } else {
-          setCounters((prev) => ({ ...prev, [key]: Math.floor(start) }));
-        }
-      }, 16);
+  const animateValue = useCallback((element: HTMLElement, end: number, duration: number, format: (n: number) => string) => {
+    const startTime = performance.now();
+    
+    const update = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.floor(eased * end);
+      element.textContent = format(current);
+      
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
     };
-
-    setTimeout(() => {
-      animateValue("learners", 2500, 2000);
-      animateValue("hours", 120, 2500);
-      animateValue("volunteers", 450, 2000);
-    }, 500);
+    
+    requestAnimationFrame(update);
   }, []);
 
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !animatedRef.current) {
+            animatedRef.current = true;
+            // Animate each counter
+            const counters = container.querySelectorAll('[data-counter]');
+            counters.forEach((el) => {
+              const target = Number(el.getAttribute('data-counter'));
+              const suffix = el.getAttribute('data-suffix') || '';
+              const locale = el.getAttribute('data-locale') === 'true';
+              animateValue(el as HTMLElement, target, 2000, (n) => {
+                const formatted = locale ? n.toLocaleString('he-IL') : String(n);
+                return formatted + suffix;
+              });
+            });
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    observer.observe(container);
+    return () => observer.disconnect();
+  }, [animateValue]);
+
   return (
-    <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
+    <div ref={containerRef} className="relative grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
       <div className="text-center reveal">
-        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">{counters.learners.toLocaleString("he-IL")}</div>
+        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number" aria-label="2,500">
+          <span data-counter="2500" data-locale="true">0</span>
+        </div>
         <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">לומדים פעילים</div>
       </div>
       <div className="text-center reveal" style={{ transitionDelay: "0.1s" }}>
-        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">
-          <span>{counters.hours}</span>K+
+        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number" aria-label="120K+">
+          <span data-counter="120" data-suffix="K+">0</span>
         </div>
         <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">שעות של למידה</div>
       </div>
       <div className="text-center reveal" style={{ transitionDelay: "0.2s" }}>
-        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">
-          <span>{counters.volunteers}</span>+
+        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number" aria-label="450+">
+          <span data-counter="450" data-suffix="+">0</span>
         </div>
         <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">מתנדבים ברחבי הארץ</div>
       </div>
       <div className="text-center reveal" style={{ transitionDelay: "0.3s" }}>
-        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">4.9<span className="text-accent-400 text-3xl">★</span></div>
+        <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number" aria-label="4.9★">
+          4.9<span className="text-accent-400 text-3xl">★</span>
+        </div>
         <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">דירוג שביעות רצון</div>
       </div>
     </div>

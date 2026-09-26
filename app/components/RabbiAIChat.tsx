@@ -2,7 +2,7 @@ export default function RabbiAIChat() {
   return (
     <div className="w-full h-[600px] rounded-2xl overflow-hidden shadow-elevated border border-ink-100 bg-white relative animate-fade-up">
       <div className="absolute inset-0 flex items-center justify-center bg-ink-50 animate-pulse -z-10">
-        <span className="text-ink-400 font-medium text-sm">טוען את הרב הווירטואלי...</span>
+        <span className="text-ink-500 font-medium text-sm">טוען את הרב הווירטואלי...</span>
       </div>
       <iframe
         src="https://widget.rabbiai.app/he/chat/rabbi?display-mode=auto&app=your-app-name"

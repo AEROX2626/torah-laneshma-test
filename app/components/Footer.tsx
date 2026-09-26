@@ -41,7 +41,7 @@ export default function Footer() {
             </div>
 
             <div className="md:col-span-3">
-              <h4 className="font-heading font-extrabold text-ink-900 mb-5 text-sm uppercase tracking-widest">תפריט ניווט</h4>
+              <h2 className="font-heading font-extrabold text-ink-900 mb-5 text-sm uppercase tracking-widest">תפריט ניווט</h2>
               <ul className="space-y-3">
                 <li><Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">מהות החברותא</Link></li>
                 <li><Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">תכלס, איך מתחילים?</Link></li>
@@ -52,7 +52,7 @@ export default function Footer() {
             </div>
 
             <div className="md:col-span-4">
-              <h4 className="font-heading font-extrabold text-ink-900 mb-5 text-sm uppercase tracking-widest">דברו איתנו</h4>
+              <h2 className="font-heading font-extrabold text-ink-900 mb-5 text-sm uppercase tracking-widest">דברו איתנו</h2>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-ink-600 font-semibold">
                   <i className="fab fa-whatsapp text-emerald-500 text-lg"></i>

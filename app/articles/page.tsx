@@ -40,7 +40,7 @@ export default function ArticlesIndexPage() {
                 <div className="p-6 md:p-8 flex flex-col flex-grow">
                   <div className="flex items-center gap-3 mb-3">
                     <span className="text-xs font-bold text-primary-600 bg-primary-50 px-3 py-1 rounded-full">{article.category}</span>
-                    {article.date && <span className="text-xs font-medium text-ink-400">{article.date}</span>}
+                    {article.date && <span className="text-xs font-medium text-ink-500">{article.date}</span>}
                   </div>
                   <h3 className="font-heading font-extrabold text-2xl text-ink-900 mb-3 group-hover:text-primary-600 transition-colors">{article.title}</h3>
                   <p className="text-ink-600 font-medium leading-relaxed flex-grow">{article.excerpt}</p>

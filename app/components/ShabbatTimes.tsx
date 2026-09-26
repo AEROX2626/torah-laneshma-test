@@ -149,9 +149,9 @@ export default function ShabbatTimes() {
       </div>
       <div className="hidden sm:block w-px h-4 bg-ink-200"></div>
               <div className="flex items-center gap-2 text-ink-600 bg-ink-50 px-2.5 py-1 rounded-lg border border-ink-100">
-          <button onClick={() => setTargetDate(d => new Date(d.getTime() - 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-right text-[10px]"></i></button>
+          <button aria-label="שבוע קודם" onClick={() => setTargetDate(d => new Date(d.getTime() - 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-right text-[10px]"></i></button>
           <span className={`font-bold text-xs tracking-wide min-w-[75px] text-center transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>{times.dateStr}</span>
-          <button onClick={() => setTargetDate(d => new Date(d.getTime() + 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-left text-[10px]"></i></button>
+          <button aria-label="שבוע הבא" onClick={() => setTargetDate(d => new Date(d.getTime() + 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-left text-[10px]"></i></button>
         </div>
         <div className={`flex flex-col text-[11px] font-medium text-ink-500 leading-tight transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>
           <span>כניסה: {times.inTime}</span>
@@ -207,7 +207,7 @@ export default function ShabbatTimes() {
               </button>
             ))}
             {searchQuery.length >= 2 && searchResults.length === 0 && (
-              <div className="text-center text-ink-400 py-3 text-xs">לא נמצאו ערים</div>
+              <div className="text-center text-ink-500 py-3 text-xs">לא נמצאו ערים</div>
             )}
           </div>
         </div>

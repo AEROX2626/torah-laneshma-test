@@ -33,8 +33,8 @@ export default function RelationshipsGuidePage() {
             {dailyTips.map((tip, index) => (
               <div key={tip.id} className="bg-white rounded-3xl p-8 shadow-soft border border-rose-100 flex flex-col h-full hover:shadow-lg transition-shadow">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold text-rose-500 bg-rose-50 px-3 py-1 rounded-full">{tip.category}</span>
-                  <span className="text-xs font-medium text-ink-400">{tip.date}</span>
+                  <span className="text-xs font-bold text-rose-700 bg-rose-50 px-3 py-1 rounded-full">{tip.category}</span>
+                  <span className="text-xs font-medium text-ink-500">{tip.date}</span>
                 </div>
                 <h3 className="font-heading font-extrabold text-xl text-ink-900 mb-3">{tip.title}</h3>
                 <p className="text-ink-600 font-medium leading-relaxed flex-grow">{tip.content}</p>

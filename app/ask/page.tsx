@@ -34,7 +34,7 @@ export default function AskRabbiPage() {
             <RabbiAIChat />
           </div>
 
-          <div className="mt-12 text-center text-ink-400 text-sm font-medium flex items-center justify-center gap-2">
+          <div className="mt-12 text-center text-ink-500 text-sm font-medium flex items-center justify-center gap-2">
             <i className="fas fa-info-circle"></i>
             <span>התשובות ניתנות על ידי בינה מלאכותית ונועדו להעשרה ולימוד בלבד.</span>
           </div>

@@ -94,7 +94,7 @@ export default function JewishCalendarWidget({ onClose }: { onClose: () => void 
             </div>
           </div>
           
-          <button onClick={onClose} className="absolute sm:relative top-4 left-4 sm:top-0 sm:left-0 w-10 h-10 flex items-center justify-center rounded-full bg-white border border-ink-200 text-ink-500 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-colors shadow-sm z-10">
+          <button onClick={onClose} className="absolute sm:relative top-4 left-4 sm:top-0 sm:left-0 w-10 h-10 flex items-center justify-center rounded-full bg-white border border-ink-200 text-ink-500 hover:text-rose-700 hover:border-rose-200 hover:bg-rose-50 transition-colors shadow-sm z-10">
             <i className="fas fa-times text-lg"></i>
           </button>
         </div>
@@ -134,7 +134,7 @@ export default function JewishCalendarWidget({ onClose }: { onClose: () => void 
                     
                     <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start mb-1 md:mb-2 gap-0.5 md:gap-0">
                       <span className={`font-black text-[13px] md:text-xl leading-none ${isToday ? 'text-primary-700' : (isShabbat ? 'text-primary-600' : 'text-ink-800')}`}>{day}</span>
-                      <span className={`text-[9px] md:text-sm font-semibold leading-none ${isToday ? 'text-primary-600' : 'text-ink-400'}`}>{hebDateStr}</span>
+                      <span className={`text-[9px] md:text-sm font-semibold leading-none ${isToday ? 'text-primary-600' : 'text-ink-500'}`}>{hebDateStr}</span>
                     </div>
                     
                     <div className="flex-grow flex flex-col gap-1 mt-0.5 md:mt-1 overflow-hidden justify-end md:justify-start">

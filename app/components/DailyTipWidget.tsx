@@ -19,8 +19,8 @@ export default function DailyTipWidget({ standalone = true }: { standalone?: boo
               <i className="fas fa-gem"></i>
             </div>
             <div>
-              <span className="text-xs font-bold uppercase tracking-widest text-rose-500 bg-rose-50 px-3 py-1 rounded-full">לזוגיות ושידוכים</span>
-              <div className="text-sm font-semibold text-ink-400 mt-1">{latestTip.category}</div>
+              <span className="text-xs font-bold uppercase tracking-widest text-rose-700 bg-rose-50 px-3 py-1 rounded-full">לזוגיות ושידוכים</span>
+              <div className="text-sm font-semibold text-ink-500 mt-1">{latestTip.category}</div>
             </div>
           </div>
         </div>
