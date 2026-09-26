@@ -547,10 +547,12 @@ export default function SefariaReader() {
                             <i className={`${bookmarks.some(b => b.ref === data.ref && b.verseIdx === idx) ? 'fas' : 'far'} fa-bookmark`}></i>
                           </button>
                         <p 
-                          dangerouslySetInnerHTML={{ __html: paragraph }} 
-                          style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
-                          className={`font-serif leading-loose ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}
-                        />
+    style={{ fontSize: `${fontSize}px`, lineHeight: '1.8' }}
+    className={`font-serif leading-loose ${isDarkMode ? 'text-slate-50' : 'text-slate-900'}`}
+  >
+    <span className="font-bold text-slate-400 dark:text-slate-500 ml-2 select-none" style={{ fontSize: `${Math.max(12, fontSize - 6)}px` }}>{numberToHebrew(idx + 1)}.</span>
+    <span dangerouslySetInnerHTML={{ __html: paragraph }} />
+  </p>
                         {showEnglish && data.text[idx] && (
                           <p 
                             dir="ltr" 
