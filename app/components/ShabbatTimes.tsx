@@ -21,7 +21,7 @@ export default function ShabbatTimes() {
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
       const delay = setTimeout(() => {
-        fetch(`https://www.hebcal.com/complete?q=${encodeURIComponent(searchQuery)}`)
+        fetch(`/api/hebcal?q=${encodeURIComponent(searchQuery)}`)
           .then(res => res.json())
           .then(data => {
             if (Array.isArray(data)) {
