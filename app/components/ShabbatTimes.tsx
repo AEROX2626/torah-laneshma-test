@@ -68,12 +68,12 @@ export default function ShabbatTimes() {
     if (saved) {
       try {
         const { query, cityName } = JSON.parse(saved);
-        fetchShabbatTimes(query, cityName);
+        fetchShabbatTimes(query, cityName, targetDate);
       } catch (e) {
-        fetchShabbatTimes("geonameid=281184", "ירושלים");
+        fetchShabbatTimes("geonameid=281184", "ירושלים", targetDate);
       }
     } else {
-      fetchShabbatTimes("geonameid=281184", "ירושלים");
+      fetchShabbatTimes("geonameid=281184", "ירושלים", targetDate);
     }
     
     const handleClickOutside = (event: MouseEvent) => {
@@ -83,7 +83,7 @@ export default function ShabbatTimes() {
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [targetDate]);
 
   const handleCitySelect = (cityId: string, cityName: string) => {
     fetchShabbatTimes(`geonameid=${cityId}`, cityName, targetDate);
