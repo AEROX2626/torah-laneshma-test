@@ -32,7 +32,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="navbar" className={`sticky top-0 w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "bg-white shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
+      <nav id="navbar" className={`sticky top-0 w-full z-50 transition-all duration-500 border-b ${isNavGlass ? "bg-white/85 backdrop-blur-lg shadow-soft border-ink-100" : "bg-transparent border-ink-100/0"}`}>
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex justify-between items-center h-20 md:h-24">
             <Link href="/" onClick={(e) => { if(isHome) { e.preventDefault(); window.scrollTo({ top: 0, behavior: "smooth" }); } }} className="flex items-center gap-3 group">
