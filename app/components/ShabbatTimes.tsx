@@ -18,6 +18,7 @@ export default function ShabbatTimes() {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (searchQuery.trim().length >= 2) {
@@ -37,6 +38,7 @@ export default function ShabbatTimes() {
   }, [searchQuery]);
 
   const fetchShabbatTimes = (query: string, cityName: string, d: Date = targetDate) => {
+    setIsLoading(true);
     const gy = d.getFullYear();
     const gm = d.getMonth() + 1;
     const gd = d.getDate();
@@ -59,8 +61,12 @@ export default function ShabbatTimes() {
             dateStr: new Date(candles.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', timeZone: 'Asia/Jerusalem' }),
           });
         }
+        setIsLoading(false);
       })
-      .catch((err) => console.error("Failed to load Shabbat times", err));
+      .catch((err) => {
+        console.error("Failed to load Shabbat times", err);
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -136,10 +142,10 @@ export default function ShabbatTimes() {
       <div className="hidden sm:block w-px h-4 bg-ink-200"></div>
               <div className="flex items-center gap-2 text-ink-600 bg-ink-50 px-2.5 py-1 rounded-lg border border-ink-100">
           <button onClick={() => setTargetDate(d => new Date(d.getTime() - 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-right text-[10px]"></i></button>
-          <span className="font-bold text-xs tracking-wide min-w-[75px] text-center">{times.dateStr}</span>
+          <span className={`font-bold text-xs tracking-wide min-w-[75px] text-center transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>{times.dateStr}</span>
           <button onClick={() => setTargetDate(d => new Date(d.getTime() + 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-left text-[10px]"></i></button>
         </div>
-        <div className="flex flex-col text-[11px] font-medium text-ink-500 leading-tight">
+        <div className={`flex flex-col text-[11px] font-medium text-ink-500 leading-tight transition-opacity duration-300 ${isLoading ? 'opacity-30' : 'opacity-100'}`}>
           <span>כניסה: {times.inTime}</span>
           <span>יציאה: {times.outTime}</span>
         </div>
