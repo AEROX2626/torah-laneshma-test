@@ -5,150 +5,17 @@ import { articles } from "./articles/data";
 
 import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
+import PageEffects from "./components/PageEffects";
+import HeroCounters from "./components/HeroCounters";
+import FaqAccordion from "./components/FaqAccordion";
+import StatsCounters from "./components/StatsCounters";
+import JoinForm from "./components/JoinForm";
 import DailyInspiration from "./components/DailyInspiration";
 import Footer from "./components/Footer";
 import ShabbatTimes from "./components/ShabbatTimes";
 import HebrewDate from "./components/HebrewDate";
 
 export default function Home() {
-
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Counters
-  const [counters, setCounters] = useState({
-    learners: 0,
-    hours: 0,
-    volunteers: 0,
-  });
-
-  useEffect(() => {
-    // Scroll Progress
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const el = document.getElementById("scroll-progress");
-      if (el) el.style.width = `${(scrollTop / docHeight) * 100}%`;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    // Intersection Observer for Reveal
-    const els = document.querySelectorAll(".reveal, .reveal-scale");
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("active");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -60px 0px" }
-    );
-   els.forEach((el) => observer.observe(el));
-
-    // Intersection Observer for Counters
-    const counterObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const start = performance.now();
-            const duration = 1800;
-            const animate = (now: number) => {
-              const elapsed = now - start;
-              const progress = Math.min(elapsed / duration, 1);
-              const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
-              
-              setCounters({
-                learners: Math.floor(eased * 2500),
-                hours: Math.floor(eased * 80),
-                volunteers: Math.floor(eased * 340),
-              });
-
-              if (progress < 1) requestAnimationFrame(animate);
-            };
-            requestAnimationFrame(animate);
-            counterObserver.disconnect();
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-    
-    const statsSection = document.getElementById("stats-section");
-    if (statsSection) counterObserver.observe(statsSection);
-
-    // 3D Tilt for hover devices
-    if (window.matchMedia("(hover: hover)").matches) {
-      document.querySelectorAll<HTMLElement>(".card-hover").forEach((card) => {
-        card.addEventListener("mousemove", (e) => {
-          const rect = card.getBoundingClientRect();
-          const x = ((e.clientX - rect.left) / rect.width - 0.5) * 4;
-          const y = ((e.clientY - rect.top) / rect.height - 0.5) * -4;
-          card.style.transform = `translateY(-8px) rotateX(${y}deg) rotateY(${x}deg)`;
-          card.style.transformStyle = "preserve-3d";
-          card.style.perspective = "1000px";
-        });
-        card.addEventListener("mouseleave", () => {
-          card.style.transform = "";
-        });
-      });
-    }
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      observer.disconnect();
-      counterObserver.disconnect();
-    };
-  }, []);
-
-  const handleFormSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    
-    // Add Web3Forms access key
-    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11");
-    formData.append("subject", "ליד חדש מהאתר - בקשה לחברותא!");
-    formData.append("from_name", "תורה לנשמה");
-
-    try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
-      });
-      const data = await response.json();
-      
-      if (data.success) {
-        setIsSubmitting(false);
-        setIsModalOpen(true);
-        form.reset();
-      } else {
-        console.error("Form submission failed", data);
-        alert("����� ����� ������ �����. ��� ��� �� ��� ����� ��������.");
-        setIsSubmitting(false);
-      }
-    } catch (error) {
-      console.error(error);
-      alert("����� �����. ���� �� ������ �������� ���� ���.");
-      setIsSubmitting(false);
-    }
-  };
-
-  const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
-    e.preventDefault();
-    const target = document.querySelector(hash);
-    if (target) {
-      const top = target.getBoundingClientRect().top + window.scrollY - 90;
-      window.scrollTo({ top, behavior: "smooth" });
-    }
-  };
-
   return (
     <>
       <div id="scroll-progress" style={{ width: `0%` }}></div>
@@ -187,11 +54,11 @@ export default function Home() {
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8" style={{ transitionDelay: "0.3s" }}>
-                <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
+                <a href="#join"  className="btn-primary px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 group">
                   <span>מצאו לי חברותא</span>
                   <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
                 </a>
-                <a href="#how" onClick={(e) => scrollToSection(e, "#how")} className="btn-outline px-8 py-4 rounded-2xl font-bold text-ink-700 bg-white inline-flex items-center justify-center gap-2">
+                <a href="#how"  className="btn-outline px-8 py-4 rounded-2xl font-bold text-ink-700 bg-white inline-flex items-center justify-center gap-2">
                   <i className="fas fa-play-circle text-primary-500"></i>
                   איך זה עובד?
                 </a>
@@ -313,28 +180,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="bg-gradient-to-br from-ink-950 to-ink-900 rounded-[2rem] md:rounded-[2.5rem] p-10 md:p-16 relative overflow-hidden noise">
             <div className="absolute inset-0 opacity-[0.04] bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwem0yMCAyMGMtNS41IDAtMTAtNC41LTEwLTEwUzE0LjUgMTAgMjAgMTBzMTAgNC41IDEwIDEwLTQuNSAxMC0xMCAxMHoiIGZpbGw9IiNmZmYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]"></div>
-            <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6">
-              <div className="text-center reveal">
-                <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">{counters.learners.toLocaleString("he-IL")}</div>
-                <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">לומדים פעילים</div>
-              </div>
-              <div className="text-center reveal" style={{ transitionDelay: "0.1s" }}>
-                <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">
-                  <span>{counters.hours}</span>K+
-                </div>
-                <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">שעות של למידה</div>
-              </div>
-              <div className="text-center reveal" style={{ transitionDelay: "0.2s" }}>
-                <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">
-                  <span>{counters.volunteers}</span>+
-                </div>
-                <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">מתנדבים ברחבי הארץ</div>
-              </div>
-              <div className="text-center reveal" style={{ transitionDelay: "0.3s" }}>
-                <div className="font-heading font-black text-4xl md:text-6xl text-white stat-number">4.9<span className="text-accent-400 text-3xl">★</span></div>
-                <div className="text-primary-300 font-bold mt-2 text-sm md:text-base">דירוג שביעות רצון</div>
-              </div>
-            </div>
+            <HeroCounters />
           </div>
         </div>
       </section>
@@ -414,13 +260,7 @@ export default function Home() {
               </p>
             </div>
             <div className="md:w-7/12 w-full">
-              <form onSubmit={handleFormSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input type="text" name="name" placeholder="שם מלא" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm" />
-                <input type="tel" name="phone" placeholder="מספר טלפון" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm text-right" dir="ltr" />
-                <button type="submit" disabled={isSubmitting} className="btn-primary px-6 py-3.5 rounded-xl font-bold whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center">
-                  {isSubmitting ? <i className="fas fa-circle-notch fa-spin"></i> : "שליחה מהירה"}
-                </button>
-              </form>
+              <JoinForm />
             </div>
           </div>
         </div>
@@ -530,7 +370,7 @@ export default function Home() {
                   <span className="text-white font-bold text-sm">מרחב מכבד</span>
                 </div>
               </div>
-              <a href="#join" onClick={(e) => scrollToSection(e, "#join")} className="inline-flex items-center gap-3 px-8 py-4 bg-white text-ink-900 rounded-full font-bold hover:bg-primary-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 group">
+              <a href="#join"  className="inline-flex items-center gap-3 px-8 py-4 bg-white text-ink-900 rounded-full font-bold hover:bg-primary-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1 group">
                 <span>מעולה, זה מה שחיפשתי</span>
                 <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
               </a>
@@ -551,13 +391,7 @@ export default function Home() {
               </p>
             </div>
             <div className="md:w-7/12 w-full">
-              <form onSubmit={handleFormSubmit} className="flex flex-col sm:flex-row gap-3">
-                <input type="text" name="name" placeholder="שם מלא" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 transition-all shadow-sm" />
-                <input type="tel" name="phone" placeholder="מספר טלפון" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-accent-500/20 focus:border-accent-500 transition-all shadow-sm text-right" dir="ltr" />
-                <button type="submit" disabled={isSubmitting} className="bg-accent-600 hover:bg-accent-700 text-white px-6 py-3.5 rounded-xl font-bold whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center transition-colors">
-                  {isSubmitting ? <i className="fas fa-circle-notch fa-spin"></i> : "בואו נדבר"}
-                </button>
-              </form>
+              <JoinForm />
             </div>
           </div>
         </div>
@@ -621,24 +455,14 @@ export default function Home() {
           </div>
 
           <div className="space-y-4">
-            {[
-              { q: "האם החברותא אכן מוצעת בחינם וללא אותיות קטנות?", a: "לחלוטין כן. זהו פרויקט התנדבותי שפועל ללא מטרות רווח וללא עלויות נסתרות. המתנדבים שלנו עושים זאת באהבה, נטו מתוך רצון לבנות גשרים ולחלוק ידע." },
-              { q: "יש לכם אג'נדה סמויה להחזיר בתשובה?", a: "ממש לא! המטרה היא לצמצם פערים בחברה הישראלית ולאפשר לימוד משותף. אין אצלנו אג'נדות נסתרות או 'החזרה בתשובה' – אלא רק כבוד הדדי, סקרנות ושיח פתוח." },
-              { q: "מה אם אין לי שום ידע מוקדם ביהדות?", a: "מצוין! אין שום צורך בידע מוקדם או הכנה מראש. הלימוד גמיש לחלוטין ומותאם לקצב ולהעדפות שלכם. כל שאלה שתשאלו היא מבורכת, וכל נושא מהווה הזדמנות מרתקת." },
-              { q: "איך עובד תהליך החיבור וההתאמה?", a: "בדרך כלל, בתוך 24-48 שעות מאז שהשארתם פנייה, נציג מטעמנו יצלצל אליכם לשיחת היכרות קצרה. נבין מה בדיוק מעניין אתכם ונתאים לכם את החברותא המושלמת. לאחר מכן פשוט תתאמו ביניכם את שעת הלימוד הנוחה." },
-              { q: "איך אתם שומרים על הפרטיות שלי?", a: "הפרטיות שלכם היא ערך עליון מבחינתנו. המידע שתמסרו יישמר תחת אבטחה קפדנית ולא יועבר לשום גורם חיצוני. תוכלו גם לסיים את החברותא בכל שלב, בלי שאלות מיותרות." },
-              { q: "האם אוכל לבחור את נושא הלימוד?", a: "בוודאי. כבר בטופס ההרשמה תוכלו לבחור תחומים מועדפים, ובשיחת ההתאמה נדייק את זה עוד יותר. אפשר ללמוד פרשת שבוע, פילוסופיה יהודית, תורת הנפש או אפילו לדון סתם כך על משמעות החיים." },
-            ].map((faq, i) => (
-              <div key={i} className="bg-white rounded-2xl border border-ink-100 hover:border-primary-200 transition-colors overflow-hidden reveal" style={{ transitionDelay: `${i * 0.05}s` }}>
-                <button onClick={() => setOpenFaq(openFaq === i ? null : i)} className="faq-toggle w-full flex items-center justify-between gap-4 text-right p-6 md:p-7">
-                  <span className="font-heading font-extrabold text-lg text-ink-900">{faq.q}</span>
-                  <i className={`fas fa-chevron-down accordion-icon text-primary-500 flex-shrink-0 ${openFaq === i ? "open" : ""}`}></i>
-                </button>
-                <div className={`accordion-content px-6 md:px-7 pb-6 md:pb-7 ${openFaq === i ? "open" : ""}`}>
-                  <p className="text-ink-600 leading-relaxed font-medium">{faq.a}</p>
-                </div>
-              </div>
-            ))}
+            <FaqAccordion faqs={[
+              { q: "האם החברותא בחינם או כרוכה בתשלום / התחייבות כלשהי?", a: "חינם לגמרי, לתמיד. המטרה שלנו היא להנגיש את התורה לכל יהודי, ללא שום עלות. אתם לא משלמים על השירות, ולא מחויבים להמשיך אם זה לא מתאים לכם." },
+              { q: "איך מתבצע הלימוד בפועל? זה בטלפון או בזום?", a: "בטלפון! רוב הלומדים שלנו מעדיפים את הפשטות והנוחות של שיחת טלפון רגילה. אין צורך להסתבך עם זום, מצלמות או אינטרנט. פשוט מתקשרים, לומדים ומנתקים. קל ונגיש מכל מקום." },
+              { q: "אני לא יודע לקרוא דף גמרא. האם זה מתאים לי?", a: "בהחלט! יש לנו מסלולי לימוד שמותאמים בדיוק לרמה שלך. בין אם אתה רוצה ללמוד פרשת שבוע, הלכה, מוסר, או גמרא מהבסיס – נתאים לך חברותא שילמד איתך בקצב ובשפה שלך." },
+              { q: "תוך כמה זמן ימצאו לי חברותא?", a: "בדרך כלל, תוך 24-48 שעות ממועד הפנייה. צוות ההתאמה שלנו עובד קשה כדי למצוא עבורך את החברותא המדויק ביותר מתוך מאגר המתנדבים המסור שלנו. אם יש בקשות מיוחדות (כמו שפה ספציפית), זה עשוי לקחת מעט יותר זמן." },
+              { q: "האם אפשר לבחור את נושא הלימוד?", a: "הבחירה כולה שלך! אתה יכול לבחור ללמוד גמרא (דף יומי או מסכת ספציפית), פרשת שבוע, הלכה, מוסר (כמו מסילת ישרים) או כל נושא תורני אחר. אם אתה לא בטוח, החברותא שלך ישמח להמליץ לך." },
+              { q: "האם יש שעות ספציפיות בהן צריך ללמוד?", a: "לא. אתה מתאם את שעת הלימוד ישירות מול החברותא שלך, לפי מה שנוח לשניכם. זה יכול להיות בבוקר בדרך לעבודה, בערב לפני השינה, או ביום שישי בצהריים. הגמישות היא מלאה." },
+            ]} />
           </div>
         </div>
       </section>
@@ -674,54 +498,7 @@ export default function Home() {
             </div>
 
             <div className="lg:w-7/12 p-8 md:p-14 bg-white">
-              <form id="signup-form" className="space-y-6" onSubmit={handleFormSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="block text-sm font-bold text-ink-800" htmlFor="name">איך קוראים לך?</label>
-                    <input type="text" id="name" name="Full Name" required className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base" placeholder="שם מלא" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="block text-sm font-bold text-ink-800" htmlFor="phone">לאן נוכל להתקשר?</label>
-                    <input type="tel" id="phone" name="Phone Number" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-ink-900 text-left font-medium text-base" dir="ltr" placeholder="050-0000000" />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-bold text-ink-800" htmlFor="topic">איזה נושא הכי מסקרן אותך? (לא חובה)</label>
-                  <div className="relative">
-                    <select id="topic" name="Preferred Topic" className="w-full input-modern p-4 rounded-2xl text-ink-900 appearance-none pl-12 font-medium text-base cursor-pointer" defaultValue="">
-                      <option value="" disabled>אנא בחר/י מהרשימה...</option>
-                      <option value="פילוסופיה של הנפש / חובת הלבבות">פילוסופיה של הנפש / חובת הלבבות</option>
-                      <option value="אקטואליה ופרשת השבוע">אקטואליה ופרשת השבוע</option>
-                      <option value="תלמוד או גמרא לעומק">תלמוד או גמרא לעומק</option>
-                      <option value="הלכה ומושגי יסוד">הלכה ומושגי יסוד</option>
-                      <option value="תפתיעו אותי – אשמח להמלצה">תפתיעו אותי – אשמח להמלצה</option>
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4 text-ink-400">
-                      <i className="fas fa-chevron-down text-sm"></i>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="block text-sm font-bold text-ink-800" htmlFor="notes">יש משהו נוסף שחשוב שנדע? (לא חובה)</label>
-                  <textarea id="notes" name="Additional Notes" rows={3} className="w-full input-modern p-4 rounded-2xl text-ink-900 font-medium text-base resize-none" placeholder="זה הזמן לספר על עצמך, על שעות שנוחות לך, או כל בקשה מיוחדת שתעזור לנו לדייק..."></textarea>
-                </div>
-
-                <button type="submit" disabled={isSubmitting} className="btn-primary w-full py-5 rounded-2xl font-extrabold text-lg inline-flex items-center justify-center gap-3 group">
-                  {isSubmitting ? (
-                    <><i className="fas fa-circle-notch fa-spin"></i><span>מעבד את הנתונים, רק רגע...</span></>
-                  ) : (
-                    <><span>מצאו לי את החברותא המושלמת!</span><i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i></>
-                  )}
-                </button>
-
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-ink-400 font-bold pt-2">
-                  <span className="flex items-center gap-1.5"><i className="fas fa-lock text-ink-300"></i> אבטחת פרטיות מחמירה</span>
-                  <span className="hidden sm:inline text-ink-200">|</span>
-                  <span className="flex items-center gap-1.5"><i className="fas fa-gift text-ink-300"></i> שירות ללא כל תשלום</span>
-                </div>
-              </form>
+              <JoinForm />
             </div>
           </div>
         </div>
@@ -746,20 +523,7 @@ export default function Home() {
       </section>
 
       <Footer />
-
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
-          <div className="bg-white rounded-[2rem] p-10 md:p-12 max-w-md w-full relative z-10 shadow-elevated text-center transition-all duration-300 border border-ink-100">
-            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-7 shadow-lg shadow-emerald-500/30">
-              <i className="fas fa-check"></i>
-            </div>
-            <h3 className="font-heading text-2xl md:text-3xl font-black text-ink-900 mb-3">תודה מכל הלב! ✨</h3>
-            <p className="text-ink-600 text-base md:text-lg mb-8 leading-relaxed font-medium">הפרטים התקבלו בהצלחה. הנציגים שלנו יעברו על הפנייה וייצרו עמך קשר בקרוב כדי למצוא את החברותא המושלמת עבורך.</p>
-            <button onClick={() => setIsModalOpen(false)} className="w-full bg-ink-50 text-ink-700 border-2 border-ink-100 py-4 rounded-2xl font-bold text-lg hover:bg-ink-100 hover:border-ink-200 transition-all">סגירה והמשך גלישה</button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
+      <PageEffects />
+      </>
+    );
+  }
