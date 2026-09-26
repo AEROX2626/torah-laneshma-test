@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Assistant, Rubik } from "next/font/google";
 import "./globals.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import HolidayBanner from "./components/HolidayBanner";
 
 const assistant = Assistant({
@@ -44,10 +45,10 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl" className="scroll-smooth">
       <head>
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
+        
         <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+        
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />
