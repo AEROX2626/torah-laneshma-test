@@ -125,7 +125,7 @@ export default function SefariaReader() {
     setShowSuggestions(false);
     
     if (contentRef.current) {
-      contentRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+      contentRef.current.scrollTo({ top: 0 });
     }
 
     try {
@@ -227,18 +227,23 @@ export default function SefariaReader() {
           setTimeout(() => el.classList.remove('bg-amber-100/50', 'dark:bg-amber-900/30'), 2500);
         }
         setPendingScrollVerse(null);
-      }, 300);
+      }, 600);
     }
   }, [data, pendingScrollVerse]);
 
-  const handleBookmarkClick = (b: Bookmark) => {
+    const handleBookmarkClick = async (b: Bookmark) => {
     setSidebarOpen(false);
+    
+    // Only fetch if we are not already on this exact page
+    if (!data || data.ref !== b.ref) {
+      await fetchText(b.ref);
+    }
+    
     if (b.verseIdx !== undefined) {
       setPendingScrollVerse(b.verseIdx);
     } else {
       setPendingScrollVerse(null);
     }
-    fetchText(b.ref);
   };
 
   const toggleVerseBookmark = (idx: number) => {
