@@ -12,7 +12,8 @@ const CITIES = [
 ];
 
 export default function ShabbatTimes() {
-  const [times, setTimes] = useState<{ inTime: string; outTime: string; eventName: string; city: string } | null>(null);
+  const [times, setTimes] = useState<{ inTime: string; outTime: string; eventName: string; city: string; dateStr: string } | null>(null);
+  const [targetDate, setTargetDate] = useState<Date>(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,8 +36,11 @@ export default function ShabbatTimes() {
     }
   }, [searchQuery]);
 
-  const fetchShabbatTimes = (query: string, cityName: string) => {
-    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he`)
+  const fetchShabbatTimes = (query: string, cityName: string, d: Date = targetDate) => {
+    const gy = d.getFullYear();
+    const gm = d.getMonth() + 1;
+    const gd = d.getDate();
+    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he&gy=${gy}&gm=${gm}&gd=${gd}`)
       .then((res) => res.json())
       .then((data) => {
         const items = data.items;
@@ -52,6 +56,7 @@ export default function ShabbatTimes() {
             inTime: candles.title.match(/\d{1,2}:\d{2}/)?.[0] || "",
             outTime: havdalah.title.match(/\d{1,2}:\d{2}/)?.[0] || "",
             city: cityName,
+            dateStr: new Date(candles.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', timeZone: 'Asia/Jerusalem' }),
           });
         }
       })
@@ -81,7 +86,7 @@ export default function ShabbatTimes() {
   }, []);
 
   const handleCitySelect = (cityId: string, cityName: string) => {
-    fetchShabbatTimes(`geonameid=${cityId}`, cityName);
+    fetchShabbatTimes(`geonameid=${cityId}`, cityName, targetDate);
     localStorage.setItem("shabbatLocation", JSON.stringify({ query: `geonameid=${cityId}`, cityName }));
     setIsDropdownOpen(false);
   };
@@ -129,10 +134,15 @@ export default function ShabbatTimes() {
         <span className="font-bold text-sm">{times.eventName}</span>
       </div>
       <div className="hidden sm:block w-px h-4 bg-ink-200"></div>
-      <div className="flex flex-col text-[11px] font-medium text-ink-500 leading-tight">
-        <span>כניסה: {times.inTime}</span>
-        <span>יציאה: {times.outTime}</span>
-      </div>
+              <div className="flex items-center gap-2 text-ink-600 bg-ink-50 px-2.5 py-1 rounded-lg border border-ink-100">
+          <button onClick={() => setTargetDate(d => new Date(d.getTime() - 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-right text-[10px]"></i></button>
+          <span className="font-bold text-xs tracking-wide min-w-[75px] text-center">{times.dateStr}</span>
+          <button onClick={() => setTargetDate(d => new Date(d.getTime() + 7 * 86400000))} className="hover:text-primary-600 transition-colors w-5 h-5 flex items-center justify-center rounded-full hover:bg-white"><i className="fas fa-chevron-left text-[10px]"></i></button>
+        </div>
+        <div className="flex flex-col text-[11px] font-medium text-ink-500 leading-tight">
+          <span>כניסה: {times.inTime}</span>
+          <span>יציאה: {times.outTime}</span>
+        </div>
       <div className="hidden sm:block w-px h-4 bg-ink-200"></div>
       
       {/* Dropdown Toggle */}
