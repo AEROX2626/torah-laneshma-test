@@ -135,8 +135,8 @@ export default function ShabbatTimes() {
 
   return (
     <div className="flex flex-wrap sm:flex-nowrap justify-center relative items-center gap-3 sm:gap-4 bg-white/95 backdrop-blur-sm shadow-soft border border-ink-100 rounded-2xl sm:rounded-full px-5 py-2.5 animate-fade-up" ref={dropdownRef}>
-      <div className="flex items-center gap-2 text-ink-700">
-        <i className="fas fa-star-of-david text-primary-500 text-[15px]"></i>
+      <div className={`flex items-center gap-2 text-ink-700 transition-opacity duration-300 ${isLoading ? "opacity-30" : "opacity-100"}`}>
+        <i className={`fas fa-star-of-david text-primary-500 text-[15px] ${isLoading ? "fa-spin" : ""}`}></i>
         <span className="font-bold text-sm">{times.eventName}</span>
       </div>
       <div className="hidden sm:block w-px h-4 bg-ink-200"></div>
