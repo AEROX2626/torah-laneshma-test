@@ -62,7 +62,7 @@ async function requestGemini(modelName, requestBody) {
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
   // Use an explicit text model; list order does not guarantee model access.
-  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-2.5-flash';
+  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.8-flash';
 
   console.log("Using model:", modelName);
 
