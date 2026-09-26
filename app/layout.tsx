@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Assistant, Rubik } from "next/font/google";
 import "./globals.css";
 import HolidayBanner from "./components/HolidayBanner";
-import FontAwesome from "./components/FontAwesome";
 
 const assistant = Assistant({
   subsets: ["hebrew", "latin"],
@@ -48,22 +47,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link
-          rel="preload"
-          as="style"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-        />
-        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        <noscript>
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-        </noscript>
-        
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
-        <FontAwesome />
         <HolidayBanner />
         {children}
       </body>

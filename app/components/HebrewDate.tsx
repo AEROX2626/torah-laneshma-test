@@ -17,7 +17,12 @@ export default function HebrewDate() {
       .catch(() => {});
   }, []);
   
-  if (!dateStr) return null;
+  if (!dateStr) return (
+    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-primary-100 text-primary-200 shadow-soft animate-pulse h-[38px] min-w-[120px]">
+      <i className="fas fa-calendar-alt"></i>
+      <div className="h-3 bg-primary-100 rounded w-16"></div>
+    </div>
+  );
 
   return (
     <>

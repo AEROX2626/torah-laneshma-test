@@ -34,7 +34,7 @@ export default function ArticlesIndexPage() {
             {articles.map((article) => (
               <Link key={article.slug} href={`/articles/${article.slug}`} className="group bg-white rounded-3xl overflow-hidden border border-ink-100 hover:border-primary-200 shadow-soft hover:shadow-lg flex flex-col h-full transition-all duration-300 hover:-translate-y-1">
                 <div className="h-52 overflow-hidden relative">
-                  <img src={article.image} className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-out" alt={article.title} />
+                  <img loading="lazy" src={article.image} className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700 ease-out" alt={article.title} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
                 <div className="p-6 md:p-8 flex flex-col flex-grow">
