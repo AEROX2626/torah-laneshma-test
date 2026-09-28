@@ -178,7 +178,7 @@ export default function ShabbatTimes() {
               placeholder="חפש עיר בעולם..." 
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-ink-50 border border-transparent focus:border-primary-300 focus:bg-white rounded-lg px-3 py-1.5 text-sm outline-none transition-all"
+              className="w-full bg-ink-50 border border-transparent focus:border-primary-300 focus:bg-white rounded-lg px-3 py-1.5 text-[16px] md:text-sm outline-none transition-all"
               autoFocus
             />
           </div>
