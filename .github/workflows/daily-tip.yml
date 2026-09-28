@@ -28,9 +28,9 @@ jobs:
           TZ: "Asia/Jerusalem"
           OLD_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          node scripts/generate-daily-tip.mjs
+          node scripts/generate-daily-tip.mjs || true
           sleep 30
-          node scripts/generate-daily-features.mjs
+          node scripts/generate-daily-features.mjs || true
         
       - name: Commit and Push changes
         run: |
