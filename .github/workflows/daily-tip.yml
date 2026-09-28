@@ -29,6 +29,7 @@ jobs:
           OLD_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           node scripts/generate-daily-tip.mjs
+          sleep 30
           node scripts/generate-daily-features.mjs
         
       - name: Commit and Push changes
