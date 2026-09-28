@@ -56,7 +56,7 @@ async function generateDafYomi() {
   summary = summary.replace(/"/g, '').trim();
 
   const dafYomiData = {
-    date: new Date().toLocaleDateString('he-IL'),
+    date: new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' }),
     daf: dafNameHe,
     summary: summary
   };
@@ -78,7 +78,7 @@ async function generateDailyWisdom() {
   const text = await askGemini(prompt, true);
   const newWisdom = JSON.parse(text);
   newWisdom.id = Date.now().toString();
-  newWisdom.date = new Date().toLocaleDateString('he-IL');
+  newWisdom.date = new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' });
 
   const filePath = path.join(DATA_DIR, 'daily-wisdom.json');
   let wisdoms = [];

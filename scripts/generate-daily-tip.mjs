@@ -65,7 +65,7 @@ async function run() {
     
     // Add Metadata
     newTip.id = Date.now().toString();
-    newTip.date = new Date().toLocaleDateString('he-IL');
+    newTip.date = new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' });
 
     // Read existing tips
     let tips = [];
