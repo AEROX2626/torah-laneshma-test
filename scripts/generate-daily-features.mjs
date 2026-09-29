@@ -14,7 +14,7 @@ if (!API_KEY) {
 
 
 async function requestGemini(modelName, requestBody) {
-  const maxAttempts = 3;
+  const maxAttempts = 6;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${API_KEY}`, {
       method: 'POST',
@@ -25,7 +25,11 @@ async function requestGemini(modelName, requestBody) {
     const errorText = await res.text();
     console.error(`Gemini API error (attempt ${attempt}): ${res.status} - ${errorText}`);
     if (attempt === maxAttempts) throw new Error(`Gemini failed: ${res.status} - ${errorText}`);
-    await new Promise(r => setTimeout(r, 2000));
+    
+    // Exponential backoff: 5s, 10s, 20s, 40s, 80s
+    const delay = Math.pow(2, attempt - 1) * 5000;
+    console.log(`Waiting ${delay}ms before next attempt...`);
+    await new Promise(r => setTimeout(r, delay));
   }
 }
 
