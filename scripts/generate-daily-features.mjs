@@ -13,9 +13,10 @@ if (!API_KEY) {
 }
 
 
-async function requestGemini(modelName, requestBody) {
+async function requestGemini(baseModelName, requestBody) {
   const maxAttempts = 6;
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    const modelName = (attempt >= 4 && baseModelName === 'gemini-3.8-flash') ? 'gemini-3.8-flash-lite' : baseModelName;
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
