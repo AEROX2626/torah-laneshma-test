@@ -55,7 +55,7 @@ async function requestGemini(baseModelName, requestBody) {
 
 async function run() {
   try {
-    const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.8-flash';
+    const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
     const result = await requestGemini(modelName, {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: {
