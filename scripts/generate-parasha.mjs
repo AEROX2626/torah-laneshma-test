@@ -11,7 +11,8 @@ if (!API_KEY) {
 async function getParasha() {
   const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&m=50&s=on');
   const data = await res.json();
-  const parashaEvent = data.items.find(item => item.category === 'parashat');
+  const today = new Date().toISOString().split('T')[0];
+  const parashaEvent = data.items.find(item => item.category === 'parashat' && item.date >= today);
   if (!parashaEvent) {
     throw new Error("Could not find Parasha in Hebcal response.");
   }
