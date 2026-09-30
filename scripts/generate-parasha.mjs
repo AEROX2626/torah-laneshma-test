@@ -113,7 +113,7 @@ async function getRandomIsraelImage() {
     const imgData = await imgUrlRes.json();
     const pages = imgData.query.pages;
     const imgInfo = Object.values(pages)[0].imageinfo[0];
-    return imgInfo.url;
+    return imgInfo.url.split('?')[0];
   } catch(e) {
     console.error("Failed to fetch Wikimedia image", e);
     // fallback
