@@ -21,7 +21,7 @@ async function getParasha() {
 // Retry temporary server failures, with a finite number of attempts.
 async function requestGemini(modelName, requestBody) {
   const maxAttempts = 6;
-  const retryableStatuses = new Set([500, 502, 503, 504]);
+  const retryableStatuses = new Set([429, 500, 502, 503, 504]);
 
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     console.log(`Gemini attempt ${attempt}/${maxAttempts}`);
@@ -62,7 +62,7 @@ async function requestGemini(modelName, requestBody) {
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
   // Use an explicit text model; list order does not guarantee model access.
-  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.8-flash';
+  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
 
   console.log("Using model:", modelName);
 
