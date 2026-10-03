@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Assistant, Rubik } from "next/font/google";
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
 import '@fortawesome/fontawesome-free/css/solid.min.css';
@@ -72,6 +73,12 @@ export default function RootLayout({
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />
+        <Script 
+          src="https://analytics.ahrefs.com/analytics.js" 
+          data-key="n9w2GKUrpeZ8gQf6pLCWlA" 
+          strategy="afterInteractive" 
+        />
+
         <main>{children}</main>
       </body>
     </html>
