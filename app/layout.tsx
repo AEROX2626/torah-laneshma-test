@@ -70,14 +70,11 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+              <script src="https://analytics.ahrefs.com/analytics.js" data-key="n9w2GKUrpeZ8gQf6pLCWlA" async></script>
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />
-        <Script 
-          src="https://analytics.ahrefs.com/analytics.js" 
-          data-key="n9w2GKUrpeZ8gQf6pLCWlA" 
-          strategy="afterInteractive" 
-        />
+        
 
         <main>{children}</main>
       </body>
