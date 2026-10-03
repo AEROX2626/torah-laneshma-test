@@ -44,11 +44,11 @@ export default function ShabbatTimes() {
     const gd = d.getDate();
     let customB = "";
     if (/(ירושלים|פתח תקווה|בית שמש|מבשרת|מעלה אדומים|ביתר עילית)/.test(cityName)) {
-      customB = "&b=40";
+      customB = "&b=39"; // 40 mins - 1 min for elevation compensation to match Israeli Rabbinate
     } else if (/(חיפה|טירת כרמל|נשר|קריות|קרית אתא|קרית ביאליק|קרית מוצקין|קרית ים|צפת|זכרון יעקב)/.test(cityName)) {
-      customB = "&b=30";
+      customB = "&b=29"; // 30 mins - 1 min for elevation compensation
     } else if (query.includes('latitude=')) {
-      customB = "&b=20";
+      customB = "&b=21"; // Standard 22 mins - 1 min for elevation compensation
     }
 
     fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he&gy=${gy}&gm=${gm}&gd=${gd}${customB}`)
