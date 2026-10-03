@@ -42,7 +42,16 @@ export default function ShabbatTimes() {
     const gy = d.getFullYear();
     const gm = d.getMonth() + 1;
     const gd = d.getDate();
-    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he&gy=${gy}&gm=${gm}&gd=${gd}`)
+    let customB = "";
+    if (/(ירושלים|פתח תקווה|בית שמש|מבשרת|מעלה אדומים|ביתר עילית)/.test(cityName)) {
+      customB = "&b=40";
+    } else if (/(חיפה|טירת כרמל|נשר|קריות|קרית אתא|קרית ביאליק|קרית מוצקין|קרית ים|צפת|זכרון יעקב)/.test(cityName)) {
+      customB = "&b=30";
+    } else if (query.includes('latitude=')) {
+      customB = "&b=20";
+    }
+
+    fetch(`https://www.hebcal.com/shabbat?cfg=json&${query}&lg=he&gy=${gy}&gm=${gm}&gd=${gd}${customB}`)
       .then((res) => res.json())
       .then((data) => {
         const items = data.items;
