@@ -71,6 +71,16 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
               <script src="https://analytics.ahrefs.com/analytics.js" data-key="n9w2GKUrpeZ8gQf6pLCWlA" async></script>
+
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-PQ4ZMY1H4V" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-PQ4ZMY1H4V');
+          `}
+        </Script>
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
         <HolidayBanner />
