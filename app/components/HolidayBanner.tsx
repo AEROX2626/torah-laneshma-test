@@ -1,7 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import holidayData from "../data/holiday.json";
+import holidayDataRaw from "../data/holiday.json";
+const holidayData = holidayDataRaw as { active: boolean; hebrewName?: string; message?: string };
 
 export default function HolidayBanner() {
   const pathname = usePathname();
