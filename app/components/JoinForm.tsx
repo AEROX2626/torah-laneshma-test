@@ -2,7 +2,7 @@
 import { useState, useId } from "react";
 
 // Web3Forms access key (get/manage at https://web3forms.com). Can be overridden via env var.
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "bf5fc6bd-58b9-4a0f-ba00-721245781a7a";
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11";
 // Fallback channel so a lead is never lost if the form service fails.
 const WHATSAPP_NUMBER = "972585986685";
 
@@ -55,26 +55,31 @@ export default function JoinForm() {
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="flex flex-col md:flex-row gap-3 p-1" aria-busy={isSubmitting}>
-        <div className="relative flex-1 group">
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
-            <i className="fas fa-user"></i>
-          </div>
-          <input id={`${formId}-name`} type="text" name="name" placeholder="שם מלא" required className="w-full bg-white/90 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-[1.25rem] pr-11 pl-4 py-3.5 md:py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" />
+      <form onSubmit={handleFormSubmit} className="flex flex-col gap-5 w-full max-w-sm mx-auto my-auto py-4" aria-busy={isSubmitting}>
+        <div className="text-center mb-2">
+          <h4 className="font-heading font-black text-2xl text-ink-900 mb-1">מלאו פרטים</h4>
+          <p className="text-ink-500 font-medium">ונחזור אליכם בהקדם האפשרי</p>
         </div>
         
-        <div className="relative flex-1 group">
-          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
-            <i className="fas fa-phone"></i>
+        <div className="relative group">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
+            <i className="fas fa-user text-lg"></i>
           </div>
-          <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="w-full bg-white/90 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-[1.25rem] pr-11 pl-4 py-3.5 md:py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" dir="ltr" />
+          <input id={`${formId}-name`} type="text" name="name" placeholder="שם מלא" required className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" />
         </div>
         
-        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="md:w-auto w-full bg-primary-600 hover:bg-primary-700 text-white px-8 py-3.5 md:py-4 rounded-[1.25rem] font-black text-lg transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-600/40 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-          {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin"></i> : (
+        <div className="relative group">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
+            <i className="fas fa-phone text-lg"></i>
+          </div>
+          <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" dir="ltr" />
+        </div>
+        
+        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="w-full mt-2 bg-gradient-to-l from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-2xl font-black text-xl transition-all shadow-xl shadow-primary-600/30 hover:shadow-primary-600/50 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+          {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin text-2xl"></i> : (
             <>
-              <span>הצטרפות</span>
-              <i className="fas fa-arrow-left text-sm opacity-80"></i>
+              <span>הצטרפות מהירה</span>
+              <i className="fas fa-arrow-left opacity-90"></i>
             </>
           )}
         </button>
