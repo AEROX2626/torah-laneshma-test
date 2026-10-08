@@ -43,9 +43,9 @@ export default function AdoptPage() {
 
     const payload = new FormData();
     payload.append("access_key", WEB3FORMS_KEY);
-    payload.append("name", name);
-    payload.append("phone", phone);
-    if (message) payload.append("message", message);
+    payload.append("Name", name);
+    payload.append("Phone", phone);
+    if (message) payload.append("Message", message);
     payload.append("subject", "פנייה חדשה מאתר תורה לנשמה - עמוד אמץ אברך");
     payload.append("from_name", "אתר תורה לנשמה - אמץ אברך");
 
