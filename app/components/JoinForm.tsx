@@ -4,7 +4,7 @@ import { useState, useId } from "react";
 // Web3Forms access key (get/manage at https://web3forms.com). Can be overridden via env var.
 const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11";
 // Fallback channel so a lead is never lost if the form service fails.
-const WHATSAPP_NUMBER = "972503938151";
+const WHATSAPP_NUMBER = "972503938114";
 
 export default function JoinForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
