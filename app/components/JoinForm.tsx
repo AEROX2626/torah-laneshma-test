@@ -25,9 +25,11 @@ export default function JoinForm() {
     // FormData (multipart) is a "simple" CORS request – no preflight, as recommended by Web3Forms.
     const payload = new FormData();
     payload.append("access_key", WEB3FORMS_KEY);
-    payload.append("name", name);
-    payload.append("phone", phone);
-    if (topic) payload.append("נושא לימוד מועדף", topic);
+    payload.append("Name", name);
+    payload.append("Phone", phone);
+    if (topic) {
+      payload.append("Study_Topic", topic); // Web3Forms sometimes strips unicode/spaced keys
+    }
     payload.append("subject", "פנייה חדשה מאתר תורה לנשמה");
     payload.append("from_name", "אתר תורה לנשמה");
 
