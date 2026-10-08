@@ -1,11 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Link from "next/link";
 
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "bf5fc6bd-58b9-4a0f-ba00-721245781a7a";
+const WHATSAPP_NUMBER = "972585986685";
+
 export default function AdoptPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fallbackLead, setFallbackLead] = useState<{ name: string; phone: string; message?: string } | null>(null);
+
   useEffect(() => {
     // Intersection Observer for Reveal
     const revealEls = document.querySelectorAll(".reveal, .reveal-scale");
@@ -24,6 +31,49 @@ export default function AdoptPage() {
 
     return () => observer.disconnect();
   }, []);
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
+    const name = String(formData.get("name") || "").trim();
+    const phone = String(formData.get("phone") || "").trim();
+    const message = String(formData.get("message") || "").trim();
+
+    const payload = new FormData();
+    payload.append("access_key", WEB3FORMS_KEY);
+    payload.append("name", name);
+    payload.append("phone", phone);
+    if (message) payload.append("message", message);
+    payload.append("subject", "פנייה חדשה מאתר תורה לנשמה - עמוד אמץ אברך");
+    payload.append("from_name", "אתר תורה לנשמה - אמץ אברך");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: payload });
+      const data = await res.json().catch(() => ({}));
+      if (data.success) {
+        setIsModalOpen(true);
+        form.reset();
+      } else {
+        console.error("Form submission failed", data);
+        setFallbackLead({ name, phone, message });
+      }
+    } catch (error) {
+      console.error(error);
+      setFallbackLead({ name, phone, message });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const whatsappHref = fallbackLead
+    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+        `שלום, אשמח לשמוע פרטים על מסלול אמץ אברך 🙏\nשם: ${fallbackLead.name}\nטלפון: ${fallbackLead.phone}${
+          fallbackLead.message ? `\nהודעה: ${fallbackLead.message}` : ""
+        }`
+      )}`
+    : "";
 
   return (
     <>
@@ -143,42 +193,95 @@ export default function AdoptPage() {
         </div>
       </section>
 
-      <section id="donate" className="py-20 md:py-28 relative bg-gradient-to-br from-primary-800 to-ink-950 overflow-hidden text-white">
-        <div className="absolute inset-0 opacity-20 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBoNDBWMEgwem0yMCAyMGMtNS41IDAtMTAtNC41LTEwLTEwUzE0LjUgMTAgMjAgMTBzMTAgNC41IDEwIDEwLTQuNSAxMC0xMCAxMHoiIGZpbGw9IiNmZmYiIGZpbGwtcnVsZT0iZXZlbm9kZCIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')]"></div>
-        
+      {/* Redesigned Form Section */}
+      <section id="donate" className="py-20 md:py-28 relative bg-gradient-to-b from-white via-amber-50/50 to-primary-50 overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary-200/30 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-200/30 rounded-full blur-[80px] translate-y-1/3 -translate-x-1/3"></div>
+
         <div className="max-w-4xl mx-auto px-5 sm:px-8 relative z-10 text-center">
           <div className="reveal">
-            <h2 className="font-heading font-black text-3xl md:text-5xl mb-6 leading-tight">לקבלת פרטים והצטרפות למיזם</h2>
-            <p className="text-lg md:text-xl text-primary-100 font-medium mb-12 max-w-2xl mx-auto">
-              השאירו פרטים ונציג מטעמנו יצור עמכם קשר בהקדם כדי להסביר על מסלולי התרומה והשותפות.
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-sm border border-amber-100 text-amber-500 text-2xl mb-6">
+              <i className="fas fa-handshake"></i>
+            </div>
+            <h2 className="font-heading font-black text-3xl md:text-5xl mb-5 text-ink-950 leading-tight">לקבלת פרטים והצטרפות למיזם</h2>
+            <p className="text-lg md:text-xl text-ink-600 font-medium mb-12 max-w-2xl mx-auto">
+              השאירו פרטים ונציג מטעמנו ייצור עמכם קשר בהקדם כדי להסביר על מסלולי התרומה והשותפות, ולענות לכם על כל שאלה באהבה.
             </p>
             
-            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl text-ink-900 border border-white/20 max-w-2xl mx-auto text-right">
-              <form className="space-y-6">
+            <div className="bg-white/80 backdrop-blur-xl rounded-[2rem] p-8 md:p-12 shadow-elevated text-ink-900 border border-white max-w-2xl mx-auto text-right relative overflow-hidden">
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-400 via-primary-500 to-amber-400"></div>
+              
+              <form onSubmit={handleFormSubmit} className="space-y-6 relative z-10" aria-busy={isSubmitting}>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-name">שם מלא</label>
-                  <input type="text" id="donate-name" required className="w-full input-modern p-4 rounded-2xl font-medium text-base border-ink-200 bg-ink-50 focus:bg-white" placeholder="הכנס/י את שמך" />
+                  <input type="text" id="donate-name" name="name" required className="w-full input-modern p-4 rounded-2xl font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" placeholder="הכנס/י את שמך" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-phone">מספר טלפון ליצירת קשר</label>
-                  <input type="tel" id="donate-phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-left font-medium text-base border-ink-200 bg-ink-50 focus:bg-white" dir="ltr" placeholder="050-0000000" />
+                  <input type="tel" id="donate-phone" name="phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-right font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" dir="ltr" placeholder="050-0000000" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-msg">הודעה (רשות)</label>
-                  <textarea id="donate-msg" rows={3} className="w-full input-modern p-4 rounded-2xl font-medium text-base resize-none border-ink-200 bg-ink-50 focus:bg-white" placeholder="רצית להוסיף משהו?"></textarea>
+                  <textarea id="donate-msg" name="message" rows={3} className="w-full input-modern p-4 rounded-2xl font-medium text-base resize-none border-ink-200 bg-ink-50 focus:bg-white transition-colors" placeholder="רצית להוסיף משהו?"></textarea>
                 </div>
                 
-                <button type="submit" className="w-full bg-gradient-to-l from-primary-500 to-primary-600 text-white py-5 rounded-2xl font-extrabold text-xl shadow-lg shadow-primary-500/40 hover:shadow-primary-500/60 hover:-translate-y-1 transition-all duration-300">
-                  שלח פנייה עכשיו
+                <button type="submit" disabled={isSubmitting} className="w-full bg-gradient-to-l from-primary-500 to-primary-600 text-white py-4 md:py-5 rounded-2xl font-extrabold text-xl shadow-lg shadow-primary-500/30 hover:shadow-primary-500/50 hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center">
+                  {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin"></i> : "שליחת פנייה"}
                 </button>
-                <p className="text-center text-sm text-ink-500 font-medium mt-4">
-                  <i className="fas fa-lock mr-1"></i> הפרטים יישמרו בסודיות מלאה ולא יועברו לאיש
+                <p className="text-center text-sm text-ink-500 font-medium mt-5">
+                  <i className="fas fa-shield-alt mr-1.5 opacity-70"></i> הפרטים יישמרו בסודיות מלאה ולא יועברו לגורם שלישי
                 </p>
               </form>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Success Modal */}
+      {isModalOpen && (
+        <div role="dialog" aria-modal="true" className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm" onClick={() => setIsModalOpen(false)}></div>
+          <div className="bg-white rounded-[2rem] p-10 md:p-12 max-w-md w-full relative z-10 shadow-elevated text-center border border-ink-100">
+            <div className="w-20 h-20 bg-gradient-to-br from-emerald-400 to-emerald-600 text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-7 shadow-lg shadow-emerald-500/30">
+              <i aria-hidden="true" className="fas fa-check"></i>
+            </div>
+            <h3 className="font-heading text-2xl md:text-3xl font-black text-ink-900 mb-3">תודה רבה!</h3>
+            <p className="text-ink-600 text-base md:text-lg mb-8 leading-relaxed font-medium">
+              הפרטים שלך התקבלו בהצלחה. נציג תורה לנשמה ייצור איתך קשר בהקדם.
+            </p>
+            <button onClick={() => setIsModalOpen(false)} className="w-full bg-ink-50 text-ink-700 border-2 border-ink-100 py-4 rounded-2xl font-bold text-lg hover:bg-ink-100 hover:border-ink-200 transition-all">סגירה</button>
+          </div>
+        </div>
+      )}
+
+      {/* Fallback WhatsApp Modal */}
+      {fallbackLead && (
+        <div role="dialog" aria-modal="true" aria-label="השלמת הפנייה בוואטסאפ" className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          <div className="absolute inset-0 bg-ink-950/60 backdrop-blur-sm" onClick={() => setFallbackLead(null)}></div>
+          <div className="bg-white rounded-[2rem] p-8 md:p-10 max-w-md w-full relative z-10 shadow-elevated text-center border border-ink-100">
+            <div className="w-20 h-20 bg-[#25D366] text-white rounded-full flex items-center justify-center text-4xl mx-auto mb-6 shadow-lg shadow-emerald-500/30">
+              <i aria-hidden="true" className="fab fa-whatsapp"></i>
+            </div>
+            <h3 className="font-heading text-2xl font-black text-ink-900 mb-3">עוד צעד קטן!</h3>
+            <p className="text-ink-600 text-base mb-7 leading-relaxed font-medium">
+              לא הצלחנו לשלוח את הטופס כרגע. בלחיצה אחת הפרטים שלך יישלחו אלינו בוואטסאפ – ונחזור אליך בהקדם.
+            </p>
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setFallbackLead(null)}
+              className="w-full flex items-center justify-center gap-2 bg-[#25D366] hover:bg-[#1ebe5a] text-white py-4 rounded-2xl font-bold text-lg transition-colors shadow-md"
+            >
+              <i aria-hidden="true" className="fab fa-whatsapp text-xl"></i>
+              שליחת הפרטים בוואטסאפ
+            </a>
+            <button onClick={() => setFallbackLead(null)} className="mt-4 w-full text-ink-500 hover:text-ink-700 py-2 font-semibold transition-colors">
+              ביטול
+            </button>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

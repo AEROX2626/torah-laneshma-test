@@ -30,7 +30,7 @@ export default function GlobalCTA() {
             <i className="fas fa-arrow-left"></i>
           </Link>
           
-          <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 bg-white text-ink-700 border border-ink-200 hover:border-emerald-500 hover:text-emerald-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+          <a href="https://wa.me/972585986685?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto px-8 py-4 rounded-2xl font-bold text-lg inline-flex items-center justify-center gap-3 bg-white text-ink-700 border border-ink-200 hover:border-emerald-500 hover:text-emerald-700 shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
             <i className="fab fa-whatsapp text-emerald-500 text-xl"></i>
             <span>או דברו איתנו בוואטסאפ</span>
           </a>

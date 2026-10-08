@@ -56,7 +56,7 @@ export default function Footer() {
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-ink-600 font-semibold">
                   <i className="fab fa-whatsapp text-emerald-500 text-lg"></i>
-                  <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" dir="ltr">+972 58-598-6685</a>
+                  <a href="https://wa.me/972585986685?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" dir="ltr">+972 58-598-6685</a>
                 </li>
                 <li className="flex items-center gap-3 text-ink-600 font-semibold">
                   <i className="fas fa-phone text-primary-500 text-lg"></i>
@@ -65,7 +65,7 @@ export default function Footer() {
               </ul>
 
               <div className="mt-6 flex gap-3">
-                <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-xl bg-white border border-ink-100 flex items-center justify-center text-ink-600 hover:text-emerald-500 hover:border-emerald-200 transition-all" aria-label="וואטסאפ">
+                <a href="https://wa.me/972585986685?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" className="w-11 h-11 rounded-xl bg-white border border-ink-100 flex items-center justify-center text-ink-600 hover:text-emerald-500 hover:border-emerald-200 transition-all" aria-label="וואטסאפ">
                   <i className="fab fa-whatsapp text-lg"></i>
                 </a>
                 <a href="#" className="w-11 h-11 rounded-xl bg-white border border-ink-100 flex items-center justify-center text-ink-600 hover:text-primary-600 hover:border-primary-200 transition-all" aria-label="אימייל">
@@ -89,7 +89,7 @@ export default function Footer() {
         </div>
       </footer>
 
-      <a href="https://wa.me/972585986685" target="_blank" rel="noopener noreferrer" aria-label="פניה בוואטסאפ" className="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-50 group flex items-center">
+      <a href="https://wa.me/972585986685?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" aria-label="פניה בוואטסאפ" className="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-50 group flex items-center">
         <span className="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl text-sm font-bold text-ink-700 shadow-elevated opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap border border-ink-100 translate-x-2 group-hover:translate-x-0">
           זמינים עבורכם בוואטסאפ!
         </span>

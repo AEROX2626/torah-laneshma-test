@@ -1,208 +1,380 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
 type HebcalItem = {
   date: string;
   category: string;
+  subcat?: string;
   title: string;
   hebrew: string;
-  memo?: string;
 };
 
+type DayEvent = { title: string; kind: "holiday" | "modern" | "roshchodesh" | "parasha" };
+
+/* ---------- Hebrew date helpers (computed locally – no network needed) ---------- */
+
+const HEB_ONES = ["", "א", "ב", "ג", "ד", "ה", "ו", "ז", "ח", "ט"];
+const HEB_TENS = ["", "י", "כ", "ל", "מ", "נ", "ס", "ע", "פ", "צ"];
+const HEB_HUNDREDS = ["", "ק", "ר", "ש", "ת", "תק", "תר", "תש", "תת", "תתק"];
+
+/** 26 -> כ״ו , 5787 -> תשפ״ז */
+function toHebrewNumeral(n: number): string {
+  n = n % 1000;
+  let s = HEB_HUNDREDS[Math.floor(n / 100)];
+  const rest = n % 100;
+  if (rest === 15) s += "טו";
+  else if (rest === 16) s += "טז";
+  else s += HEB_TENS[Math.floor(rest / 10)] + HEB_ONES[rest % 10];
+  if (s.length === 1) return s + "׳";
+  return s.slice(0, -1) + "״" + s.slice(-1);
+}
+
+const hebFmt = (opts: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat("he-IL-u-ca-hebrew", opts);
+const fmtDay = hebFmt({ day: "numeric" });
+const fmtMonth = hebFmt({ month: "long" });
+const fmtYear = hebFmt({ year: "numeric" });
+
+function hebrewParts(d: Date) {
+  const day = parseInt(fmtDay.format(d), 10);
+  const year = parseInt(fmtYear.format(d).replace(/\D/g, ""), 10);
+  return {
+    day,
+    dayStr: toHebrewNumeral(day),
+    month: fmtMonth.format(d),
+    yearStr: toHebrewNumeral(year),
+  };
+}
+
+const stripNikud = (s: string) => s.replace(/[\u0591-\u05C7]/g, "").replace(/\s\d{4}$/, "").trim();
+
+/* ---------- constants ---------- */
+
+const WEEKDAYS = [
+  { full: "ראשון", short: "א׳" },
+  { full: "שני", short: "ב׳" },
+  { full: "שלישי", short: "ג׳" },
+  { full: "רביעי", short: "ד׳" },
+  { full: "חמישי", short: "ה׳" },
+  { full: "שישי", short: "ו׳" },
+  { full: "שבת", short: "ש׳" },
+];
+const GREG_MONTHS = ["ינואר", "פברואר", "מרץ", "אפריל", "מאי", "יוני", "יולי", "אוגוסט", "ספטמבר", "אוקטובר", "נובמבר", "דצמבר"];
+
+const EVENT_STYLE: Record<DayEvent["kind"], { chip: string; dot: string; icon: string }> = {
+  holiday: { chip: "bg-amber-50 text-amber-800 border-amber-200", dot: "bg-amber-500", icon: "fa-star" },
+  modern: { chip: "bg-indigo-50 text-indigo-800 border-indigo-200", dot: "bg-indigo-500", icon: "fa-flag" },
+  roshchodesh: { chip: "bg-sky-50 text-sky-800 border-sky-200", dot: "bg-sky-500", icon: "fa-moon" },
+  parasha: { chip: "bg-emerald-50 text-emerald-800 border-emerald-200", dot: "bg-emerald-500", icon: "fa-book-open" },
+};
+
+function toKind(item: HebcalItem): DayEvent["kind"] | null {
+  if (item.category === "parashat") return "parasha";
+  if (item.category === "roshchodesh") return "roshchodesh";
+  if (item.category === "holiday") return item.subcat === "modern" ? "modern" : "holiday";
+  return null;
+}
+
+/* ---------- component ---------- */
+
 export default function JewishCalendarWidget({ onClose }: { onClose: () => void }) {
+  const today = useMemo(() => new Date(), []);
+  const [viewDate, setViewDate] = useState(() => new Date(today.getFullYear(), today.getMonth(), 1));
+  const [selectedDay, setSelectedDay] = useState<number>(today.getDate());
   const [items, setItems] = useState<HebcalItem[]>([]);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [loadingEvents, setLoadingEvents] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
 
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth(); // 0-based
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const startWeekday = new Date(year, month, 1).getDay();
+  const isCurrentMonth = year === today.getFullYear() && month === today.getMonth();
+
+  useEffect(() => setMounted(true), []);
+
+  // Lock background scroll + close on Escape
   useEffect(() => {
-    setMounted(true);
-  }, []);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-
+  // Holidays & parashot (Israel schedule)
   useEffect(() => {
-    setLoading(true);
-    fetch(`https://www.hebcal.com/hebcal?cfg=json&v=1&year=${year}&month=${month}&maj=on&min=on&mod=on&nx=on&d=on&lg=h`)
-      .then(r => r.json())
-      .then(d => {
+    const ctrl = new AbortController();
+    setLoadingEvents(true);
+    fetch(
+      `https://www.hebcal.com/hebcal?cfg=json&v=1&year=${year}&month=${month + 1}&maj=on&min=on&mod=on&nx=on&s=on&i=on&lg=h`,
+      { signal: ctrl.signal }
+    )
+      .then((r) => r.json())
+      .then((d) => {
         setItems(d.items || []);
-        setLoading(false);
+        setLoadingEvents(false);
       })
-      .catch(() => setLoading(false));
+      .catch((e) => {
+        if (e.name !== "AbortError") setLoadingEvents(false);
+      });
+    return () => ctrl.abort();
   }, [year, month]);
 
-  const firstDayOfMonth = new Date(year, month - 1, 1);
-  const daysInMonth = new Date(year, month, 0).getDate();
-  const startWeekday = firstDayOfMonth.getDay(); // 0 is Sunday
-
-  const prevMonth = () => setCurrentDate(new Date(year, month - 2, 1));
-  const nextMonth = () => setCurrentDate(new Date(year, month, 1));
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-  
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchEndX - touchStartX;
-    
-    // In RTL, swipe right (diff > 50) goes to NEXT month (visually left). Swipe left (diff < -50) goes to PREV month.
-    if (diff > 50) {
-      nextMonth();
-    } else if (diff < -50) {
-      prevMonth();
+  // Build day models for the month
+  const days = useMemo(() => {
+    const byDate: Record<string, DayEvent[]> = {};
+    for (const it of items) {
+      const kind = toKind(it);
+      if (!kind) continue;
+      const key = it.date.slice(0, 10);
+      const title = stripNikud(it.hebrew || it.title);
+      const list = (byDate[key] ||= []);
+      if (!list.some((e) => e.title === title)) list.push({ title, kind });
     }
-    setTouchStartX(null);
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      const date = new Date(year, month, day);
+      const key = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      return {
+        day,
+        date,
+        weekday: date.getDay(),
+        heb: hebrewParts(date),
+        events: byDate[key] || [],
+        isToday: isCurrentMonth && day === today.getDate(),
+      };
+    });
+  }, [items, year, month, daysInMonth, isCurrentMonth, today]);
+
+  // Header: Hebrew month range for the visible Gregorian month
+  const hebrewRange = useMemo(() => {
+    const first = hebrewParts(new Date(year, month, 1));
+    const last = hebrewParts(new Date(year, month, daysInMonth));
+    if (first.month === last.month) return `${first.month} ${first.yearStr}`;
+    if (first.yearStr === last.yearStr) return `${first.month} – ${last.month} ${last.yearStr}`;
+    return `${first.month} ${first.yearStr} – ${last.month} ${last.yearStr}`;
+  }, [year, month, daysInMonth]);
+
+  const goToMonth = (offset: number) => {
+    const next = new Date(year, month + offset, 1);
+    setViewDate(next);
+    const nextIsCurrent = next.getFullYear() === today.getFullYear() && next.getMonth() === today.getMonth();
+    setSelectedDay(nextIsCurrent ? today.getDate() : 1);
+  };
+  const goToToday = () => {
+    setViewDate(new Date(today.getFullYear(), today.getMonth(), 1));
+    setSelectedDay(today.getDate());
   };
 
-  const getDayItems = (day: number) => {
-    const dStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    const dayItems = items.filter(i => i.date === dStr);
-    const hebDate = dayItems.find(i => i.category === 'hebdate');
-    const holidays = dayItems.filter(i => i.category !== 'hebdate' && i.category !== 'candles' && i.category !== 'havdalah' && i.category !== 'parashat');
-    const parasha = dayItems.find(i => i.category === 'parashat');
-    
-    return {
-      hebDateStr: hebDate ? hebDate.hebrew.split(' ')[0].replace(/[\u0591-\u05C7]/g, '') : '',
-      holidays: holidays,
-      parasha: parasha ? parasha.hebrew.replace(/[\u0591-\u05C7]/g, '') : ''
-    };
+  // RTL swipe: finger moving right (→) reveals the next month (which sits on the left in RTL)
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    const dy = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) goToMonth(dx > 0 ? 1 : -1);
+    touchStartX.current = touchStartY.current = null;
   };
 
-  const weekdays = [
-    { full: 'ראשון', short: "א'" },
-    { full: 'שני', short: "ב'" },
-    { full: 'שלישי', short: "ג'" },
-    { full: 'רביעי', short: "ד'" },
-    { full: 'חמישי', short: "ה'" },
-    { full: 'שישי', short: "ו'" },
-    { full: 'שבת', short: 'שבת' }
-  ];
-  const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+  const selected = days[Math.min(selectedDay, daysInMonth) - 1];
+  const monthEvents = days.filter((d) => d.events.length > 0);
 
-  const modalContent = (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4 md:p-6" dir="rtl">
-      <div className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm transition-opacity" onClick={onClose}></div>
-      
-      <div className="relative bg-white rounded-2xl md:rounded-3xl w-full max-w-5xl max-h-[95vh] flex flex-col overflow-hidden shadow-2xl animate-fade-up border border-ink-100">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between px-5 md:px-8 py-5 border-b border-ink-100 bg-ink-50/50 shrink-0 relative">
-          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto mt-6 sm:mt-0">
-            <div className="flex flex-col items-center sm:items-start text-center sm:text-right">
-              <h3 className="font-heading font-black text-2xl md:text-3xl text-ink-950 tracking-tight">
-                לוח שנה עברי
-              </h3>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mt-1.5">
-                <span className="text-ink-600 font-bold text-base">
-                  {monthNames[month - 1]} {year}
-                </span>
-                <span className="text-ink-300 hidden sm:inline">•</span>
-                <span className="text-primary-700 font-bold text-sm bg-primary-50 px-2.5 py-0.5 rounded-md border border-primary-100/50">
-                  {(() => {
-                    if (items.length === 0) return '';
-                    const hebDates = items.filter(i => i.category === 'hebdate');
-                    if (hebDates.length === 0) return '';
-                    const getMonthYear = (str: string) => {
-                      const parts = str.split(' ').slice(1);
-                      return parts.join(' ').replace(/[\u0591-\u05C7]/g, '');
-                    };
-                    const firstMonth = getMonthYear(hebDates[0].hebrew);
-                    const lastMonth = getMonthYear(hebDates[hebDates.length - 1].hebrew);
-                    if (firstMonth === lastMonth) return firstMonth;
-                    return firstMonth + " / " + lastMonth;
-                  })()}
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2 bg-white p-1.5 rounded-full shadow-sm border border-ink-200 w-full sm:w-auto justify-center">
-              <button onClick={nextMonth} className="w-12 h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-primary-50 text-ink-600 hover:text-primary-600 transition-colors" title="חודש הבא">
-                <i className="fas fa-chevron-right text-base"></i>
-              </button>
-              <div className="w-px h-6 bg-ink-200"></div>
-              <button onClick={prevMonth} className="w-12 h-10 sm:w-10 flex items-center justify-center rounded-full hover:bg-primary-50 text-ink-600 hover:text-primary-600 transition-colors" title="חודש קודם">
-                <i className="fas fa-chevron-left text-base"></i>
+  const modal = (
+    <div className="fixed inset-0 z-[9999] flex items-stretch sm:items-center justify-center sm:p-4 md:p-6" dir="rtl" role="dialog" aria-modal="true" aria-label="לוח שנה עברי">
+      <div className="absolute inset-0 bg-ink-950/70 backdrop-blur-sm" onClick={onClose}></div>
+
+      <div className="relative bg-white w-full sm:max-w-5xl sm:rounded-3xl h-[100dvh] sm:h-auto sm:max-h-[92vh] flex flex-col overflow-hidden shadow-2xl border border-ink-100">
+        {/* ---------- Header ---------- */}
+        <div className="shrink-0 border-b border-ink-100 bg-white px-4 sm:px-6 pt-3 pb-3 sm:py-4">
+          <div className="flex items-center justify-between mb-2 sm:mb-3">
+            <span className="text-xs font-bold tracking-widest text-ink-400">לוח שנה עברי</span>
+            <div className="flex items-center gap-2">
+              {!isCurrentMonth && (
+                <button onClick={goToToday} className="text-sm font-bold text-primary-700 bg-primary-50 hover:bg-primary-100 border border-primary-100 px-3 py-1.5 rounded-full transition-colors">
+                  היום
+                </button>
+              )}
+              <button onClick={onClose} aria-label="סגירה" className="w-9 h-9 flex items-center justify-center rounded-full bg-ink-50 text-ink-500 hover:text-rose-700 hover:bg-rose-50 transition-colors">
+                <i className="fas fa-times"></i>
               </button>
             </div>
           </div>
-          
-          <button onClick={onClose} className="absolute top-4 left-4 w-10 h-10 flex items-center justify-center rounded-full bg-white border border-ink-200 text-ink-500 hover:text-rose-700 hover:border-rose-200 hover:bg-rose-50 transition-colors shadow-sm z-10">
-            <i className="fas fa-times text-lg"></i>
-          </button>
-        </div>
-        
-        {/* Calendar Body */}
-        <div className="flex-grow overflow-y-auto p-3 md:p-8 bg-ink-50/40 no-scrollbar" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
-          {loading ? (
-            <div className="flex flex-col items-center justify-center h-64 text-ink-500 gap-4">
-              <i className="fas fa-circle-notch fa-spin text-4xl text-primary-500"></i>
-              <span className="font-medium text-lg">מכין את לוח השנה...</span>
+
+          <div className="flex items-center justify-between gap-2">
+            {/* RTL: previous on the right, next on the left */}
+            <button onClick={() => goToMonth(-1)} aria-label="חודש קודם" className="w-11 h-11 shrink-0 flex items-center justify-center rounded-full border border-ink-200 text-ink-600 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-200 transition-colors">
+              <i className="fas fa-chevron-right"></i>
+            </button>
+            <div className="text-center min-w-0">
+              <h3 className="font-heading font-black text-xl sm:text-2xl md:text-3xl text-ink-950 leading-tight truncate">{hebrewRange}</h3>
+              <div className="text-ink-500 font-semibold text-sm sm:text-base">{GREG_MONTHS[month]} {year}</div>
             </div>
-          ) : (
-            <div className="grid grid-cols-7 gap-1 md:gap-4">
-              {weekdays.map((wd, i) => (
-                <div key={wd.full} className={`text-center font-bold text-[11px] md:text-sm py-1.5 md:py-2 ${i === 6 ? 'text-primary-600' : 'text-ink-500'}`}>
-                  <span className="hidden md:inline">{wd.full}</span>
-                  <span className="md:hidden">{wd.short}</span>
-                </div>
-              ))}
-              
-              {Array.from({ length: startWeekday }).map((_, i) => (
-                <div key={`empty-${i}`} className="min-h-[70px] md:min-h-[110px] rounded-lg md:rounded-2xl bg-white/40 border border-ink-100/40"></div>
-              ))}
-              
-              {Array.from({ length: daysInMonth }).map((_, i) => {
-                const day = i + 1;
-                const { hebDateStr, holidays, parasha } = getDayItems(day);
-                const isToday = new Date().getDate() === day && new Date().getMonth() + 1 === month && new Date().getFullYear() === year;
-                const isShabbat = (startWeekday + i) % 7 === 6;
-                
-                return (
-                  <div key={day} className={`min-h-[80px] md:min-h-[120px] rounded-xl md:rounded-2xl border p-1.5 md:p-3 flex flex-col transition-all group ${
-                    isToday 
-                      ? 'bg-white border-primary-300 ring-1 ring-primary-200 shadow-sm relative' 
-                      : 'bg-white border-ink-100 hover:border-primary-200 hover:shadow-md'
-                  }`}>
-                    {isToday && <div className="absolute top-0 left-0 w-full h-1 bg-primary-500 rounded-t-xl md:rounded-t-2xl"></div>}
-                    
-                    <div className="flex flex-col md:flex-row md:justify-between items-center md:items-start mb-2 gap-1 md:gap-0">
-                      <div className={`flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full ${isToday ? 'bg-primary-600 text-white font-bold' : (isShabbat ? 'text-primary-600 font-bold' : 'text-ink-800 font-bold')} text-[14px] md:text-lg`}>
-                        {day}
+            <button onClick={() => goToMonth(1)} aria-label="חודש הבא" className="w-11 h-11 shrink-0 flex items-center justify-center rounded-full border border-ink-200 text-ink-600 hover:bg-primary-50 hover:text-primary-700 hover:border-primary-200 transition-colors">
+              <i className="fas fa-chevron-left"></i>
+            </button>
+          </div>
+        </div>
+
+        {/* ---------- Body ---------- */}
+        <div className="flex-grow overflow-y-auto overscroll-contain bg-ink-50/40" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+          <div className="md:flex md:gap-6 p-2 sm:p-4 md:p-6">
+            {/* Grid */}
+            <div className="md:flex-1">
+              <div className="grid grid-cols-7 gap-1 md:gap-2 mb-1">
+                {WEEKDAYS.map((wd, i) => (
+                  <div key={wd.full} className={`text-center font-bold text-xs md:text-sm py-1.5 ${i === 6 ? "text-primary-600" : "text-ink-500"}`}>
+                    <span className="hidden md:inline">{wd.full}</span>
+                    <span className="md:hidden">{wd.short}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="grid grid-cols-7 gap-1 md:gap-2">
+                {Array.from({ length: startWeekday }).map((_, i) => (
+                  <div key={`e-${i}`} aria-hidden="true"></div>
+                ))}
+
+                {days.map((d) => {
+                  const isSelected = d.day === selectedDay;
+                  const isShabbat = d.weekday === 6;
+                  const monthStart = d.heb.day === 1;
+                  return (
+                    <button
+                      key={d.day}
+                      onClick={() => setSelectedDay(d.day)}
+                      aria-label={`${d.day} ב${GREG_MONTHS[month]}, ${d.heb.dayStr} ב${d.heb.month}${d.events.length ? ", " + d.events.map((e) => e.title).join(", ") : ""}`}
+                      aria-pressed={isSelected}
+                      className={`relative flex flex-col items-center md:items-stretch rounded-xl md:rounded-2xl border text-center md:text-right transition-all min-h-[58px] md:min-h-[104px] p-1 md:p-2.5 ${
+                        isSelected
+                          ? "border-primary-500 ring-2 ring-primary-200 bg-white shadow-sm"
+                          : isShabbat
+                          ? "border-primary-100/70 bg-primary-50/40 hover:border-primary-200"
+                          : "border-ink-100 bg-white hover:border-primary-200"
+                      }`}
+                    >
+                      <div className="flex flex-col md:flex-row md:items-start md:justify-between items-center w-full">
+                        <span
+                          className={`flex items-center justify-center w-7 h-7 md:w-8 md:h-8 rounded-full font-bold text-[15px] md:text-lg ${
+                            d.isToday ? "bg-primary-600 text-white shadow" : isShabbat ? "text-primary-700" : "text-ink-900"
+                          }`}
+                        >
+                          {d.day}
+                        </span>
+                        <span
+                          className={`leading-tight font-bold whitespace-nowrap mt-0.5 md:mt-1 ${
+                            monthStart ? "text-primary-700 text-[10px] md:text-xs bg-primary-50 md:bg-transparent px-1 rounded" : "text-ink-500 text-[11px] md:text-sm"
+                          }`}
+                        >
+                          {monthStart ? `א׳ ${d.heb.month}` : d.heb.dayStr}
+                        </span>
                       </div>
-                      <span className={`text-[10px] md:text-sm font-semibold leading-none ${isToday ? 'text-primary-700' : 'text-ink-500'}`}>{hebDateStr}</span>
-                    </div>
-                    
-                    <div className="flex-grow flex flex-col gap-1 md:gap-1.5 mt-0.5 md:mt-1 overflow-y-auto no-scrollbar justify-end md:justify-start">
-                      {holidays.map((h, idx) => {
-                        const cleanTitle = h.hebrew.replace(/[\u0591-\u05C7]/g, '').replace(/\s\d{4}$/, '');
-                        return (
-                          <div key={idx} className="text-[9px] md:text-[11px] font-bold px-1 md:px-2 py-1 md:py-1.5 rounded bg-amber-50 text-amber-700 border border-amber-100 leading-tight text-center md:text-right line-clamp-2 md:line-clamp-none shadow-sm" title={cleanTitle}>
-                            {cleanTitle}
-                          </div>
-                        );
-                      })}
-                      {parasha && (
-                        <div className="text-[9px] md:text-[11px] font-bold px-1 md:px-2 py-1 md:py-1.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-100 leading-tight text-center md:text-right line-clamp-2 md:line-clamp-none shadow-sm" title={parasha}>
-                          {parasha}
+
+                      {/* Mobile: dots */}
+                      {d.events.length > 0 && (
+                        <div className="md:hidden flex gap-0.5 mt-auto pt-0.5">
+                          {d.events.slice(0, 3).map((e, i) => (
+                            <span key={i} className={`w-1.5 h-1.5 rounded-full ${EVENT_STYLE[e.kind].dot}`}></span>
+                          ))}
                         </div>
                       )}
-                    </div>
-                    
-                  </div>
-                );
-              })}
+
+                      {/* Desktop: chips */}
+                      <div className="hidden md:flex flex-col gap-1 mt-2 min-w-0">
+                        {d.events.map((e, i) => (
+                          <span key={i} className={`block truncate text-[11px] font-bold px-1.5 py-1 rounded-md border leading-tight ${EVENT_STYLE[e.kind].chip}`} title={e.title}>
+                            {e.title}
+                          </span>
+                        ))}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Legend */}
+              <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 mt-3 text-[11px] md:text-xs font-semibold text-ink-500">
+                <span className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${EVENT_STYLE.holiday.dot}`}></span>חג / מועד</span>
+                <span className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${EVENT_STYLE.parasha.dot}`}></span>פרשת השבוע</span>
+                <span className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${EVENT_STYLE.roshchodesh.dot}`}></span>ראש חודש</span>
+                <span className="flex items-center gap-1.5"><span className={`w-2 h-2 rounded-full ${EVENT_STYLE.modern.dot}`}></span>יום לאומי</span>
+              </div>
             </div>
-          )}
+
+            {/* Side / bottom panel */}
+            <aside className="md:w-80 shrink-0 mt-3 md:mt-0 space-y-3">
+              {selected && (
+                <div className="bg-white rounded-2xl border border-ink-100 shadow-sm p-4" aria-live="polite">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="font-heading font-black text-2xl text-ink-950 leading-tight">
+                        {selected.heb.dayStr} ב{selected.heb.month} {selected.heb.yearStr}
+                      </div>
+                      <div className="text-ink-500 font-semibold text-sm mt-0.5">
+                        יום {WEEKDAYS[selected.weekday].full}, {selected.day} ב{GREG_MONTHS[month]} {year}
+                      </div>
+                    </div>
+                    {selected.isToday && <span className="shrink-0 text-xs font-bold text-white bg-primary-600 px-2.5 py-1 rounded-full">היום</span>}
+                  </div>
+
+                  <div className="mt-3 space-y-1.5">
+                    {selected.events.length > 0 ? (
+                      selected.events.map((e, i) => (
+                        <div key={i} className={`flex items-center gap-2 text-sm font-bold px-3 py-2 rounded-xl border ${EVENT_STYLE[e.kind].chip}`}>
+                          <i className={`fas ${EVENT_STYLE[e.kind].icon} text-xs opacity-80`}></i>
+                          {e.title}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-sm text-ink-400 font-medium">{loadingEvents ? "טוען אירועים..." : "אין מועדים מיוחדים ביום זה"}</div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {monthEvents.length > 0 && (
+                <div className="bg-white rounded-2xl border border-ink-100 shadow-sm p-2">
+                  <div className="px-2 pt-1.5 pb-2 text-xs font-bold tracking-wider text-ink-400">מועדים החודש</div>
+                  <ul>
+                    {monthEvents.map((d) => (
+                      <li key={d.day}>
+                        <button
+                          onClick={() => setSelectedDay(d.day)}
+                          className={`w-full flex items-center gap-3 px-2 py-2 rounded-xl text-right transition-colors ${d.day === selectedDay ? "bg-primary-50" : "hover:bg-ink-50"}`}
+                        >
+                          <span className="w-11 shrink-0 text-center leading-tight">
+                            <span className="block font-black text-ink-900">{d.day}</span>
+                            <span className="block text-[11px] font-semibold text-ink-500">{d.heb.dayStr} {d.heb.month}</span>
+                          </span>
+                          <span className="flex flex-col gap-1 min-w-0">
+                            {d.events.map((e, i) => (
+                              <span key={i} className="flex items-center gap-1.5 text-sm font-semibold text-ink-800 truncate">
+                                <span className={`w-2 h-2 shrink-0 rounded-full ${EVENT_STYLE[e.kind].dot}`}></span>
+                                <span className="truncate">{e.title}</span>
+                              </span>
+                            ))}
+                          </span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </aside>
+          </div>
         </div>
       </div>
     </div>
   );
 
   if (!mounted) return null;
-  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
+  return createPortal(modal, document.body);
 }
