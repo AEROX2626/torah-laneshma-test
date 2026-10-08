@@ -9,7 +9,7 @@ const WHATSAPP_NUMBER = "972585986685";
 export default function JoinForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fallbackLead, setFallbackLead] = useState<{ name: string; phone: string } | null>(null);
+  const [fallbackLead, setFallbackLead] = useState<{ name: string; phone: string; topic: string } | null>(null);
   
   const formId = useId();
 
@@ -20,12 +20,14 @@ export default function JoinForm() {
     const formData = new FormData(form);
     const name = String(formData.get("name") || "").trim();
     const phone = String(formData.get("phone") || "").trim();
+    const topic = String(formData.get("topic") || "").trim();
 
     // FormData (multipart) is a "simple" CORS request – no preflight, as recommended by Web3Forms.
     const payload = new FormData();
     payload.append("access_key", WEB3FORMS_KEY);
     payload.append("name", name);
     payload.append("phone", phone);
+    if (topic) payload.append("נושא לימוד מועדף", topic);
     payload.append("subject", "פנייה חדשה מאתר תורה לנשמה");
     payload.append("from_name", "אתר תורה לנשמה");
 
@@ -37,11 +39,11 @@ export default function JoinForm() {
         form.reset();
       } else {
         console.error("Form submission failed", data);
-        setFallbackLead({ name, phone });
+        setFallbackLead({ name, phone, topic });
       }
     } catch (error) {
       console.error(error);
-      setFallbackLead({ name, phone });
+      setFallbackLead({ name, phone, topic });
     } finally {
       setIsSubmitting(false);
     }
@@ -49,7 +51,9 @@ export default function JoinForm() {
 
   const whatsappHref = fallbackLead
     ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-        `שלום, אשמח להצטרף לחברותא בתורה לנשמה 🙏\nשם: ${fallbackLead.name}\nטלפון: ${fallbackLead.phone}`
+        `שלום, אשמח להצטרף לחברותא בתורה לנשמה 🙏\nשם: ${fallbackLead.name}\nטלפון: ${fallbackLead.phone}${
+          fallbackLead.topic ? `\nנושא מועדף: ${fallbackLead.topic}` : ""
+        }`
       )}`
     : "";
 
@@ -73,6 +77,23 @@ export default function JoinForm() {
             <i className="fas fa-phone text-lg"></i>
           </div>
           <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" dir="ltr" />
+        </div>
+
+        <div className="relative group">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
+            <i className="fas fa-book-open text-lg"></i>
+          </div>
+          <select id={`${formId}-topic`} name="topic" defaultValue="" className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-10 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm appearance-none cursor-pointer">
+            <option value="" disabled>נושא לימוד מועדף (לא חובה)</option>
+            <option value="פרשת שבוע">פרשת שבוע</option>
+            <option value="גמרא / תלמוד">גמרא / תלמוד</option>
+            <option value="הלכה ומשפט עברי">הלכה ומשפט עברי</option>
+            <option value="אמונה, מוסר ומידות">אמונה, מוסר ומידות</option>
+            <option value="עדיין לא בטוח, אשמח לייעוץ">עדיין לא בטוח, אשמח לייעוץ</option>
+          </select>
+          <div className="absolute inset-y-0 left-0 flex items-center pl-5 pointer-events-none text-ink-400">
+            <i className="fas fa-chevron-down text-sm"></i>
+          </div>
         </div>
         
         <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="w-full mt-2 bg-gradient-to-l from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-2xl font-black text-xl transition-all shadow-xl shadow-primary-600/30 hover:shadow-primary-600/50 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3">
