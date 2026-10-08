@@ -55,15 +55,28 @@ export default function JoinForm() {
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="flex flex-col sm:flex-row gap-3" aria-busy={isSubmitting}>
-        <label className="sr-only" htmlFor={`${formId}-name`}>שם מלא</label>
-        <input id={`${formId}-name`} type="text" name="name" placeholder="שם מלא" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm" />
+      <form onSubmit={handleFormSubmit} className="flex flex-col md:flex-row gap-3 p-1" aria-busy={isSubmitting}>
+        <div className="relative flex-1 group">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
+            <i className="fas fa-user"></i>
+          </div>
+          <input id={`${formId}-name`} type="text" name="name" placeholder="שם מלא" required className="w-full bg-white/90 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-[1.25rem] pr-11 pl-4 py-3.5 md:py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" />
+        </div>
         
-        <label className="sr-only" htmlFor={`${formId}-phone`}>מספר טלפון</label>
-        <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="flex-1 bg-white border border-ink-200 rounded-xl px-4 py-3.5 text-ink-900 font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-all shadow-sm text-right" dir="ltr" />
+        <div className="relative flex-1 group">
+          <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
+            <i className="fas fa-phone"></i>
+          </div>
+          <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="w-full bg-white/90 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-[1.25rem] pr-11 pl-4 py-3.5 md:py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" dir="ltr" />
+        </div>
         
-        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="btn-primary px-6 py-3.5 rounded-xl font-bold whitespace-nowrap disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center">
-          {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin"></i> : "שליחה מהירה"}
+        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="md:w-auto w-full bg-primary-600 hover:bg-primary-700 text-white px-8 py-3.5 md:py-4 rounded-[1.25rem] font-black text-lg transition-all shadow-lg shadow-primary-600/20 hover:shadow-primary-600/40 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+          {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin"></i> : (
+            <>
+              <span>הצטרפות</span>
+              <i className="fas fa-arrow-left text-sm opacity-80"></i>
+            </>
+          )}
         </button>
       </form>
 
