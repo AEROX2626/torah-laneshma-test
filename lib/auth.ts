@@ -4,10 +4,12 @@ import { cookies } from "next/headers";
 const JWT_SECRET = process.env.ADMIN_JWT_SECRET || "super_secret_torah_laneshma_admin_jwt_key_2026";
 export const COOKIE_NAME = "torah_admin_session";
 
+export type UserRole = "admin" | "editor" | "leads_manager";
+
 export interface AdminUser {
   id: string;
   email: string;
-  role: "admin" | "editor";
+  role: UserRole;
   created_at?: string;
 }
 

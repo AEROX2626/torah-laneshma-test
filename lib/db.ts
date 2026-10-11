@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { supabaseAdmin } from "./supabase";
-import { AdminUser, hashPassword } from "./auth";
+import { AdminUser, hashPassword, UserRole } from "./auth";
 
 export interface Submission {
   id: string;
@@ -29,7 +29,7 @@ export interface FaqItem {
 export interface AdminInvite {
   id: string;
   token: string;
-  role: "admin" | "editor";
+  role: UserRole;
   created_at: string;
   expires_at: string;
   used_at?: string | null;
@@ -151,7 +151,7 @@ export async function getAdminUserByEmail(email: string) {
   return store.users.find((u) => u.email.toLowerCase() === email.toLowerCase()) || null;
 }
 
-export async function createAdminUser(email: string, passwordHash: string, role: "admin" | "editor" = "editor") {
+export async function createAdminUser(email: string, passwordHash: string, role: UserRole = "editor") {
   const user = {
     id: `user-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
     email: email.toLowerCase(),
@@ -171,8 +171,19 @@ export async function createAdminUser(email: string, passwordHash: string, role:
   return user;
 }
 
+export async function deleteAdminUser(id: string): Promise<boolean> {
+  try {
+    await supabaseAdmin.from("admin_users").delete().eq("id", id);
+  } catch {}
+
+  const store = readLocalStore();
+  store.users = store.users.filter((u) => u.id !== id);
+  writeLocalStore(store);
+  return true;
+}
+
 // ----------------- INVITES -----------------
-export async function createAdminInvite(role: "admin" | "editor" = "editor"): Promise<AdminInvite> {
+export async function createAdminInvite(role: UserRole = "editor"): Promise<AdminInvite> {
   const token = `inv_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`;
   const invite: AdminInvite = {
     id: `inv-id-${Date.now()}`,

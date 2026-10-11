@@ -48,30 +48,46 @@ export default function AdminShell({
     router.refresh();
   };
 
-  const navGroups = [
+  const getRoleLabel = (role: string) => {
+    switch (role) {
+      case "admin": return "מנהל מערכת";
+      case "editor": return "עורך תוכן";
+      case "leads_manager": return "מנהל לידים";
+      default: return "משתמש מערכת";
+    }
+  };
+
+  const allNavGroups = [
     {
       title: "פעילות שוטפת",
       items: [
-        { href: "/admin", label: "לוח בקרה", icon: "fa-chart-pie", exact: true },
-        { href: "/admin/submissions", label: "פניות ולידים", icon: "fa-inbox", badge: "חדש" },
-        { href: "/admin/faqs", label: "שאלות ותשובות", icon: "fa-circle-question" },
+        { href: "/admin", label: "לוח בקרה", icon: "fa-chart-pie", exact: true, roles: ["admin", "editor", "leads_manager"] },
+        { href: "/admin/submissions", label: "פניות ולידים", icon: "fa-inbox", badge: "חדש", roles: ["admin", "leads_manager"] },
+        { href: "/admin/faqs", label: "שאלות ותשובות", icon: "fa-circle-question", roles: ["admin", "editor"] },
       ],
     },
     {
       title: "תוכן האתר",
       items: [
-        { href: "/admin/editor", label: "עורך ויזואלי", icon: "fa-wand-magic-sparkles" },
-        { href: "/design-system", label: "שפת עיצוב", icon: "fa-palette" },
+        { href: "/admin/editor", label: "עורך ויזואלי", icon: "fa-wand-magic-sparkles", roles: ["admin", "editor"] },
+        { href: "/design-system", label: "שפת עיצוב", icon: "fa-palette", roles: ["admin", "editor"] },
       ],
     },
     {
       title: "ניהול והרשאות",
       items: [
-        { href: "/admin/users", label: "משתמשים והזמנות", icon: "fa-user-group" },
-        { href: "/admin/settings", label: "הגדרות אתר", icon: "fa-sliders" },
+        { href: "/admin/users", label: "משתמשים והזמנות", icon: "fa-user-group", roles: ["admin"] },
+        { href: "/admin/settings", label: "הגדרות אתר", icon: "fa-sliders", roles: ["admin"] },
       ],
     },
   ];
+
+  const navGroups = allNavGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => item.roles.includes(user.role)),
+    }))
+    .filter((group) => group.items.length > 0);
 
   return (
     <div className="min-h-screen bg-neutral-100 font-sans text-neutral-900 flex" dir="rtl">
@@ -173,7 +189,7 @@ export default function AdminShell({
               <div className="flex-1 min-w-0 leading-tight">
                 <span className="block text-xs font-bold text-neutral-900 truncate">{user.email}</span>
                 <span className="block text-[10px] text-neutral-400 font-semibold">
-                  {user.role === "admin" ? "מנהל מערכת" : "עורך תוכן"}
+                  {getRoleLabel(user.role)}
                 </span>
               </div>
             )}

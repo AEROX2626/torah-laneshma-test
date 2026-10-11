@@ -1,19 +1,74 @@
 "use client";
 
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { UserRole } from "@/lib/auth";
+
+const roleDetails: Record<UserRole, { label: string; icon: string; desc: string; badgeClass: string }> = {
+  admin: {
+    label: "מנהל מערכת ראשי",
+    icon: "fa-shield-halved",
+    desc: "גישה מלאה לכל חלקי המערכת: עריכת תוכן, ניהול לידים, ניהול משתמשים והגדרות.",
+    badgeClass: "bg-purple-100 text-purple-800 border-purple-200",
+  },
+  editor: {
+    label: "עורך תוכן",
+    icon: "fa-pen-to-square",
+    desc: "גישה לעריכת כל תכני האתר (טקסטים, תמונות, שאלות נפוצות, עיצוב) ללא גישה לניהול משתמשים.",
+    badgeClass: "bg-blue-100 text-blue-800 border-blue-200",
+  },
+  leads_manager: {
+    label: "מנהל לידים ופניות",
+    icon: "fa-address-book",
+    desc: "גישה לניהול פניות ולידים (סטטוסים, הערות פנימיות וייצוא) ללא אפשרות לשנות תכני אתר.",
+    badgeClass: "bg-emerald-100 text-emerald-800 border-emerald-200",
+  },
+};
 
 function JoinFormContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token") || "";
 
+  const [role, setRole] = useState<UserRole>("editor");
+  const [checkingInvite, setCheckingInvite] = useState(true);
+  const [inviteValid, setInviteValid] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!token) {
+      setCheckingInvite(false);
+      setInviteValid(false);
+      return;
+    }
+
+    fetch(`/api/admin/auth?token=${encodeURIComponent(token)}`)
+      .then(async (res) => {
+        if (!res.ok) {
+          setInviteValid(false);
+        } else {
+          const data = await res.json();
+          if (data.valid && data.role) {
+            setRole(data.role as UserRole);
+            setInviteValid(true);
+          } else {
+            setInviteValid(false);
+          }
+        }
+      })
+      .catch(() => {
+        // Fallback: keep valid assumption if offline or fallback
+        setInviteValid(true);
+      })
+      .finally(() => {
+        setCheckingInvite(false);
+      });
+  }, [token]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,17 +112,24 @@ function JoinFormContent() {
     }
   };
 
+  const roleInfo = roleDetails[role] || roleDetails.editor;
+
   return (
     <div className="max-w-md w-full bg-white rounded-3xl p-8 md:p-10 shadow-lg border border-neutral-200/80">
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <div className="w-14 h-14 rounded-2xl bg-primary-500 text-white flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
           <i className="fas fa-user-plus"></i>
         </div>
         <h1 className="font-heading font-black text-2xl text-neutral-950 mb-1">הצטרפות למערכת הניהול</h1>
-        <p className="text-sm text-neutral-500 font-medium">הוזמנת לערוך ולנהל תכנים באתר תורה לנשמה</p>
+        <p className="text-sm text-neutral-500 font-medium">הוזמנת להצטרף לצוות אתר תורה לנשמה</p>
       </div>
 
-      {!token ? (
+      {checkingInvite ? (
+        <div className="py-12 text-center text-neutral-500 font-bold text-sm flex items-center justify-center gap-3">
+          <i className="fas fa-circle-notch fa-spin text-primary-600"></i>
+          <span>מאמת פרטי הזמנה...</span>
+        </div>
+      ) : !inviteValid || !token ? (
         <div className="p-5 rounded-2xl bg-amber-50 border border-amber-200 text-amber-800 text-sm font-bold text-center space-y-3">
           <p>קישור ההזמנה אינו תקף או שפג תוקפו.</p>
           <Link href="/admin/login" className="inline-block px-4 py-2 bg-neutral-900 text-white rounded-xl text-xs">
@@ -76,6 +138,18 @@ function JoinFormContent() {
         </div>
       ) : (
         <>
+          {/* Role badge presentation */}
+          <div className="mb-6 p-4 rounded-2xl bg-neutral-50 border border-neutral-200 text-right">
+            <div className="text-xs text-neutral-500 font-bold mb-1.5">תפקיד מוקצה:</div>
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black border ${roleInfo.badgeClass}`}>
+                <i className={`fas ${roleInfo.icon}`}></i>
+                {roleInfo.label}
+              </span>
+            </div>
+            <p className="text-xs text-neutral-600 font-medium leading-relaxed">{roleInfo.desc}</p>
+          </div>
+
           {error && (
             <div className="mb-6 p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-sm font-bold flex items-center gap-3">
               <i className="fas fa-circle-exclamation text-base"></i>

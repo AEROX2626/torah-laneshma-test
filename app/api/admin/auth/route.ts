@@ -3,6 +3,15 @@ import { getAdminUserByEmail, createAdminUser, getAdminInviteByToken, consumeAdm
 import { verifyPassword, hashPassword, createSessionToken, verifySessionToken, COOKIE_NAME } from "@/lib/auth";
 
 export async function GET(req: NextRequest) {
+  const inviteToken = req.nextUrl.searchParams.get("token");
+  if (inviteToken) {
+    const invite = await getAdminInviteByToken(inviteToken);
+    if (!invite) {
+      return NextResponse.json({ valid: false, error: "קישור ההזמנה אינו תקף או שפג תוקפו" }, { status: 404 });
+    }
+    return NextResponse.json({ valid: true, role: invite.role });
+  }
+
   const token = req.cookies.get(COOKIE_NAME)?.value;
   if (!token) {
     return NextResponse.json({ authenticated: false, user: null });
