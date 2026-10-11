@@ -68,24 +68,46 @@ export default function JoinForm() {
 
   return (
     <>
-      <form onSubmit={handleFormSubmit} className="flex flex-col gap-5 w-full max-w-sm mx-auto my-auto py-4" aria-busy={isSubmitting}>
-        <div className="text-center mb-2">
-          <h4 className="font-heading font-black text-2xl text-ink-900 mb-1">מלאו פרטים</h4>
-          <p className="text-ink-500 font-medium">ונחזור אליכם בהקדם האפשרי</p>
+      <form id="chavruta-form" onSubmit={handleFormSubmit} className="flex flex-col gap-4 sm:gap-5 w-full max-w-sm mx-auto my-auto py-2" aria-busy={isSubmitting}>
+        <div className="text-center mb-1">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 text-primary-700 text-xs font-bold border border-primary-200/60 mb-2">
+            <i className="fas fa-phone-alt text-[10px]"></i>
+            <span>חברותא טלפונית אישית • ללא עלות</span>
+          </div>
+          <h4 className="font-heading font-black text-2xl text-ink-900 mb-1">מלאו פרטים להצטרפות</h4>
+          <p className="text-ink-500 font-medium text-sm sm:text-base">ונחזור אליכם לשיחת היכרות קצרה</p>
         </div>
         
         <div className="relative group">
           <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
             <i className="fas fa-user text-lg"></i>
           </div>
-          <input id={`${formId}-name`} type="text" name="name" placeholder="שם מלא" required className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" />
+          <input 
+            id={`${formId}-name`} 
+            type="text" 
+            name="name" 
+            placeholder="שם מלא" 
+            required 
+            autoComplete="name"
+            className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-base text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" 
+          />
         </div>
         
         <div className="relative group">
           <div className="absolute inset-y-0 right-0 flex items-center pr-5 pointer-events-none text-ink-400 group-focus-within:text-primary-500 transition-colors">
             <i className="fas fa-phone text-lg"></i>
           </div>
-          <input id={`${formId}-phone`} type="tel" name="phone" placeholder="מספר טלפון" required className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" dir="ltr" />
+          <input 
+            id={`${formId}-phone`} 
+            type="tel" 
+            inputMode="tel"
+            autoComplete="tel"
+            name="phone" 
+            placeholder="מספר טלפון נייד" 
+            required 
+            className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-base text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400 text-right" 
+            dir="ltr" 
+          />
         </div>
 
         <div className="relative group">
@@ -97,7 +119,7 @@ export default function JoinForm() {
             name={topicSelection === "other" ? "topic_hidden" : "topic"} 
             value={topicSelection}
             onChange={(e) => setTopicSelection(e.target.value)}
-            className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-10 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm appearance-none cursor-pointer"
+            className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-10 py-4 text-base text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm appearance-none cursor-pointer"
           >
             <option value="" disabled>נושא לימוד מועדף (לא חובה)</option>
             <option value="פרשת שבוע">פרשת שבוע</option>
@@ -124,19 +146,34 @@ export default function JoinForm() {
               placeholder="איזה נושא תרצו ללמוד?" 
               required 
               autoFocus
-              className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" 
+              className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-4 py-4 text-base text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm placeholder:font-normal placeholder:text-ink-400" 
             />
           </div>
         )}
         
-        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="w-full mt-2 bg-gradient-to-l from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-2xl font-black text-xl transition-all shadow-xl shadow-primary-600/30 hover:shadow-primary-600/50 hover:-translate-y-1 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3">
+        <button type="submit" disabled={isSubmitting} aria-label="שליחת טופס" className="w-full mt-1 bg-gradient-to-l from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 text-white px-8 py-4 rounded-2xl font-black text-lg sm:text-xl transition-all shadow-xl shadow-primary-600/30 hover:shadow-primary-600/50 hover:-translate-y-1 active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3">
           {isSubmitting ? <i aria-hidden="true" className="fas fa-circle-notch fa-spin text-2xl"></i> : (
             <>
-              <span>הצטרפות מהירה</span>
-              <i className="fas fa-arrow-left opacity-90"></i>
+              <span>הצטרפות מהירה לחברותא</span>
+              <i className="fas fa-arrow-left opacity-90 text-sm"></i>
             </>
           )}
         </button>
+
+        <div className="text-center pt-1">
+          <p className="text-xs text-ink-500 font-medium">
+            מעדיפים לפנות ישירות?{" "}
+            <a href="tel:0503938114" className="text-primary-600 font-bold hover:underline inline-flex items-center gap-1">
+              <i className="fas fa-phone-alt text-[10px]"></i>
+              050-3938114
+            </a>
+            {" • "}
+            <a href="https://wa.me/972503938114?text=שלום%2C%20אשמח%20לפרטים%20על%20חברותא%20טלפונית%20בתורה%20לנשמה" target="_blank" rel="noopener noreferrer" className="text-emerald-600 font-bold hover:underline inline-flex items-center gap-1">
+              <i className="fab fa-whatsapp text-[11px]"></i>
+              וואטסאפ
+            </a>
+          </p>
+        </div>
       </form>
 
       {isModalOpen && (

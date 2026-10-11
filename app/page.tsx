@@ -11,6 +11,7 @@ import DailyInspiration from "./components/DailyInspiration";
 import Footer from "./components/Footer";
 import ShabbatTimes from "./components/ShabbatTimes";
 import HebrewDate from "./components/HebrewDate";
+import MobileQuickBar from "./components/MobileQuickBar";
 import { getFaqs } from "@/lib/db";
 
 export default async function Home() {
@@ -528,37 +529,38 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="join" className="py-20 md:py-28 relative overflow-hidden">
+      <section id="join" className="py-20 md:py-28 relative overflow-hidden scroll-mt-24">
+        <div id="contact" className="absolute -top-24 pointer-events-none" aria-hidden="true"></div>
         <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
-          <div className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-elevated overflow-hidden flex flex-col lg:flex-row border border-ink-100 reveal-scale">
+          <div id="join-card" className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-elevated overflow-hidden flex flex-col lg:flex-row border border-ink-100 reveal-scale transition-all duration-500">
             
-            <div className="lg:w-5/12 bg-gradient-to-br from-primary-700 via-primary-800 to-ink-950 p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
+            <div className="lg:w-5/12 bg-gradient-to-br from-primary-700 via-primary-800 to-ink-950 p-7 sm:p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
               <div className="absolute -right-20 -bottom-20 w-72 h-72 border-[40px] border-white/5 rounded-full"></div>
               <div className="absolute -left-24 -top-24 w-64 h-64 bg-[radial-gradient(circle,_rgba(245,158,11,0.1)_0%,_transparent_70%)]"></div>
 
               <div className="relative z-10">
-                <span className="inline-block py-1.5 px-4 rounded-full bg-white/10 text-primary-100 border border-white/20 text-xs font-bold mb-6 tracking-widest uppercase">הצעד הראשון שלכם</span>
-                <h3 className="font-heading text-3xl md:text-4xl lg:text-5xl font-black mb-6 leading-tight text-white">אז מתי מתחילים ללמוד?</h3>
-                <p className="text-primary-100/90 text-lg mb-9 leading-relaxed font-medium">אין שום צורך להתכונן. השאירו פרטים ונציג שלנו ישמח ליצור קשר בהקדם לשיחת היכרות קצרצרה – כך שנוכל למצוא את החברותא שמתאימה בדיוק למידות שלכם.</p>
+                <span className="inline-block py-1 px-3.5 rounded-full bg-white/10 text-primary-100 border border-white/20 text-xs font-bold mb-4 md:mb-6 tracking-widest uppercase">הצעד הראשון שלכם</span>
+                <h3 className="font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black mb-4 md:mb-6 leading-tight text-white">אז מתי מתחילים ללמוד?</h3>
+                <p className="text-primary-100/90 text-base sm:text-lg mb-6 md:mb-9 leading-relaxed font-medium">אין שום צורך להתכונן. השאירו פרטים ונציג שלנו ישמח ליצור קשר בהקדם לשיחת היכרות קצרצרה – כך שנוכל למצוא את החברותא שמתאימה בדיוק למידות שלכם.</p>
 
-                <div className="space-y-4 mb-8">
-                  <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-shield-alt"></i></div>
-                    <span className="font-semibold text-white">שירות בחינם, בלי שום אותיות קטנות.</span>
+                <div className="space-y-3 md:space-y-4 mb-4 md:mb-8">
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-shield-alt text-sm"></i></div>
+                    <span className="font-semibold text-sm sm:text-base text-white">שירות בחינם, בלי שום אותיות קטנות.</span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-bolt"></i></div>
-                    <span className="font-semibold text-white">מענה אנושי מהיר בתוך יממה.</span>
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-bolt text-sm"></i></div>
+                    <span className="font-semibold text-sm sm:text-base text-white">מענה אנושי מהיר בתוך יממה.</span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-user-lock"></i></div>
-                    <span className="font-semibold text-white">הפרטיות שלכם נשמרת בקפידה.</span>
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-10 h-10 md:w-11 md:h-11 rounded-xl bg-white/10 flex items-center justify-center text-white border border-white/20"><i className="fas fa-user-lock text-sm"></i></div>
+                    <span className="font-semibold text-sm sm:text-base text-white">הפרטיות שלכם נשמרת בקפידה.</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="lg:w-7/12 p-8 md:p-14 bg-white">
+            <div id="join-form-wrapper" className="lg:w-7/12 p-6 sm:p-8 md:p-14 bg-white scroll-mt-24">
               <JoinForm />
             </div>
           </div>
@@ -586,6 +588,7 @@ export default async function Home() {
       </section>
 
       <Footer />
+      <MobileQuickBar />
       <PageEffects />
       </>
     );

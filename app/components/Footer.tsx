@@ -89,11 +89,11 @@ export default function Footer() {
         </div>
       </footer>
 
-      <a href="https://wa.me/972503938114?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" aria-label="פניה בוואטסאפ" className="fixed bottom-6 left-6 md:bottom-10 md:left-10 z-50 group flex items-center">
+      <a href="https://wa.me/972503938114?text=%D7%A9%D7%9C%D7%95%D7%9D%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%9E%D7%95%D7%A2%20%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A0%D7%95%D7%A1%D7%A4%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%97%D7%91%D7%A8%D7%95%D7%AA%D7%90%20%D7%91%D7%AA%D7%95%D7%A8%D7%94%20%D7%9C%D7%A0%D7%A9%D7%9E%D7%94." target="_blank" rel="noopener noreferrer" aria-label="פניה בוואטסאפ" className="hidden lg:flex fixed bottom-10 left-10 z-50 group items-center">
         <span className="absolute right-full mr-4 bg-white px-4 py-2 rounded-xl text-sm font-bold text-ink-700 shadow-elevated opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none whitespace-nowrap border border-ink-100 translate-x-2 group-hover:translate-x-0">
           זמינים עבורכם בוואטסאפ!
         </span>
-        <div className="w-14 h-14 md:w-16 md:h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl md:text-3xl shadow-xl pulse-whatsapp transform group-hover:scale-110 transition-transform duration-300">
+        <div className="w-16 h-16 bg-[#25D366] text-white rounded-full flex items-center justify-center text-3xl shadow-xl pulse-whatsapp transform group-hover:scale-110 transition-transform duration-300">
           <i className="fab fa-whatsapp"></i>
         </div>
       </a>

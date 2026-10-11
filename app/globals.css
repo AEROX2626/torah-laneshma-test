@@ -256,8 +256,37 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   pointer-events: none;
 }
 
-#mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
-#mobile-menu.open { max-height: 800px; overflow-y: auto; }
+/* Mobile menu overlay transitions - zero layout shifts */
+#mobile-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: calc(100vh - 5.5rem);
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1), visibility 0.25s ease;
+  pointer-events: none;
+}
+#mobile-menu.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@keyframes formHighlightPulse {
+  0% { box-shadow: 0 0 0 0 rgba(31, 132, 238, 0.6); }
+  50% { box-shadow: 0 0 0 14px rgba(31, 132, 238, 0.25), 0 20px 40px -15px rgba(31, 132, 238, 0.4); }
+  100% { box-shadow: 0 0 0 0 rgba(31, 132, 238, 0); }
+}
+
+.highlight-pulse {
+  animation: formHighlightPulse 1.8s ease-out 1;
+  border-color: #1f84ee !important;
+}
 
 .hero-frame::after {
   content: '';
