@@ -46,11 +46,12 @@ export default function AdoptPage() {
     payload.append("Name", name);
     payload.append("Phone", phone);
     if (message) payload.append("Message", message);
+    payload.append("kind", "adopt");
     payload.append("subject", "פנייה חדשה מאתר תורה לנשמה - עמוד אמץ אברך");
     payload.append("from_name", "אתר תורה לנשמה - אמץ אברך");
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: payload });
+      const res = await fetch("/api/submit", { method: "POST", body: payload });
       const data = await res.json().catch(() => ({}));
       if (data.success) {
         setIsModalOpen(true);

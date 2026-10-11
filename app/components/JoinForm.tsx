@@ -35,11 +35,12 @@ export default function JoinForm() {
     if (topic) {
       payload.append("Study_Topic", topic); // Web3Forms sometimes strips unicode/spaced keys
     }
+    payload.append("kind", "chavruta");
     payload.append("subject", "פנייה חדשה מאתר תורה לנשמה");
     payload.append("from_name", "אתר תורה לנשמה");
 
     try {
-      const res = await fetch("https://api.web3forms.com/submit", { method: "POST", body: payload });
+      const res = await fetch("/api/submit", { method: "POST", body: payload });
       const data = await res.json().catch(() => ({}));
       if (data.success) {
         setIsModalOpen(true);
