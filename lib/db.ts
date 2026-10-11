@@ -376,3 +376,93 @@ export async function restoreFaq(id: string) {
     writeLocalStore(store);
   }
 }
+
+// ----------------- SITE DOCS (TREE ENGINE) -----------------
+export async function getSiteDoc(id: string): Promise<any | null> {
+  try {
+    const { data, error } = await supabaseAdmin.from("site_docs").select("*").eq("id", id).single();
+    if (!error && data) return data;
+  } catch {}
+
+  const store = readLocalStore();
+  if (store.site_docs && store.site_docs[id]) {
+    return store.site_docs[id];
+  }
+
+  // Initial seed doc for home page sections
+  if (id === "page_home") {
+    const seedHome = {
+      id: "page_home",
+      kind: "page",
+      title: "דף הבית · תורה לנשמה",
+      path: "/",
+      revision: 1,
+      nodes: [
+        {
+          id: "hero-sec",
+          type: "section",
+          name: "אזור פתיחה (Hero)",
+          classes: "relative overflow-hidden pt-12 pb-20 md:pt-16 md:pb-28 bg-radial-gradient",
+          children: [
+            {
+              id: "hero-container",
+              type: "container",
+              name: "קונטיינר מרכזי",
+              classes: "max-w-7xl mx-auto px-5 sm:px-8",
+              children: [
+                {
+                  id: "hero-badge",
+                  type: "heading",
+                  name: "תגית פתיחה",
+                  tag: "div",
+                  classes: "inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-50 text-primary-700 font-bold text-xs uppercase mb-6 shadow-sm",
+                  props: { text: "חברותא טלפונית ללימוד תורה" },
+                },
+                {
+                  id: "hero-title",
+                  type: "heading",
+                  name: "כותרת ראשית",
+                  tag: "h1",
+                  classes: "font-heading font-black text-4xl sm:text-6xl md:text-7xl text-ink-950 mb-6 leading-tight",
+                  props: { text: "חיבור אנושי אמיתי, מכל מקום" },
+                },
+                {
+                  id: "hero-subtitle",
+                  type: "text",
+                  name: "פסקת הסבר",
+                  classes: "text-lg sm:text-xl text-ink-600 font-medium mb-10 max-w-2xl leading-relaxed",
+                  props: { text: "שעה אחת בשבוע של לימוד ושיחה בגובה העיניים. בליווי אישי, מותאם אליך, ובאהבה גדולה." },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      updated_at: new Date().toISOString(),
+    };
+    store.site_docs[id] = seedHome;
+    writeLocalStore(store);
+    return seedHome;
+  }
+
+  return null;
+}
+
+export async function saveSiteDoc(id: string, doc: any): Promise<any> {
+  const record = {
+    ...doc,
+    id,
+    updated_at: new Date().toISOString(),
+  };
+
+  try {
+    const { data, error } = await supabaseAdmin.from("site_docs").upsert(record).select().single();
+    if (!error && data) return data;
+  } catch {}
+
+  const store = readLocalStore();
+  if (!store.site_docs) store.site_docs = {};
+  store.site_docs[id] = record;
+  writeLocalStore(store);
+  return record;
+}
