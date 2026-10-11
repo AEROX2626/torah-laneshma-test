@@ -21,6 +21,7 @@ export interface FaqItem {
   category: string;
   display_order: number;
   is_published: boolean;
+  is_deleted?: boolean;
   created_at?: string;
   updated_at?: string;
 }
@@ -290,16 +291,23 @@ export async function createSubmission(sub: Omit<Submission, "id" | "created_at"
 }
 
 // ----------------- FAQS -----------------
-export async function getFaqs(publishedOnly = false): Promise<FaqItem[]> {
+export async function getFaqs(options?: { publishedOnly?: boolean; includeTrash?: boolean }): Promise<FaqItem[]> {
+  const publishedOnly = options?.publishedOnly ?? false;
+  const includeTrash = options?.includeTrash ?? false;
+
   try {
     let q = supabaseAdmin.from("faqs").select("*").order("display_order", { ascending: true });
     if (publishedOnly) q = q.eq("is_published", true);
+    if (!includeTrash) q = q.eq("is_deleted", false);
     const { data, error } = await q;
     if (!error && data) return data;
   } catch {}
 
   let items = readLocalStore().faqs;
-  if (publishedOnly) items = items.filter((f) => f.is_published);
+  if (publishedOnly) items = items.filter((f) => f.is_published && !f.is_deleted);
+  else if (includeTrash) items = items.filter((f) => f.is_deleted);
+  else items = items.filter((f) => !f.is_deleted);
+
   return items.sort((a, b) => a.display_order - b.display_order);
 }
 
@@ -312,6 +320,7 @@ export async function saveFaq(faq: Partial<FaqItem> & { question: string; answer
     category: faq.category || "כללי",
     display_order: faq.display_order ?? 0,
     is_published: faq.is_published ?? true,
+    is_deleted: faq.is_deleted ?? false,
     updated_at: new Date().toISOString(),
   };
 
@@ -331,12 +340,39 @@ export async function saveFaq(faq: Partial<FaqItem> & { question: string; answer
   return record;
 }
 
-export async function deleteFaq(id: string) {
+export async function deleteFaq(id: string, permanent = false) {
+  if (permanent) {
+    try {
+      await supabaseAdmin.from("faqs").delete().eq("id", id);
+    } catch {}
+
+    const store = readLocalStore();
+    store.faqs = store.faqs.filter((f) => f.id !== id);
+    writeLocalStore(store);
+  } else {
+    // Soft delete to recycle bin
+    try {
+      await supabaseAdmin.from("faqs").update({ is_deleted: true, updated_at: new Date().toISOString() }).eq("id", id);
+    } catch {}
+
+    const store = readLocalStore();
+    const item = store.faqs.find((f) => f.id === id);
+    if (item) {
+      item.is_deleted = true;
+      writeLocalStore(store);
+    }
+  }
+}
+
+export async function restoreFaq(id: string) {
   try {
-    await supabaseAdmin.from("faqs").delete().eq("id", id);
+    await supabaseAdmin.from("faqs").update({ is_deleted: false, updated_at: new Date().toISOString() }).eq("id", id);
   } catch {}
 
   const store = readLocalStore();
-  store.faqs = store.faqs.filter((f) => f.id !== id);
-  writeLocalStore(store);
+  const item = store.faqs.find((f) => f.id === id);
+  if (item) {
+    item.is_deleted = false;
+    writeLocalStore(store);
+  }
 }
