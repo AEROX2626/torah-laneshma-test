@@ -40,6 +40,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://www.torah-laneshma.org",
   },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({
@@ -63,6 +72,9 @@ export default function RootLayout({
     <html lang="he" dir="rtl" className="scroll-smooth">
       <head>
         <meta name="theme-color" content="#1f84ee" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="preconnect" href="https://upload.wikimedia.org" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <link rel="alternate" type="text/markdown" href="/llms.txt" title="Torah Laneshima LLM Guide" />
