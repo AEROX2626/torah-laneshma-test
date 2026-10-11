@@ -1,0 +1,16 @@
+{
+  "users": [
+    {
+      "id": "user-admin-main",
+      "email": "admin@torah-laneshma.co.il",
+      "password_hash": "4a674694235fe8fce88cd7c761eb78ed:097e5bf89e3faa6fe9ea309ebec01b5c9f8c49c2167dbf8253ecd4e29ab50e73d069c7e93a770f6081af0bc333b5546bb5f614a056413354d3cc8b8555986d66",
+      "role": "admin",
+      "created_at": "2026-10-11T03:14:06.272Z"
+    }
+  ],
+  "invites": [],
+  "submissions": [],
+  "faqs": [],
+  "site_docs": {},
+  "settings": {}
+}
