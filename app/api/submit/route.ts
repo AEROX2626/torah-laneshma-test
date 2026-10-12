@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createSubmission } from "@/lib/db";
+import { sendNewLeadTelegramNotification } from "@/lib/telegram";
 
 const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11";
 
@@ -45,7 +46,15 @@ export async function POST(req: NextRequest) {
       topic_or_message: topicOrMessage,
     });
 
-    // 2. Concurrently forward to Web3Forms for immediate email notification
+    // 2. Concurrently send instant Telegram notification if configured
+    sendNewLeadTelegramNotification({
+      name,
+      phone,
+      kind,
+      topic_or_message: topicOrMessage,
+    }).catch((err) => console.error("Telegram lead notification error:", err));
+
+    // 3. Concurrently forward to Web3Forms for email notification
     try {
       const payload = new FormData();
       payload.append("access_key", WEB3FORMS_KEY);

@@ -35,6 +35,28 @@ export interface AdminInvite {
   used_at?: string | null;
 }
 
+export interface SiteVisit {
+  id: string;
+  path: string;
+  referrer?: string;
+  source?: string;
+  device?: "mobile" | "desktop" | "tablet";
+  ip_hash?: string;
+  country?: string;
+  city?: string;
+  created_at: string;
+}
+
+export interface SiteVisitsSummary {
+  total_visits: number;
+  unique_visitors: number;
+  top_pages: Array<{ path: string; count: number }>;
+  top_sources: Array<{ source: string; count: number }>;
+  devices: { mobile: number; desktop: number; tablet: number };
+  new_leads_count: number;
+  new_leads: Submission[];
+}
+
 const STORE_PATH = path.join(process.cwd(), "app", "data", "admin_store.json");
 
 interface LocalStore {
@@ -44,12 +66,14 @@ interface LocalStore {
   faqs: FaqItem[];
   site_docs: Record<string, any>;
   settings: Record<string, any>;
+  visits: SiteVisit[];
 }
 
 function getInitialStore(): LocalStore {
   return {
     users: [],
     invites: [],
+    visits: [],
     submissions: [
       {
         id: "demo-lead-1",
@@ -477,3 +501,130 @@ export async function saveSiteDoc(id: string, doc: any): Promise<any> {
   writeLocalStore(store);
   return record;
 }
+
+// ----------------- ANALYTICS & VISITS -----------------
+export async function recordSiteVisit(visit: Omit<SiteVisit, "id" | "created_at">): Promise<void> {
+  const newVisit: SiteVisit = {
+    id: `v-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+    ...visit,
+    created_at: new Date().toISOString(),
+  };
+
+  try {
+    await supabaseAdmin.from("site_visits").insert(newVisit);
+  } catch {}
+
+  const store = readLocalStore();
+  if (!store.visits) store.visits = [];
+  store.visits.push(newVisit);
+
+  // Keep maximum 5000 recent visits locally to prevent file bloat
+  if (store.visits.length > 5000) {
+    store.visits = store.visits.slice(-5000);
+  }
+
+  writeLocalStore(store);
+}
+
+export async function getSiteVisitsSummary(hours = 24): Promise<SiteVisitsSummary> {
+  const sinceTime = new Date(Date.now() - hours * 60 * 60 * 1000).toISOString();
+  let visits: SiteVisit[] = [];
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("site_visits")
+      .select("*")
+      .gte("created_at", sinceTime);
+    if (!error && data && data.length > 0) {
+      visits = data;
+    }
+  } catch {}
+
+  if (visits.length === 0) {
+    const store = readLocalStore();
+    visits = (store.visits || []).filter((v) => v.created_at >= sinceTime);
+  }
+
+  const uniqueIps = new Set<string>();
+  const pageCounts: Record<string, number> = {};
+  const sourceCounts: Record<string, number> = {};
+  const devices = { mobile: 0, desktop: 0, tablet: 0 };
+
+  for (const v of visits) {
+    if (v.ip_hash) uniqueIps.add(v.ip_hash);
+    pageCounts[v.path] = (pageCounts[v.path] || 0) + 1;
+    const src = v.source || "direct";
+    sourceCounts[src] = (sourceCounts[src] || 0) + 1;
+    if (v.device === "mobile") devices.mobile++;
+    else if (v.device === "tablet") devices.tablet++;
+    else devices.desktop++;
+  }
+
+  const top_pages = Object.entries(pageCounts)
+    .map(([path, count]) => ({ path, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  const top_sources = Object.entries(sourceCounts)
+    .map(([source, count]) => ({ source, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10);
+
+  // Fetch leads in this timeframe
+  const allSubmissions = await getSubmissions();
+  const recentLeads = allSubmissions.filter((s) => s.created_at >= sinceTime && s.status !== "trash");
+
+  return {
+    total_visits: visits.length,
+    unique_visitors: uniqueIps.size > 0 ? uniqueIps.size : visits.length,
+    top_pages,
+    top_sources,
+    devices,
+    new_leads_count: recentLeads.length,
+    new_leads: recentLeads,
+  };
+}
+
+// ----------------- SETTINGS -----------------
+export async function getSiteSettings(): Promise<Record<string, any>> {
+  let settings: Record<string, any> = {
+    site_name: "תורה לנשמה",
+    whatsapp_number: "050-3938114",
+    contact_email: "contact@torah-laneshma.co.il",
+    telegram_bot_token: process.env.TELEGRAM_BOT_TOKEN || "",
+    telegram_chat_id: process.env.TELEGRAM_CHAT_ID || "",
+    telegram_daily_report_enabled: true,
+    telegram_instant_leads_enabled: true,
+  };
+
+  try {
+    const { data, error } = await supabaseAdmin.from("site_settings").select("*");
+    if (!error && data && data.length > 0) {
+      data.forEach((item: any) => {
+        if (item.key) settings[item.key] = item.value;
+      });
+      return settings;
+    }
+  } catch {}
+
+  const store = readLocalStore();
+  if (store.settings) {
+    settings = { ...settings, ...store.settings };
+  }
+
+  return settings;
+}
+
+export async function updateSiteSettings(newSettings: Record<string, any>): Promise<Record<string, any>> {
+  try {
+    for (const [key, value] of Object.entries(newSettings)) {
+      await supabaseAdmin.from("site_settings").upsert({ key, value, updated_at: new Date().toISOString() });
+    }
+  } catch {}
+
+  const store = readLocalStore();
+  store.settings = { ...(store.settings || {}), ...newSettings };
+  writeLocalStore(store);
+  return store.settings;
+}
+

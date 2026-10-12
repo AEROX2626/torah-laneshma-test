@@ -62,6 +62,7 @@ export default function AdminShell({
       title: "פעילות שוטפת",
       items: [
         { href: "/admin", label: "לוח בקרה", icon: "fa-chart-pie", exact: true, roles: ["admin", "editor", "leads_manager"] },
+        { href: "/admin/analytics", label: "אנליטיקס וטלגרם", icon: "fa-chart-line", roles: ["admin", "editor", "leads_manager"] },
         { href: "/admin/submissions", label: "פניות ולידים", icon: "fa-inbox", badge: "חדש", roles: ["admin", "leads_manager"] },
         { href: "/admin/faqs", label: "שאלות ותשובות", icon: "fa-circle-question", roles: ["admin", "editor"] },
       ],

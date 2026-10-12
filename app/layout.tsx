@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Script from "next/script";
 import { Assistant, Rubik } from "next/font/google";
 import '@fortawesome/fontawesome-free/css/fontawesome.min.css';
@@ -6,6 +7,7 @@ import '@fortawesome/fontawesome-free/css/solid.min.css';
 import '@fortawesome/fontawesome-free/css/brands.min.css';
 import "./globals.css";
 import HolidayBanner from "./components/HolidayBanner";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 
 const assistant = Assistant({
   subsets: ["hebrew", "latin"],
@@ -95,6 +97,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={`${assistant.variable} ${rubik.variable} antialiased`}>
+        <Suspense fallback={null}>
+          <AnalyticsTracker />
+        </Suspense>
         <HolidayBanner />
         
 
