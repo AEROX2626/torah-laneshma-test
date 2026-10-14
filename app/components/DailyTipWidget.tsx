@@ -1,10 +1,27 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import dailyTips from "../data/daily-tips.json";
 
 export default function DailyTipWidget({ standalone = true }: { standalone?: boolean }) {
-  const latestTip = dailyTips[0];
+  const [tip, setTip] = useState(dailyTips[0]);
 
-  if (!latestTip) return null;
+  useEffect(() => {
+    const today = new Date().toLocaleDateString("he-IL", { timeZone: "Asia/Jerusalem" });
+    if (!tip || tip.date !== today) {
+      fetch("/api/daily")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json?.dailyTip) {
+            setTip(json.dailyTip);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [tip]);
+
+  if (!tip) return null;
 
   const content = (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-soft border border-rose-100 relative overflow-hidden h-full flex flex-col">
@@ -20,13 +37,13 @@ export default function DailyTipWidget({ standalone = true }: { standalone?: boo
             </div>
             <div>
               <span className="text-xs font-bold uppercase tracking-widest text-rose-700 bg-rose-50 px-3 py-1 rounded-full">לזוגיות ושידוכים</span>
-              <div className="text-sm font-semibold text-ink-500 mt-1">{latestTip.category}</div>
+              <div className="text-sm font-semibold text-ink-500 mt-1">{tip.category}</div>
             </div>
           </div>
         </div>
         
-        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">{latestTip.title}</h3>
-        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{latestTip.content}</p>
+        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">{tip.title}</h3>
+        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{tip.content}</p>
 
         <div className="mt-6 pt-5 border-t border-rose-50">
           <Link href="/relationships-guide" className="text-rose-600 font-bold text-sm inline-flex items-center gap-2 hover:text-rose-700 transition-colors group">

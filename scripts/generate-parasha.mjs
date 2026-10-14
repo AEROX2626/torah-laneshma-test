@@ -7,6 +7,15 @@ if (!API_KEY) {
   process.exit(1);
 }
 
+const CANDIDATE_MODELS = [
+  process.env.GEMINI_MODEL?.trim(),
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
+  'gemini-1.5-pro'
+].filter(Boolean);
+
 // 1. Fetch Parashat Hashavua from Hebcal
 async function getParasha() {
   const res = await fetch('https://www.hebcal.com/hebcal?v=1&cfg=json&m=50&s=on');
@@ -19,54 +28,39 @@ async function getParasha() {
   return parashaEvent;
 }
 
-// Retry temporary server failures, with a finite number of attempts.
-async function requestGemini(modelName, requestBody) {
-  const maxAttempts = 6;
-  const retryableStatuses = new Set([429, 500, 502, 503, 504]);
+// Retry temporary server failures with candidate models cascade
+async function requestGemini(requestBody) {
+  let lastError = null;
 
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    console.log(`Gemini attempt ${attempt}/${maxAttempts}`);
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': API_KEY },
-      body: JSON.stringify(requestBody),
-      signal: AbortSignal.timeout(120_000)
-    });
+  for (const modelName of CANDIDATE_MODELS) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      console.log(`Trying Gemini model for Parasha: ${modelName} (attempt ${attempt})`);
+      try {
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': API_KEY },
+          body: JSON.stringify(requestBody),
+          signal: AbortSignal.timeout(60_000)
+        });
 
-    if (res.ok) return res.json();
+        if (res.ok) return await res.json();
 
-    const errorText = await res.text();
-    const error = new Error(`Gemini API error (${modelName}, attempt ${attempt}/${maxAttempts}): ${res.status} - ${errorText}`);
-    if (!retryableStatuses.has(res.status) || attempt === maxAttempts) {
-      throw error;
+        const errorText = await res.text();
+        console.warn(`Model ${modelName} attempt ${attempt} returned ${res.status}: ${errorText.slice(0, 100)}`);
+        lastError = new Error(`Status ${res.status}: ${errorText}`);
+      } catch (err) {
+        console.warn(`Network error with ${modelName}:`, err.message);
+        lastError = err;
+      }
+      await new Promise(r => setTimeout(r, 2000));
     }
-
-    // Respect Retry-After when present, but do not keep a workflow waiting indefinitely.
-    const retryAfter = res.headers.get('retry-after');
-    let serverDelayMs = 0;
-    if (retryAfter) {
-      const seconds = Number(retryAfter);
-      serverDelayMs = Number.isFinite(seconds)
-        ? Math.max(0, seconds * 1000)
-        : Math.max(0, Date.parse(retryAfter) - Date.now());
-      if (!Number.isFinite(serverDelayMs)) serverDelayMs = 0;
-    }
-    if (serverDelayMs > 300_000) throw error;
-
-    const backoffMs = Math.min(10_000 * 2 ** (attempt - 1), 120_000);
-    const delayMs = Math.max(backoffMs, serverDelayMs) + Math.floor(Math.random() * 1000);
-    console.warn(`Gemini returned ${res.status}; retrying in ${Math.ceil(delayMs / 1000)} seconds...`);
-    await new Promise(resolve => setTimeout(resolve, delayMs));
   }
+
+  throw lastError || new Error("All Gemini models failed for Parasha");
 }
 
 // 2. Call Gemini
 async function generateArticle(parashaNameHe, parashaNameEn) {
-  // Use an explicit text model; list order does not guarantee model access.
-  const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
-
-  console.log("Using model:", modelName);
-
   const prompt = `
 אתה כותב תוכן לאתר אינטרנט בשם 'תורה לנשמה', שמטרתו להנגיש חיבור למסורת לאנשים עמוסים דרך לימוד טלפוני (חברותא).
 כתוב מאמר מעורר השראה בן 3 פסקאות על ${parashaNameHe} (פרשת השבוע).
@@ -89,7 +83,7 @@ async function generateArticle(parashaNameHe, parashaNameEn) {
     }
   };
 
-  const data = await requestGemini(modelName, requestBody);
+  const data = await requestGemini(requestBody);
   const contentText = data.candidates[0].content.parts[0].text;
   
   try {

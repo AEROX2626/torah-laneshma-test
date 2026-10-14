@@ -8,10 +8,37 @@ const __dirname = path.dirname(__filename);
 const DATA_FILE = path.join(__dirname, '..', 'app', 'data', 'daily-tips.json');
 const API_KEY = process.env.GEMINI_API_KEY || process.env.GEMINI_API_KEY_NEW;
 
-if (!API_KEY) {
-  console.error("No GEMINI_API_KEY found");
-  process.exit(1);
-}
+const CANDIDATE_MODELS = [
+  process.env.GEMINI_MODEL?.trim(),
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash',
+  'gemini-1.5-flash-8b',
+  'gemini-1.5-pro'
+].filter(Boolean);
+
+const FALLBACK_TIPS = [
+  {
+    category: "שלום בית",
+    title: "כוחה של מילה טובה",
+    content: "חז\"ל לימדו ש'טוב המלבין שיניים לחברו יותר ממשקהו חלב'. מחמאה כנה אחת ביום לבן או בת הזוג מעניקה כוח, בונה אמון ומאירה את כל הבית. נסו למצוא היום מעשה קטן ולהודות עליו מכל הלב."
+  },
+  {
+    category: "תיקון מידות",
+    title: "לעצור לפני שמגיבים",
+    content: "ברגעי כעס או ויכוח, העוצמה האמיתית היא בשתיקה של כמה שניות. כשאנחנו נושמים עמוק ומוותרים על הצורך 'לנצח', אנחנו מרוויחים את הקשר עצמו."
+  },
+  {
+    category: "פגישות ושידוכים",
+    title: "הקשבה בגובה העיניים",
+    content: "בפגישה או בשיחה זוגית, שאלות של התעניינות כנה בערכים ובחלומות של האחר יוצרות חיבור עמוק פי כמה מכל שיחה שטחית."
+  },
+  {
+    category: "שלום בית",
+    title: "הנחת כוונות טובות",
+    content: "כשבן הזוג עושה משהו שפגע בנו, הצעד הראשון הוא להניח שהוא לא התכוון לרע. לימוד זכות היא לא רק הלכה – היא המתכון המנצח לזוגיות יציבה ומאושרת."
+  }
+];
 
 const prompt = `
 אתה יועץ זוגיות, שדכן ומומחה לחכמת ישראל (תורה).
@@ -31,66 +58,83 @@ const prompt = `
 }
 `;
 
-
-async function requestGemini(baseModelName, requestBody) {
-  const maxAttempts = 6;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    const modelName = baseModelName;
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${API_KEY}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)
-    });
-    if (res.ok) return res.json();
-    const errorText = await res.text();
-    console.error(`Gemini API error (attempt ${attempt}): ${res.status} - ${errorText}`);
-    if (attempt === maxAttempts) throw new Error(`Gemini failed: ${res.status} - ${errorText}`);
-    
-    // Exponential backoff: 5s, 10s, 20s, 40s, 80s
-    const delay = attempt === 1 ? 5000 : attempt === 2 ? 15000 : attempt === 3 ? 35000 : attempt === 4 ? 65000 : 120000;
-    console.log(`Waiting ${delay}ms before next attempt...`);
-    await new Promise(r => setTimeout(r, delay));
+async function requestGeminiWithFallback(requestBody) {
+  if (!API_KEY) {
+    throw new Error("No GEMINI_API_KEY found");
   }
+
+  let lastError = null;
+  for (const modelName of CANDIDATE_MODELS) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        console.log(`Trying Gemini model for Daily Tip: ${modelName} (attempt ${attempt})...`);
+        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelName)}:generateContent?key=${API_KEY}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(requestBody),
+          signal: AbortSignal.timeout(20000)
+        });
+
+        if (res.ok) {
+          return await res.json();
+        }
+
+        const errText = await res.text();
+        console.warn(`Model ${modelName} returned status ${res.status}: ${errText.slice(0, 120)}`);
+        lastError = new Error(`Status ${res.status}: ${errText}`);
+      } catch (e) {
+        console.warn(`Network/timeout with ${modelName}:`, e.message);
+        lastError = e;
+      }
+      await new Promise(r => setTimeout(r, 2000));
+    }
+  }
+
+  throw lastError || new Error("All models failed for Daily Tip");
 }
 
 async function run() {
+  const todayStr = new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' });
+  let newTip = null;
+
   try {
-    const modelName = process.env.GEMINI_MODEL?.trim() || 'gemini-3.5-flash';
-    const result = await requestGemini(modelName, {
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-            temperature: 0.8,
-            responseMimeType: "application/json"
-        }
-      });
-    let text = result.candidates[0].content.parts[0].text;
-    
-    // Parse the new tip
-    const newTip = JSON.parse(text);
-    
-    // Add Metadata
-    newTip.id = Date.now().toString();
-    newTip.date = new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' });
+    const result = await requestGeminiWithFallback({
+      contents: [{ parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: 0.8,
+        responseMimeType: "application/json"
+      }
+    });
 
-    // Read existing tips
-    let tips = [];
-    try {
-      const data = await fs.readFile(DATA_FILE, 'utf-8');
-      tips = JSON.parse(data);
-    } catch (e) {
-      console.log("Creating new tips file");
-    }
-
-    // Unshift to add at the top (index 0)
-    tips.unshift(newTip);
-
-    // Save
-    await fs.writeFile(DATA_FILE, JSON.stringify(tips, null, 2), 'utf-8');
-    console.log("Added new daily tip:", newTip.title);
+    const text = result.candidates[0].content.parts[0].text;
+    newTip = JSON.parse(text);
   } catch (error) {
-    console.error("Error generating daily tip:", error);
-    process.exit(1);
+    console.warn("AI generation failed for daily tip, using curated fallback:", error.message);
+    const dayIndex = Math.floor(Date.now() / 86400000) % FALLBACK_TIPS.length;
+    newTip = { ...FALLBACK_TIPS[dayIndex] };
   }
+
+  newTip.id = Date.now().toString();
+  newTip.date = todayStr;
+
+  let tips = [];
+  try {
+    const data = await fs.readFile(DATA_FILE, 'utf-8');
+    tips = JSON.parse(data);
+  } catch {
+    console.log("Creating new tips file");
+  }
+
+  // If today's tip was already added, replace it, otherwise unshift
+  if (!tips.length || tips[0].date !== todayStr) {
+    tips.unshift(newTip);
+  } else {
+    tips[0] = newTip;
+  }
+
+  tips = tips.slice(0, 30);
+  await fs.writeFile(DATA_FILE, JSON.stringify(tips, null, 2), 'utf-8');
+  console.log(`Successfully updated Daily Tip for ${todayStr}: ${newTip.title}`);
 }
 
 run();

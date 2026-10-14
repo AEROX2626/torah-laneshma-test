@@ -1,9 +1,26 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import dailyWisdom from "../data/daily-wisdom.json";
 
 export default function DailyWisdomWidget() {
-  const latestWisdom = dailyWisdom[0];
+  const [wisdom, setWisdom] = useState(dailyWisdom[0]);
 
-  if (!latestWisdom) return null;
+  useEffect(() => {
+    const today = new Date().toLocaleDateString("he-IL", { timeZone: "Asia/Jerusalem" });
+    if (!wisdom || wisdom.date !== today) {
+      fetch("/api/daily")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json?.dailyWisdom) {
+            setWisdom(json.dailyWisdom);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [wisdom]);
+
+  if (!wisdom) return null;
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-soft border border-emerald-100 relative overflow-hidden h-full flex flex-col">
@@ -18,12 +35,12 @@ export default function DailyWisdomWidget() {
           </div>
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">חיזוק יומי</span>
-            <div className="text-sm font-semibold text-ink-500 mt-1">{latestWisdom.source}</div>
+            <div className="text-sm font-semibold text-ink-500 mt-1">{wisdom.source}</div>
           </div>
         </div>
         
-        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">"{latestWisdom.quote}"</h3>
-        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{latestWisdom.explanation}</p>
+        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">"{wisdom.quote}"</h3>
+        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{wisdom.explanation}</p>
       </div>
     </div>
   );

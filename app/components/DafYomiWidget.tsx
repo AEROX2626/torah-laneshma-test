@@ -1,7 +1,26 @@
-import dafYomiData from "../data/daf-yomi.json";
+"use client";
+
+import { useState, useEffect } from "react";
+import initialDaf from "../data/daf-yomi.json";
 
 export default function DafYomiWidget() {
-  if (!dafYomiData) return null;
+  const [data, setData] = useState(initialDaf);
+
+  useEffect(() => {
+    const today = new Date().toLocaleDateString("he-IL", { timeZone: "Asia/Jerusalem" });
+    if (!data || data.date !== today) {
+      fetch("/api/daily")
+        .then((res) => res.json())
+        .then((json) => {
+          if (json?.dafYomi) {
+            setData(json.dafYomi);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [data]);
+
+  if (!data) return null;
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-8 shadow-soft border border-indigo-100 relative overflow-hidden h-full flex flex-col">
@@ -16,12 +35,12 @@ export default function DafYomiWidget() {
           </div>
           <div>
             <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">הדף היומי היום</span>
-            <div className="text-sm font-semibold text-ink-500 mt-1">{dafYomiData.daf} | {dafYomiData.date}</div>
+            <div className="text-sm font-semibold text-ink-500 mt-1">{data.daf} | {data.date}</div>
           </div>
         </div>
         
-        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">מסכת {dafYomiData.daf.split(' ')[0]}</h3>
-        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{dafYomiData.summary}</p>
+        <h3 className="font-heading font-black text-xl text-ink-900 mb-3 leading-snug">מסכת {data.daf.split(' ')[0]}</h3>
+        <p className="text-ink-600 font-medium leading-relaxed flex-grow">{data.summary}</p>
       </div>
     </div>
   );
