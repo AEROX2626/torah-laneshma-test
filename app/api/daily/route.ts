@@ -71,8 +71,10 @@ export async function GET() {
       if (parsed && parsed.date === todayStr) {
         dafYomi = parsed;
       } else {
-        // Fetch fresh from Sefaria
-        const res = await fetch("https://www.sefaria.org/api/calendars", { next: { revalidate: 3600 } });
+        // Fetch fresh from Sefaria for exact Israel date
+        const now = new Date();
+        const d = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Jerusalem" }));
+        const res = await fetch(`https://www.sefaria.org/api/calendars?day=${d.getDate()}&month=${d.getMonth() + 1}&year=${d.getFullYear()}`, { next: { revalidate: 1800 } });
         if (res.ok) {
           const data = await res.json();
           const dafItem = data.calendar_items?.find((i: any) => i.title?.en === "Daf Yomi");

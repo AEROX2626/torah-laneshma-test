@@ -94,10 +94,12 @@ async function askGemini(prompt, isJson = false) {
 }
 
 async function generateDafYomi() {
-  console.log("Generating Daf Yomi...");
-  const res = await fetch('https://www.sefaria.org/api/calendars');
+  const now = new Date();
+  const d = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jerusalem' }));
+  const todayStr = d.toLocaleDateString('he-IL');
+  const res = await fetch(`https://www.sefaria.org/api/calendars?day=${d.getDate()}&month=${d.getMonth() + 1}&year=${d.getFullYear()}`);
   const data = await res.json();
-  const daf = data.calendar_items.find(i => i.title.en === 'Daf Yomi');
+  const daf = data.calendar_items?.find(i => i.title?.en === 'Daf Yomi');
   
   if (!daf) {
     console.warn("Could not find Daf Yomi in Sefaria response");
@@ -105,7 +107,6 @@ async function generateDafYomi() {
   }
 
   const dafNameHe = daf.displayValue.he;
-  const todayStr = new Date().toLocaleDateString('he-IL', { timeZone: 'Asia/Jerusalem' });
   const tractateName = dafNameHe.split(' ')[0] || "התלמוד";
   
   let summary = "";
