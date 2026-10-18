@@ -103,15 +103,15 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden lg:flex items-center gap-1">
-              <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">מהי חברותא?</Link>
-              <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">איך זה עובד?</Link>
-              <Link href="/study" className={`px-2 lg:px-3 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/study' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>בית מדרש</Link>
-              <Link href="/relationships-guide" className={`px-2 lg:px-3 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/relationships-guide' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>זוגיות ומידות</Link>
-              <Link href="/ask" className={`px-2 lg:px-3 py-2 font-bold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all flex items-center gap-2 ${pathname === '/ask' ? 'text-primary-700 bg-primary-100/80' : 'text-primary-600 bg-primary-50 hover:bg-primary-100/80'}`}><i className="fas fa-robot text-primary-500"></i>שאל את הרב</Link>
-              <Link href="/adopt" className={`px-2 lg:px-3 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
-              <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">כל הכתבות</Link>
-              <Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="px-2 lg:px-3 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">שאלות נפוצות</Link>
-              <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary mr-1 lg:mr-3 px-4 lg:px-6 py-2.5 rounded-full font-bold text-[15px] inline-flex items-center gap-2">
+              <Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="px-2 lg:px-2.5 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">מהי חברותא?</Link>
+              <Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="px-2 lg:px-2.5 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">איך זה עובד?</Link>
+              <Link href="/guides" className={`px-2 lg:px-2.5 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname?.startsWith('/guides') ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>מדריכים</Link>
+              <Link href="/study" className={`px-2 lg:px-2.5 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/study' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>בית מדרש</Link>
+              <Link href="/relationships-guide" className={`px-2 lg:px-2.5 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/relationships-guide' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>זוגיות ומידות</Link>
+              <Link href="/ask" className={`px-2 lg:px-2.5 py-2 font-bold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all flex items-center gap-1.5 ${pathname === '/ask' ? 'text-primary-700 bg-primary-100/80' : 'text-primary-600 bg-primary-50 hover:bg-primary-100/80'}`}><i className="fas fa-robot text-primary-500"></i>שאל את הרב</Link>
+              <Link href="/adopt" className={`px-2 lg:px-2.5 py-2 font-semibold text-[14px] lg:text-[15px] whitespace-nowrap rounded-xl transition-all ${pathname === '/adopt' ? 'text-primary-600 bg-primary-50' : 'text-ink-600 hover:text-primary-600 hover:bg-primary-50'}`}>אמץ אברך</Link>
+              <Link href="/#content" onClick={(e) => handleLinkClick(e, "#content")} className="px-2 lg:px-2.5 py-2 text-ink-600 whitespace-nowrap text-[14px] lg:text-[15px] hover:text-primary-600 font-semibold rounded-xl hover:bg-primary-50 transition-all">כל הכתבות</Link>
+              <Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="btn-primary mr-1 lg:mr-2 px-4 lg:px-5 py-2.5 rounded-full font-bold text-[15px] inline-flex items-center gap-2">
                 <span>להרשמה מהירה</span>
                 <i className="fas fa-arrow-left text-xs"></i>
               </Link>
@@ -179,6 +179,16 @@ export default function Navbar() {
 
             {/* Quick navigation grid */}
             <div className="grid grid-cols-2 gap-1.5 pt-1">
+              <Link
+                href="/guides"
+                onClick={() => setIsMenuOpen(false)}
+                className={`px-4 py-3 text-sm font-semibold rounded-xl transition-all flex items-center gap-2.5 col-span-2 ${
+                  pathname?.startsWith("/guides") ? "text-primary-600 bg-primary-50" : "text-ink-800 bg-ink-50/70 hover:text-primary-600 hover:bg-primary-50"
+                }`}
+              >
+                <i className="fas fa-compass text-primary-500 text-xs"></i>
+                <span>מדריכי יהדות, הלכה ומונחים (מה זה...)</span>
+              </Link>
               <Link
                 href="/study"
                 onClick={() => setIsMenuOpen(false)}

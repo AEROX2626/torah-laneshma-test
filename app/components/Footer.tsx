@@ -44,7 +44,9 @@ export default function Footer() {
               <h2 className="font-heading font-extrabold text-ink-900 mb-5 text-sm uppercase tracking-widest">תפריט ניווט</h2>
               <ul className="space-y-3">
                 <li><Link href="/#about" onClick={(e) => handleLinkClick(e, "#about")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">מהות החברותא</Link></li>
-                <li><Link href="/#how" onClick={(e) => handleLinkClick(e, "#how")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">תכלס, איך מתחילים?</Link></li>
+                <li><Link href="/guides" className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">מדריכי יהדות ומונחים</Link></li>
+                <li><Link href="/study" className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">בית המדרש הדיגיטלי</Link></li>
+                <li><Link href="/ask" className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">שאל את הרב ב-AI</Link></li>
                 <li><Link href="/adopt" className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">אמץ אברך (שותפות)</Link></li>
                 <li><Link href="/#faq" onClick={(e) => handleLinkClick(e, "#faq")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">כל מה שרציתם לשאול</Link></li>
                 <li><Link href="/#join" onClick={(e) => handleLinkClick(e, "#join")} className="text-ink-600 hover:text-primary-600 font-semibold transition-colors">השארת פרטים</Link></li>

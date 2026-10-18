@@ -317,6 +317,12 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   scrollbar-width: none;
 }
 
+/* Defer layout/paint for off-screen below-the-fold sections */
+.heavy-section-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto none auto 380px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;

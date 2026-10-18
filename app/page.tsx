@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { articles } from "./articles/data";
+import { mainGuides } from "./guides/data";
 import Navbar from "./components/Navbar";
 import PageEffects from "./components/PageEffects";
 import HeroCounters from "./components/HeroCounters";
@@ -503,6 +504,60 @@ export default async function Home() {
                     <span>המשך לקרוא</span>
                     <i className="fas fa-arrow-left mt-0.5 text-xs"></i>
                   </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="guides-showcase" className="heavy-section-deferred py-16 md:py-24 bg-white border-y border-ink-100 relative">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 reveal">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-50 text-amber-700 font-bold text-xs tracking-widest uppercase mb-4 border border-amber-200/60">
+                <i className="fas fa-compass"></i>
+                <span>אנציקלופדיה מעשית · מה זה...</span>
+              </div>
+              <h2 className="font-heading font-black text-3xl md:text-5xl text-ink-950 mb-4 leading-tight">
+                מדריכי יהדות, הלכה <span className="text-gradient">ומושגי יסוד</span>
+              </h2>
+              <p className="text-lg text-ink-600 font-medium leading-relaxed">
+                הסבר מלא וברור, נוסחי ברכות מנוקדים, הבדלי מנהגים (ספרדים ואשכנזים) ושאלות ותשובות מסודרות לכל מצווה וזמן בלוח היהודי.
+              </p>
+            </div>
+            <Link href="/guides" className="btn-primary px-6 py-3.5 rounded-2xl font-bold text-white inline-flex items-center gap-2 whitespace-nowrap">
+              <span>לכל המדריכים והמונחים (28)</span>
+              <i className="fas fa-arrow-left text-xs"></i>
+            </Link>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {mainGuides.slice(0, 6).map((guide) => (
+              <Link
+                key={guide.slug}
+                href={`/guides/${guide.slug}`}
+                className="group rounded-2xl border border-ink-200/80 bg-ink-50/40 hover:bg-white p-6 shadow-xs hover:border-primary-400 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <h3 className="font-heading font-extrabold text-xl text-ink-900 group-hover:text-primary-600 transition-colors">
+                      {guide.title}
+                    </h3>
+                    <span className="shrink-0 rounded-full bg-primary-50 border border-primary-100 px-2.5 py-0.5 text-xs font-bold text-primary-700">
+                      {guide.categoryBadge}
+                    </span>
+                  </div>
+                  <p className="text-xs font-bold text-primary-700/90 mb-2">
+                    {guide.questionTitle}
+                  </p>
+                  <p className="text-sm text-ink-600 font-medium leading-relaxed line-clamp-3">
+                    {guide.shortSummary}
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-ink-200/60 flex items-center justify-between text-xs font-bold text-primary-600">
+                  <span>למדריך המלא ושאלות נפוצות</span>
+                  <i className="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
                 </div>
               </Link>
             ))}
