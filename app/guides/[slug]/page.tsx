@@ -245,7 +245,7 @@ export default async function GuideDetailPage({
           >
             <div className="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-primary-600 mb-2">
               <i className="fas fa-bolt" aria-hidden="true"></i>
-              <span>תקציר מנהלים (תשובה מהירה)</span>
+              <span>בקיצור – תשובה מהירה</span>
             </div>
             <p className="text-base sm:text-[1.05rem] leading-relaxed text-ink-900 font-semibold">
               {guide.tldr}
