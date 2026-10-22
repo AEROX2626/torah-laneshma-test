@@ -263,13 +263,51 @@ export async function consumeAdminInvite(token: string) {
 // ----------------- SUBMISSIONS -----------------
 export async function getSubmissions(filter?: { status?: string; search?: string }): Promise<Submission[]> {
   try {
-    let q = supabaseAdmin.from("submissions").select("*").order("created_at", { ascending: false });
+    let q = supabaseAdmin
+      .from("leads")
+      .select("*")
+      .or("source.ilike.%תורה לנשמה%,source.ilike.%חברותא%,source.ilike.%אמץ אברך%")
+      .order("created_at", { ascending: false });
+
     if (filter?.status && filter.status !== "all") {
-      q = q.eq("status", filter.status);
+      const statusMap: Record<string, string> = {
+        new: "חדש",
+        in_progress: "בטיפול",
+        done: "נסגר",
+        trash: "לא רלוונטי",
+      };
+      const dbStatus = statusMap[filter.status] || filter.status;
+      q = q.eq("status", dbStatus);
+    }
+    if (filter?.search) {
+      q = q.or(`name.ilike.%${filter.search}%,phone.ilike.%${filter.search}%,notes.ilike.%${filter.search}%`);
     }
     const { data, error } = await q;
-    if (!error && data) return data;
-  } catch {}
+    if (!error && data && data.length > 0) {
+      return data.map((d: any) => {
+        const isAdopt = d.source?.includes("אמץ") || d.extra_fields?.kind === "adopt";
+        const kind: "chavruta" | "adopt" = isAdopt ? "adopt" : "chavruta";
+        let status: Submission["status"] = "new";
+        if (d.status === "בטיפול" || d.status === "in_progress") status = "in_progress";
+        else if (d.status === "נסגר" || d.status === "done" || d.status === "טופל") status = "done";
+        else if (d.status === "לא רלוונטי" || d.status === "trash") status = "trash";
+        else status = "new";
+
+        return {
+          id: d.id,
+          kind,
+          name: d.name,
+          phone: d.phone,
+          topic_or_message: d.extra_fields?.topic_or_message || d.notes || "",
+          status,
+          notes: d.notes || "",
+          created_at: d.created_at,
+        };
+      });
+    }
+  } catch (err) {
+    console.error("Error fetching leads from Supabase:", err);
+  }
 
   let items = readLocalStore().submissions;
   if (filter?.status && filter.status !== "all") {
@@ -288,11 +326,28 @@ export async function getSubmissions(filter?: { status?: string; search?: string
 }
 
 export async function updateSubmissionStatus(id: string, status: Submission["status"], notes?: string) {
+  const statusMap: Record<string, string> = {
+    new: "חדש",
+    in_progress: "בטיפול",
+    done: "נסגר",
+    trash: "לא רלוונטי",
+  };
+  const dbStatus = statusMap[status] || status;
+
+  let supabaseItem: any = null;
   try {
-    const update: any = { status, updated_at: new Date().toISOString() };
-    if (notes !== undefined) update.notes = notes;
-    const { data, error } = await supabaseAdmin.from("submissions").update(update).eq("id", id).select().single();
-    if (!error && data) return data;
+    const updatePayload: any = { status: dbStatus, updated_at: new Date().toISOString() };
+    if (notes !== undefined) updatePayload.notes = notes;
+    const { data, error } = await supabaseAdmin.from("leads").update(updatePayload).eq("id", id).select().single();
+    if (!error && data) {
+      supabaseItem = data;
+    }
+  } catch (err) {
+    console.error("Error updating lead status in Supabase:", err);
+  }
+
+  try {
+    await supabaseAdmin.from("submissions").update({ status, notes }).eq("id", id);
   } catch {}
 
   const store = readLocalStore();
@@ -303,25 +358,78 @@ export async function updateSubmissionStatus(id: string, status: Submission["sta
     writeLocalStore(store);
     return item;
   }
+
+  if (supabaseItem) {
+    return {
+      id: supabaseItem.id,
+      kind: supabaseItem.source?.includes("אמץ") ? "adopt" : "chavruta",
+      name: supabaseItem.name,
+      phone: supabaseItem.phone,
+      topic_or_message: supabaseItem.extra_fields?.topic_or_message || supabaseItem.notes || "",
+      status,
+      notes: supabaseItem.notes || "",
+      created_at: supabaseItem.created_at,
+    };
+  }
+
   return null;
 }
 
 export async function createSubmission(sub: Omit<Submission, "id" | "created_at" | "status">): Promise<Submission> {
-  const item: Submission = {
-    id: `sub-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    ...sub,
-    status: "new",
+  const leadId = `lead_web_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+  const isAdopt = sub.kind === "adopt";
+  const source = isAdopt ? "אתר תורה לנשמה - אמץ אברך" : "אתר תורה לנשמה - טופס חברותא";
+  const notes = sub.topic_or_message
+    ? (isAdopt ? `הודעה: ${sub.topic_or_message}` : `נושא לימוד: ${sub.topic_or_message}`)
+    : "";
+
+  const leadRecord = {
+    id: leadId,
+    name: sub.name,
+    phone: sub.phone,
+    source,
+    notes,
+    status: "חדש",
+    extra_fields: {
+      kind: sub.kind,
+      topic_or_message: sub.topic_or_message || "",
+      submitted_at: new Date().toISOString(),
+    },
     created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
   };
 
+  const item: Submission = {
+    id: leadId,
+    ...sub,
+    status: "new",
+    created_at: leadRecord.created_at,
+  };
+
+  // 1. Primary: Save directly to the live Supabase leads table
   try {
-    const { data, error } = await supabaseAdmin.from("submissions").insert(item).select().single();
-    if (!error && data) return data;
+    const { data, error } = await supabaseAdmin.from("leads").insert(leadRecord).select().single();
+    if (error) {
+      console.error("Supabase leads insert error:", error);
+    } else if (data) {
+      console.log("Successfully saved lead into Supabase leads table:", leadId);
+    }
+  } catch (err) {
+    console.error("Supabase leads exception:", err);
+  }
+
+  // 2. Also try `submissions` table if present
+  try {
+    await supabaseAdmin.from("submissions").insert(item);
   } catch {}
 
-  const store = readLocalStore();
-  store.submissions.unshift(item);
-  writeLocalStore(store);
+  // 3. Keep local store updated
+  try {
+    const store = readLocalStore();
+    store.submissions.unshift(item);
+    writeLocalStore(store);
+  } catch {}
+
   return item;
 }
 

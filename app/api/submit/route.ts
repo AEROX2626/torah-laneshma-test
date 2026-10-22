@@ -2,8 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { createSubmission } from "@/lib/db";
 import { sendNewLeadTelegramNotification } from "@/lib/telegram";
 
-const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY || "1b556ba1-7101-43c0-b8d2-890c4226ec11";
-
 export async function POST(req: NextRequest) {
   try {
     let name = "";
@@ -27,18 +25,20 @@ export async function POST(req: NextRequest) {
           ""
       ).trim();
     } else {
-      const json = await req.json();
-      name = String(json.name || "").trim();
-      phone = String(json.phone || "").trim();
+      const json = await req.json().catch(() => ({}));
+      name = String(json.name || json.Name || "").trim();
+      phone = String(json.phone || json.Phone || "").trim();
       kind = json.kind || "chavruta";
-      topicOrMessage = String(json.topic || json.message || "").trim();
+      topicOrMessage = String(
+        json.topic || json.Study_Topic || json.customTopic || json.message || json.Message || ""
+      ).trim();
     }
 
     if (!name || !phone) {
       return NextResponse.json({ error: "נא למלא שם ומספר טלפון" }, { status: 400 });
     }
 
-    // 1. Save directly into Database
+    // 1. Save directly into Supabase leads table (+ local fallback)
     const submission = await createSubmission({
       kind,
       name,
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
       topic_or_message: topicOrMessage,
     });
 
-    // 2. Concurrently send instant Telegram notification if configured
+    // 2. Concurrently send instant Telegram notification if configured (non-blocking)
     sendNewLeadTelegramNotification({
       name,
       phone,
@@ -54,34 +54,9 @@ export async function POST(req: NextRequest) {
       topic_or_message: topicOrMessage,
     }).catch((err) => console.error("Telegram lead notification error:", err));
 
-    // 3. Concurrently forward to Web3Forms for email notification
-    try {
-      const payload = new FormData();
-      payload.append("access_key", WEB3FORMS_KEY);
-      payload.append("Name", name);
-      payload.append("Phone", phone);
-      if (topicOrMessage) {
-        payload.append(kind === "chavruta" ? "Study_Topic" : "Message", topicOrMessage);
-      }
-      payload.append(
-        "subject",
-        kind === "chavruta"
-          ? "פנייה חדשה מאתר תורה לנשמה - חברותא"
-          : "פנייה חדשה מאתר תורה לנשמה - אמץ אברך"
-      );
-      payload.append("from_name", "אתר תורה לנשמה");
-
-      // Fire and forget or quick fetch
-      await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: payload,
-      }).catch(console.error);
-    } catch (err) {
-      console.error("Web3Forms forward error (saved to DB anyway):", err);
-    }
-
     return NextResponse.json({ success: true, id: submission.id });
   } catch (err: any) {
+    console.error("Submission API error:", err);
     return NextResponse.json({ error: err.message || "שגיאת שרת" }, { status: 500 });
   }
 }

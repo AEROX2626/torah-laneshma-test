@@ -16,6 +16,7 @@ export default function JoinForm() {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -27,21 +28,29 @@ export default function JoinForm() {
       topic = String(formData.get("customTopic") || "").trim();
     }
 
-    // FormData (multipart) is a "simple" CORS request – no preflight, as recommended by Web3Forms.
     const payload = new FormData();
     payload.append("access_key", WEB3FORMS_KEY);
     payload.append("Name", name);
     payload.append("Phone", phone);
     if (topic) {
-      payload.append("Study_Topic", topic); // Web3Forms sometimes strips unicode/spaced keys
+      payload.append("Study_Topic", topic);
     }
     payload.append("kind", "chavruta");
-    payload.append("subject", "פנייה חדשה מאתר תורה לנשמה");
+    payload.append("subject", "פנייה חדשה מאתר תורה לנשמה - חברותא");
     payload.append("from_name", "אתר תורה לנשמה");
 
     try {
+      // 1. Primary backend submit: Saves to Supabase leads table + Telegram alert
       const res = await fetch("/api/submit", { method: "POST", body: payload });
       const data = await res.json().catch(() => ({}));
+
+      // 2. Client-side browser sync to Web3Forms (fire-and-forget for email dispatch)
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: payload,
+        mode: "cors",
+      }).catch((err) => console.warn("Web3Forms client sync:", err));
+
       if (data.success) {
         setIsModalOpen(true);
         form.reset();
@@ -51,7 +60,7 @@ export default function JoinForm() {
         setFallbackLead({ name, phone, topic });
       }
     } catch (error) {
-      console.error(error);
+      console.error("Submission error:", error);
       setFallbackLead({ name, phone, topic });
     } finally {
       setIsSubmitting(false);
@@ -121,7 +130,7 @@ export default function JoinForm() {
             onChange={(e) => setTopicSelection(e.target.value)}
             className="w-full bg-ink-50/50 focus:bg-white border-2 border-transparent focus:border-primary-400 rounded-2xl pr-14 pl-10 py-4 text-base text-ink-900 font-bold focus:outline-none focus:ring-4 focus:ring-primary-500/10 transition-all shadow-sm appearance-none cursor-pointer"
           >
-            <option value="" disabled>נושא לימוד מועדף (לא חובה)</option>
+            <option value="">נושא לימוד מועדף (לא חובה)</option>
             <option value="פרשת שבוע">פרשת שבוע</option>
             <option value="גמרא / תלמוד">גמרא / תלמוד</option>
             <option value="הלכה ומשפט עברי">הלכה ומשפט עברי</option>

@@ -34,6 +34,7 @@ export default function AdoptPage() {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setIsSubmitting(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
@@ -51,8 +52,17 @@ export default function AdoptPage() {
     payload.append("from_name", "אתר תורה לנשמה - אמץ אברך");
 
     try {
+      // 1. Primary backend submit: Saves to Supabase leads table + Telegram alert
       const res = await fetch("/api/submit", { method: "POST", body: payload });
       const data = await res.json().catch(() => ({}));
+
+      // 2. Client-side browser sync to Web3Forms (fire-and-forget for email dispatch)
+      fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: payload,
+        mode: "cors",
+      }).catch((err) => console.warn("Web3Forms client sync:", err));
+
       if (data.success) {
         setIsModalOpen(true);
         form.reset();
@@ -61,7 +71,7 @@ export default function AdoptPage() {
         setFallbackLead({ name, phone, message });
       }
     } catch (error) {
-      console.error(error);
+      console.error("Submission error:", error);
       setFallbackLead({ name, phone, message });
     } finally {
       setIsSubmitting(false);
@@ -215,11 +225,11 @@ export default function AdoptPage() {
               <form onSubmit={handleFormSubmit} className="space-y-6 relative z-10" aria-busy={isSubmitting}>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-name">שם מלא</label>
-                  <input type="text" id="donate-name" name="name" required className="w-full input-modern p-4 rounded-2xl font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" placeholder="הכנס/י את שמך" />
+                  <input type="text" id="donate-name" name="name" required autoComplete="name" className="w-full input-modern p-4 rounded-2xl font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" placeholder="הכנס/י את שמך" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-phone">מספר טלפון ליצירת קשר</label>
-                  <input type="tel" id="donate-phone" name="phone" required pattern="[0-9]{9,10}" className="w-full input-modern p-4 rounded-2xl text-right font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" dir="ltr" placeholder="050-0000000" />
+                  <input type="tel" id="donate-phone" name="phone" required inputMode="tel" autoComplete="tel" className="w-full input-modern p-4 rounded-2xl text-right font-medium text-base border-ink-200 bg-ink-50 focus:bg-white transition-colors" dir="ltr" placeholder="050-0000000" />
                 </div>
                 <div className="space-y-2">
                   <label className="block text-sm font-bold text-ink-800" htmlFor="donate-msg">הודעה (רשות)</label>
