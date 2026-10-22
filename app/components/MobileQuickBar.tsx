@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { scrollToJoinForm } from "./scrollToJoin";
 
 export default function MobileQuickBar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -23,19 +24,19 @@ export default function MobileQuickBar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
 
-    // Observe #join section to hide sticky bar when the user is already interacting with the form
-    const joinSection = document.getElementById("join");
+    // Observe #join-card section to hide sticky bar when the user is viewing the form
+    const joinSection = document.getElementById("join-card") || document.getElementById("join");
     let observer: IntersectionObserver | null = null;
 
     if (joinSection) {
       observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            // If more than 20% of form is visible, hide the bottom bar to avoid keyboard / UI collision
+            // If form area is visible, hide bottom bar so it doesn't block inputs / keyboard
             setIsNearForm(entry.isIntersecting);
           });
         },
-        { threshold: 0.15 }
+        { threshold: 0.12 }
       );
       observer.observe(joinSection);
     }
@@ -47,30 +48,7 @@ export default function MobileQuickBar() {
   }, [isHome]);
 
   const scrollToJoin = () => {
-    if (isHome) {
-      const formTarget = document.getElementById("join-form-wrapper");
-      const target = formTarget || document.getElementById("join");
-      if (target) {
-        const navOffset = 85;
-        const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navOffset;
-        window.scrollTo({ top: targetTop, behavior: "smooth" });
-
-        // Highlight form and focus first input
-        setTimeout(() => {
-          const formCard = document.getElementById("join-card") || target;
-          formCard.classList.add("highlight-pulse");
-          const nameInput = target.querySelector<HTMLInputElement>("input[name='name']");
-          if (nameInput) {
-            nameInput.focus({ preventScroll: true });
-          }
-          setTimeout(() => {
-            formCard.classList.remove("highlight-pulse");
-          }, 2500);
-        }, 600);
-      }
-    } else {
-      window.location.href = "/#join";
-    }
+    scrollToJoinForm();
   };
 
   const showBar = isVisible && !isNearForm;

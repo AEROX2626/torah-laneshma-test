@@ -330,7 +330,7 @@ export default async function Home() {
               </p>
             </div>
             <div className="md:w-7/12 w-full">
-              <JoinForm />
+              <JoinForm formHtmlId="chavruta-form-mid1" />
             </div>
           </div>
         </div>
@@ -461,7 +461,7 @@ export default async function Home() {
               </p>
             </div>
             <div className="md:w-7/12 w-full">
-              <JoinForm />
+              <JoinForm formHtmlId="chavruta-form-mid2" />
             </div>
           </div>
         </div>
@@ -511,7 +511,7 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="guides-showcase" className="heavy-section-deferred py-16 md:py-24 bg-white border-y border-ink-100 relative">
+      <section id="guides-showcase" className="py-16 md:py-24 bg-white border-y border-ink-100 relative">
         <div className="max-w-7xl mx-auto px-5 sm:px-8">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12 reveal">
             <div className="max-w-2xl">
@@ -584,10 +584,12 @@ export default async function Home() {
         </div>
       </section>
 
-      <section id="join" className="py-20 md:py-28 relative overflow-hidden scroll-mt-24">
-        <div id="contact" className="absolute -top-24 pointer-events-none" aria-hidden="true"></div>
+      <section id="join-section" className="py-20 md:py-28 relative overflow-hidden">
+        {/* Anchors for native hash navigation */}
+        <div id="join" className="scroll-mt-28 pointer-events-none" aria-hidden="true" />
+        <div id="contact" className="scroll-mt-28 pointer-events-none" aria-hidden="true" />
         <div className="max-w-6xl mx-auto px-5 sm:px-8 relative z-10">
-          <div id="join-card" className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-elevated overflow-hidden flex flex-col lg:flex-row border border-ink-100 reveal-scale transition-all duration-500">
+          <div id="join-card" className="bg-white rounded-[2rem] md:rounded-[2.5rem] shadow-elevated overflow-hidden flex flex-col lg:flex-row border border-ink-100 reveal-scale transition-all duration-500 scroll-mt-28">
             
             <div className="lg:w-5/12 bg-gradient-to-br from-primary-700 via-primary-800 to-ink-950 p-7 sm:p-10 md:p-14 text-white flex flex-col justify-center relative overflow-hidden">
               <div className="absolute -right-20 -bottom-20 w-72 h-72 border-[40px] border-white/5 rounded-full"></div>
@@ -615,8 +617,8 @@ export default async function Home() {
               </div>
             </div>
 
-            <div id="join-form-wrapper" className="lg:w-7/12 p-6 sm:p-8 md:p-14 bg-white scroll-mt-24">
-              <JoinForm />
+            <div id="join-form-wrapper" className="lg:w-7/12 p-6 sm:p-8 md:p-14 bg-white scroll-mt-20">
+              <JoinForm formHtmlId="chavruta-form-main" />
             </div>
           </div>
         </div>

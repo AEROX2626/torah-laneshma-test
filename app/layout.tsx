@@ -71,7 +71,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="he" dir="rtl" className="scroll-smooth">
+    <html lang="he" dir="rtl" className="scroll-smooth" data-scroll-behavior="smooth">
       <head>
         <meta name="theme-color" content="#1f84ee" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import GlobalCTA from "./GlobalCTA";
+import { scrollToJoinForm } from "./scrollToJoin";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -9,6 +10,11 @@ export default function Footer() {
   const isHome = pathname === "/";
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
+    if (hash === "#join" || hash === "#contact") {
+      e.preventDefault();
+      scrollToJoinForm();
+      return;
+    }
     if (isHome) {
       e.preventDefault();
       const target = document.querySelector(hash);

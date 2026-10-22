@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { scrollToJoinForm } from "./scrollToJoin";
 
 export default function Navbar() {
   const [isNavGlass, setIsNavGlass] = useState(false);
@@ -45,19 +46,20 @@ export default function Navbar() {
   }, [pathname]);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, hash: string) => {
-    setIsMenuOpen(false);
     if (isHome) {
-      e.preventDefault();
-      const isMobile = window.innerWidth < 1024;
-      let target = document.querySelector(hash);
-
-      if (isMobile && (hash === "#join" || hash === "#contact")) {
-        const formTarget = document.getElementById("join-form-wrapper");
-        if (formTarget) {
-          target = formTarget;
-        }
+      if (hash === "#join" || hash === "#contact") {
+        e.preventDefault();
+        document.body.style.overflow = "";
+        setIsMenuOpen(false);
+        requestAnimationFrame(() => {
+          scrollToJoinForm();
+        });
+        return;
       }
 
+      setIsMenuOpen(false);
+      e.preventDefault();
+      const target = document.querySelector(hash);
       if (target) {
         const navOffset = 85;
         const elementPosition = target.getBoundingClientRect().top;
@@ -66,22 +68,9 @@ export default function Navbar() {
           top: offsetPosition,
           behavior: "smooth"
         });
-
-        // If landing on join/contact, add visual pulse and focus input
-        if (hash === "#join" || hash === "#contact") {
-          setTimeout(() => {
-            const formCard = document.getElementById("join-card") || target;
-            formCard.classList.add("highlight-pulse");
-            const nameInput = target.querySelector<HTMLInputElement>("input[name='name']");
-            if (nameInput) {
-              nameInput.focus({ preventScroll: true });
-            }
-            setTimeout(() => {
-              formCard.classList.remove("highlight-pulse");
-            }, 2500);
-          }, 600);
-        }
       }
+    } else {
+      setIsMenuOpen(false);
     }
   };
 
